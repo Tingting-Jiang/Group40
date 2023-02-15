@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Group40</string>
+    <string name="hello_world">Hello World! This is Group 40 :)</string>
+    <string name="a6_btn_str">A6</string>
 </resources>
