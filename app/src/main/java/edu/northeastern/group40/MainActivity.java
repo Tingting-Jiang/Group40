@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import edu.northeastern.group40.A6.A6Activity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
