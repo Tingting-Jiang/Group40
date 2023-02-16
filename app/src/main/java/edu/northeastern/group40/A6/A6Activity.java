@@ -1,11 +1,17 @@
 package edu.northeastern.group40.A6;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.northeastern.group40.A6.YelpModels.Restaurant;
 import edu.northeastern.group40.A6.YelpModels.YelpSearchResult;
 import edu.northeastern.group40.A6.YelpModels.YelpService;
 import edu.northeastern.group40.R;
@@ -15,18 +21,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class A6Activity extends AppCompatActivity {
+public class  A6Activity extends AppCompatActivity {
 
     private static final String BASE_URL = "https://api.yelp.com/v3/";
     private static final String TAG = "A6Activity";
     private static final String API_KEY = "lycsXHp9z9AZwbfX99x-OipcWIYo_IJOtChrjwBEVPRcO5HrvVDOOTVVZ5wYKh5u3i3N4ShrT5o8ECbBG6LixqfF3yVa800kZl3aAxKwm3EH9sAao2l5vHBq2SHtY3Yx";
 
     private YelpService yelpService;
+    private List<Restaurant> restaurant;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a6);
+
+        restaurant = new ArrayList<>();
+        createRecyclerView();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -85,5 +96,13 @@ public class A6Activity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void createRecyclerView() {
+        recyclerView = findViewById(R.id.yelp_recView);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+//        set adapter
     }
 }
