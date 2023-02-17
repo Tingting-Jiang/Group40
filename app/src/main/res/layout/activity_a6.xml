@@ -9,19 +9,44 @@
     tools:context=".A6.A6Activity">
 
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="389dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/search_view_bg"
-        android:elevation="20dp"
-        app:iconifiedByDefault="false"
-        app:queryHint="Search Here...">
+<!--    <androidx.appcompat.widget.SearchView-->
+<!--        android:id="@+id/searchView"-->
+<!--        android:layout_width="389dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@drawable/search_view_bg"-->
+<!--        android:elevation="20dp"-->
+<!--        app:iconifiedByDefault="false"-->
+<!--        app:queryHint="Search Here...">-->
 
-    </androidx.appcompat.widget.SearchView>
+<!--    </androidx.appcompat.widget.SearchView>-->
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="389dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/search_view_bg"
+            android:elevation="20dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search Here...">
+        </androidx.appcompat.widget.SearchView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/yelp_recView"
