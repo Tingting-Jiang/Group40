@@ -1,11 +1,18 @@
 package edu.northeastern.group40.A6;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.northeastern.group40.A6.RecyclerView.RestaurantAdapter;
+import edu.northeastern.group40.A6.YelpModels.Restaurant;
 import edu.northeastern.group40.A6.YelpModels.YelpSearchResult;
 import edu.northeastern.group40.A6.YelpModels.YelpService;
 import edu.northeastern.group40.R;
@@ -23,18 +30,24 @@ public class A6Activity extends AppCompatActivity {
 
     private YelpService yelpService;
 
+    private RecyclerView restaurantRecyclerView;
+    private RestaurantAdapter restaurantAdapter;
+    private List<Restaurant> restaurants;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a6);
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        yelpService = retrofit.create(YelpService.class);
+        restaurants=new ArrayList<>();
+        createRecyclerView();
 
+        yelpService = retrofit.create(YelpService.class);
 
         yelpService.searchRestaurants("Bearer " + API_KEY, "Peet's coffee", "San Jose")
                 .enqueue(new Callback<YelpSearchResult>() {
@@ -48,6 +61,8 @@ public class A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+                            restaurantAdapter.setRestaurants(body.getRestaurants());
+                            restaurantAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -75,6 +90,7 @@ public class A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+
                         }
                     }
 
@@ -85,5 +101,14 @@ public class A6Activity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void createRecyclerView(){
+        RecyclerView.LayoutManager rLayoutManager = new LinearLayoutManager(this);
+        restaurantRecyclerView = findViewById(R.id.yelp_recView);
+        restaurantRecyclerView.setHasFixedSize(true);
+        restaurantAdapter = new RestaurantAdapter(restaurants, this);
+        restaurantRecyclerView.setAdapter(restaurantAdapter);
+        restaurantRecyclerView.setLayoutManager(rLayoutManager);
     }
 }
