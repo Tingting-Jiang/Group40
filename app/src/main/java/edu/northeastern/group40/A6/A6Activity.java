@@ -11,6 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.northeastern.group40.A6.RecyclerView.RestaurantAdapter;
 import edu.northeastern.group40.A6.YelpModels.Restaurant;
 import edu.northeastern.group40.A6.YelpModels.YelpSearchResult;
 import edu.northeastern.group40.A6.YelpModels.YelpService;
@@ -21,31 +22,32 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class  A6Activity extends AppCompatActivity {
+public class A6Activity extends AppCompatActivity {
 
     private static final String BASE_URL = "https://api.yelp.com/v3/";
     private static final String TAG = "A6Activity";
     private static final String API_KEY = "lycsXHp9z9AZwbfX99x-OipcWIYo_IJOtChrjwBEVPRcO5HrvVDOOTVVZ5wYKh5u3i3N4ShrT5o8ECbBG6LixqfF3yVa800kZl3aAxKwm3EH9sAao2l5vHBq2SHtY3Yx";
 
     private YelpService yelpService;
-    private List<Restaurant> restaurant;
-    private RecyclerView recyclerView;
 
+    private RecyclerView restaurantRecyclerView;
+    private RestaurantAdapter restaurantAdapter;
+    private List<Restaurant> restaurants;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a6);
 
-        restaurant = new ArrayList<>();
-        createRecyclerView();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        yelpService = retrofit.create(YelpService.class);
+        restaurants=new ArrayList<>();
+        createRecyclerView();
 
+        yelpService = retrofit.create(YelpService.class);
 
         yelpService.searchRestaurants("Bearer " + API_KEY, "Peet's coffee", "San Jose")
                 .enqueue(new Callback<YelpSearchResult>() {
@@ -59,6 +61,8 @@ public class  A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+                            restaurantAdapter.setRestaurants(body.getRestaurants());
+                            restaurantAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -86,6 +90,7 @@ public class  A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+
                         }
                     }
 
@@ -98,11 +103,12 @@ public class  A6Activity extends AppCompatActivity {
 
     }
 
-    public void createRecyclerView() {
-        recyclerView = findViewById(R.id.yelp_recView);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-//        set adapter
+    public void createRecyclerView(){
+        RecyclerView.LayoutManager rLayoutManager = new LinearLayoutManager(this);
+        restaurantRecyclerView = findViewById(R.id.yelp_recView);
+        restaurantRecyclerView.setHasFixedSize(true);
+        restaurantAdapter = new RestaurantAdapter(restaurants, this);
+        restaurantRecyclerView.setAdapter(restaurantAdapter);
+        restaurantRecyclerView.setLayoutManager(rLayoutManager);
     }
 }
