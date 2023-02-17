@@ -61,6 +61,7 @@ public class A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+                            Log.i(TAG, String.valueOf(response.body().getRestaurants().get(0).getCategories().size()));
                             restaurantAdapter.setRestaurants(body.getRestaurants());
                             restaurantAdapter.notifyDataSetChanged();
                         }
@@ -83,6 +84,7 @@ public class A6Activity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
                         Log.i(TAG, "Success: " + response);
+
                         YelpSearchResult body = response.body();
 
                         if (body == null) {

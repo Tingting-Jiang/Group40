@@ -41,18 +41,23 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         StringBuilder sb=new StringBuilder();
         for(Category category: categories){
             sb.append(category.getTitle());
-            sb.append("/");
+            sb.append(" & ");
         }
+        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length()-1);
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
 
     public void bindThisData(Restaurant restaurantToBind){
-        Picasso.get().load(restaurantToBind.getImageUrl()).into(imageView);
+        Picasso.get()
+                .load(restaurantToBind.getImageUrl())
+                .fit()
+                .into(imageView);
         restaurant_name.setText(restaurantToBind.getName());
         ratingBar.setIsIndicator(true);
         ratingBar.setRating(restaurantToBind.getRating().floatValue());
-        tvNumReviews.setText(restaurantToBind.getReviewCount().toString());
+        tvNumReviews.setText(restaurantToBind.getReviewCount().toString()+" Reviews");
         tvAddress.setText(restaurantToBind.getLocation().getAddress());
         tvCatogory.setText(categoriesToString(restaurantToBind.getCategories()));
         tvPrice.setText(restaurantToBind.getPrice());
