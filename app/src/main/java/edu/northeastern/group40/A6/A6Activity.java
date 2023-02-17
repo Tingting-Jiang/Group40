@@ -33,7 +33,7 @@ public class A6Activity extends AppCompatActivity {
 
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
-    private List<Restaurant> restaurants;
+    private List<Restaurant> restaurants = new ArrayList<>();
     private SearchView searchName;
     private String restaurantName;
 
@@ -69,32 +69,6 @@ public class A6Activity extends AppCompatActivity {
         createRecyclerView();
 
         yelpService = retrofit.create(YelpService.class);
-
-
-//        yelpService.searchRestaurants("Bearer " + API_KEY, restaurantName, "San Jose")
-//                .enqueue(new Callback<YelpSearchResult>() {
-//                    @SuppressLint("NotifyDataSetChanged")
-//                    @Override
-//                    public void onResponse(Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
-//                        YelpSearchResult body = response.body();
-//
-//                        if (body == null) {
-//                            Log.w(TAG, "Did not get valid response data from Yelp");
-//                            return;
-//                        } else {
-//                            Log.i(TAG, "Success: " + body.getRestaurants());
-//                            Log.i(TAG, String.valueOf(response.body().getRestaurants().get(0).getCategories().size()));
-//                            restaurantAdapter.setRestaurants(body.getRestaurants());
-//                            restaurantAdapter.notifyDataSetChanged();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<YelpSearchResult> call, Throwable t) {
-//                        Log.i(TAG, "Failed: " + t);
-//
-//                    }
-//                });
     }
 
 
@@ -113,6 +87,8 @@ public class A6Activity extends AppCompatActivity {
                             return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
+                            restaurants.addAll(body.getRestaurants());
+                            restaurantAdapter.notifyDataSetChanged();
 
                         }
                     }

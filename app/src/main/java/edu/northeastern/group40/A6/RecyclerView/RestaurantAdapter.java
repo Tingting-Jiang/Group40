@@ -14,16 +14,16 @@ import edu.northeastern.group40.R;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 
-    private List<Restaurant> resraurants;
+    private List<Restaurant> restaurants;
     private final Context context;
 
-    public RestaurantAdapter(List<Restaurant> resraurants, Context context) {
-        this.resraurants = resraurants;
+    public RestaurantAdapter(List<Restaurant> restaurants, Context context) {
+        this.restaurants = restaurants;
         this.context=context;
     }
 
     public void setRestaurants(List<Restaurant> restaurants){
-        this.resraurants=restaurants;
+        this.restaurants =restaurants;
     }
 
     @NonNull
@@ -34,11 +34,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        holder.bindThisData(resraurants.get(position));
+        holder.bindThisData(restaurants.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return resraurants.size();
+        return restaurants.size();
     }
 }
