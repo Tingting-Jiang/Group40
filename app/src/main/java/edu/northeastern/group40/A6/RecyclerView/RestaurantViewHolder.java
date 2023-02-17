@@ -41,7 +41,10 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     public String categoriesToString(List<Category> categories){
         StringBuilder sb=new StringBuilder();
-        for(Category category: categories){
+        if (categories.size() > 3) {
+            categories = categories.subList(0, 3);
+        }
+        for(Category category: categories) {
             sb.append(category.getTitle());
             sb.append(" & ");
         }

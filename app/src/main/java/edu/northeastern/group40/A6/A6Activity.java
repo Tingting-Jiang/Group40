@@ -97,7 +97,7 @@ public class A6Activity extends AppCompatActivity {
         progressIndicator.setVisibility(View.VISIBLE);
         restaurantRecyclerView.setVisibility(View.GONE);
         resultException.setVisibility(View.GONE);
-        yelpService.searchRestaurants("Bearer " + API_KEY, userInput, "New York")
+        yelpService.searchRestaurants("Bearer " + API_KEY, userInput, "San Jose")
                 .enqueue(new Callback<YelpSearchResult>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
