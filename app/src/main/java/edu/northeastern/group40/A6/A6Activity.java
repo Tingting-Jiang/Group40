@@ -1,12 +1,13 @@
 package edu.northeastern.group40.A6;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,9 @@ public class A6Activity extends AppCompatActivity {
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurants;
+    private SearchView searchName;
+    private String restaurantName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,37 +48,54 @@ public class A6Activity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        restaurants=new ArrayList<>();
+        searchName = findViewById(R.id.searchView);
+        restaurants = new ArrayList<>();
+
+        searchName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                restaurantName = newText;
+                searchRestaurants(restaurantName);
+                return true;
+            }
+        });
+
+
         createRecyclerView();
 
         yelpService = retrofit.create(YelpService.class);
 
-        yelpService.searchRestaurants("Bearer " + API_KEY, "Peet's coffee", "San Jose")
-                .enqueue(new Callback<YelpSearchResult>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onResponse(Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
-                        YelpSearchResult body = response.body();
 
-                        if (body == null) {
-                            Log.w(TAG, "Did not get valid response data from Yelp");
-                            return;
-                        } else {
-                            Log.i(TAG, "Success: " + body.getRestaurants());
-                            Log.i(TAG, String.valueOf(response.body().getRestaurants().get(0).getCategories().size()));
-                            restaurantAdapter.setRestaurants(body.getRestaurants());
-                            restaurantAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<YelpSearchResult> call, Throwable t) {
-                        Log.i(TAG, "Failed: " + t);
-
-                    }
-                });
+//        yelpService.searchRestaurants("Bearer " + API_KEY, restaurantName, "San Jose")
+//                .enqueue(new Callback<YelpSearchResult>() {
+//                    @SuppressLint("NotifyDataSetChanged")
+//                    @Override
+//                    public void onResponse(Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
+//                        YelpSearchResult body = response.body();
+//
+//                        if (body == null) {
+//                            Log.w(TAG, "Did not get valid response data from Yelp");
+//                            return;
+//                        } else {
+//                            Log.i(TAG, "Success: " + body.getRestaurants());
+//                            Log.i(TAG, String.valueOf(response.body().getRestaurants().get(0).getCategories().size()));
+//                            restaurantAdapter.setRestaurants(body.getRestaurants());
+//                            restaurantAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<YelpSearchResult> call, Throwable t) {
+//                        Log.i(TAG, "Failed: " + t);
+//
+//                    }
+//                });
     }
-
 
 
     private void searchRestaurants(String userInput) {
