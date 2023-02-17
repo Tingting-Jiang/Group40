@@ -1,5 +1,6 @@
 package edu.northeastern.group40.A6.RecyclerView;
 
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -25,7 +26,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     private final TextView tvAddress;
     private final TextView tvCatogory;
     private final TextView tvPrice;
-
+    private final String noImage;
     public RestaurantViewHolder(@NonNull View itemView) {
         super(itemView);
         imageView=itemView.findViewById(R.id.imageView);
@@ -35,6 +36,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         tvAddress=itemView.findViewById(R.id.tvAddress);
         tvCatogory=itemView.findViewById(R.id.tvCatgory);
         tvPrice=itemView.findViewById(R.id.tvPrice);
+        noImage="https://demofree.sirv.com/nope-not-here.jpg";
     }
 
     public String categoriesToString(List<Category> categories){
@@ -50,10 +52,17 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindThisData(Restaurant restaurantToBind){
-        Picasso.get()
+        try{
+            Picasso.get()
                 .load(restaurantToBind.getImageUrl())
                 .fit()
                 .into(imageView);
+        }catch (Exception e){
+            Picasso.get()
+                    .load(noImage)
+                    .fit()
+                    .into(imageView);
+        }
         restaurant_name.setText(restaurantToBind.getName());
         ratingBar.setIsIndicator(true);
         ratingBar.setRating(restaurantToBind.getRating().floatValue());
