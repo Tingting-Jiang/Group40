@@ -33,7 +33,7 @@ public class A6Activity extends AppCompatActivity {
 
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
-    private List<Restaurant> restaurants = new ArrayList<>();
+    private List<Restaurant> restaurants;
     private SearchView searchName;
     private String restaurantName;
 
@@ -54,14 +54,20 @@ public class A6Activity extends AppCompatActivity {
         searchName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                restaurants.clear();
+                restaurantName = query;
+                searchRestaurants(restaurantName);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                restaurantName = newText;
-                searchRestaurants(restaurantName);
-                return true;
+                if(newText != restaurantName) {
+                    restaurants.clear();
+                    searchRestaurants(restaurantName);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -105,7 +111,7 @@ public class A6Activity extends AppCompatActivity {
     public void createRecyclerView(){
         RecyclerView.LayoutManager rLayoutManager = new LinearLayoutManager(this);
         restaurantRecyclerView = findViewById(R.id.yelp_recView);
-        restaurantRecyclerView.setHasFixedSize(true);
+//        restaurantRecyclerView.setHasFixedSize(true);
         restaurantAdapter = new RestaurantAdapter(restaurants, this);
         restaurantRecyclerView.setAdapter(restaurantAdapter);
         restaurantRecyclerView.setLayoutManager(rLayoutManager);
