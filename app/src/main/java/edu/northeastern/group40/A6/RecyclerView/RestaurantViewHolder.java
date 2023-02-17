@@ -24,7 +24,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     private final RatingBar ratingBar;
     private final TextView tvNumReviews;
     private final TextView tvAddress;
-    private final TextView tvCatogory;
+    private final TextView tvCategory;
     private final TextView tvPrice;
     private final String noImage;
     public RestaurantViewHolder(@NonNull View itemView) {
@@ -34,7 +34,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         ratingBar=itemView.findViewById(R.id.ratingBar);
         tvNumReviews=itemView.findViewById(R.id.tvNumReviews);
         tvAddress=itemView.findViewById(R.id.tvAddress);
-        tvCatogory=itemView.findViewById(R.id.tvCatgory);
+        tvCategory=itemView.findViewById(R.id.tvCategory);
         tvPrice=itemView.findViewById(R.id.tvPrice);
         noImage="https://demofree.sirv.com/nope-not-here.jpg";
     }
@@ -68,7 +68,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         ratingBar.setRating(restaurantToBind.getRating().floatValue());
         tvNumReviews.setText(restaurantToBind.getReviewCount().toString()+" Reviews");
         tvAddress.setText(restaurantToBind.getLocation().getAddress());
-        tvCatogory.setText(categoriesToString(restaurantToBind.getCategories()));
+        tvCategory.setText(categoriesToString(restaurantToBind.getCategories()));
         tvPrice.setText(restaurantToBind.getPrice());
     }
 }
