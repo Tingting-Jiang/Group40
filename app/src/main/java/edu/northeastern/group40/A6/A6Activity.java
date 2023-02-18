@@ -2,8 +2,10 @@ package edu.northeastern.group40.A6;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.northeastern.group40.A6.RecyclerView.RestaurantAdapter;
 import edu.northeastern.group40.A6.YelpModels.Restaurant;
 import edu.northeastern.group40.A6.YelpModels.YelpSearchResult;
 import edu.northeastern.group40.A6.YelpModels.YelpService;
 import edu.northeastern.group40.R;
-import retrofit2.Call;
+//import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -62,7 +65,7 @@ public class A6Activity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText != restaurantName) {
+                if(!Objects.equals(newText, restaurantName)) {
                     restaurants.clear();
                     searchRestaurants(restaurantName);
                     return true;
@@ -81,16 +84,14 @@ public class A6Activity extends AppCompatActivity {
     private void searchRestaurants(String userInput) {
         yelpService.searchRestaurants("Bearer " + API_KEY, userInput, "New York")
                 .enqueue(new Callback<YelpSearchResult>() {
-                    @SuppressLint("NotifyDataSetChanged")
                     @Override
-                    public void onResponse(Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
+                    public void onResponse(@NonNull retrofit2.Call<YelpSearchResult> call, Response<YelpSearchResult> response) {
                         Log.i(TAG, "Success: " + response);
 
                         YelpSearchResult body = response.body();
 
                         if (body == null) {
                             Log.w(TAG, "Did not get valid response data from Yelp");
-                            return;
                         } else {
                             Log.i(TAG, "Success: " + body.getRestaurants());
                             restaurants.addAll(body.getRestaurants());
@@ -100,7 +101,28 @@ public class A6Activity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<YelpSearchResult> call, Throwable t) {
+                    public void onFailure(@NonNull retrofit2.Call<YelpSearchResult> call, @NonNull Throwable t) {
+                        Log.i(TAG, "Failed: " + t);
+                    }
+
+                    @SuppressLint("NotifyDataSetChanged")
+                    public void onResponse(Call call, Response<YelpSearchResult> response) {
+                        Log.i(TAG, "Success: " + response);
+
+                        YelpSearchResult body = response.body();
+
+                        if (body == null) {
+                            Log.w(TAG, "Did not get valid response data from Yelp");
+                        } else {
+                            Log.i(TAG, "Success: " + body.getRestaurants());
+                            restaurants.addAll(body.getRestaurants());
+                            restaurantAdapter.notifyDataSetChanged();
+
+                        }
+                    }
+
+
+                    public void onFailure(Call call, Throwable t) {
                         Log.i(TAG, "Failed: " + t);
 
                     }

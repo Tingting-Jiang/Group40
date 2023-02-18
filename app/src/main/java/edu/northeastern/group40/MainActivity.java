@@ -17,11 +17,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onA6Activity(View view) {
-        openNewActivity(A6Activity.class);
+        openNewActivity();
     }
 
-    private void openNewActivity(Class newActivity) {
-        Intent intent = new Intent (MainActivity.this, newActivity);
+    private void openNewActivity() {
+        Intent intent = new Intent (MainActivity.this, A6Activity.class);
         startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package edu.northeastern.group40.A6.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
         this.restaurants =restaurants;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

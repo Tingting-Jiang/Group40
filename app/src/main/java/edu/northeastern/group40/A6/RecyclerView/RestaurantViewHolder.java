@@ -1,5 +1,6 @@
 package edu.northeastern.group40.A6.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -49,6 +50,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         return sb.toString();
     }
 
+    @SuppressLint("SetTextI18n")
     public void bindThisData(Restaurant restaurantToBind){
         Picasso.get()
                 .load(restaurantToBind.getImageUrl())
