@@ -15,7 +15,7 @@ import edu.northeastern.group40.R;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 
-    private List<Restaurant> restaurants;
+    private final List<Restaurant> restaurants;
     private final Context context;
 
     public RestaurantAdapter(List<Restaurant> restaurants, Context context) {
@@ -23,9 +23,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
         this.context=context;
     }
 
-    public void setRestaurants(List<Restaurant> restaurants){
-        this.restaurants =restaurants;
-    }
 
     @SuppressLint("InflateParams")
     @NonNull
