@@ -2,4 +2,7 @@
     <string name="app_name">Group40</string>
     <string name="hello_world">Hello World! This is Group 40 :)</string>
     <string name="a6_btn_str">A6</string>
+    <string name="a8_str">A8</string>
+    <string name="about_str">About</string>
+    <string name="about_content_str">     Group40 \n\n Team members:\n - Ruihan Ding\n - Zhehao Xu\n - Chuyang Chen\n - Tingting Jiang </string>
 </resources>
