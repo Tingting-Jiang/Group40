@@ -7,6 +7,12 @@ buildscript {
         mavenCentral()  // Maven Central repository
 
     }
+
+    //firebase
+    dependencies {
+
+        classpath 'com.google.gms:google-services:4.3.15'
+    }
 }
 
 
