@@ -12,4 +12,7 @@
     <string name="input_email">Input Email</string>
     <string name="sign_up_button">sign up</string>
     <string name="go_to_sign_in">go to sign in</string>
+    <string name="next"> Next </string>
+    <string name="choose_a_friend" > Choose a friend </string>
+    <string name="the_icon_of_the_friend" >friend icon </string>
 </resources>

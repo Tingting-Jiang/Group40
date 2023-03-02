@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import edu.northeastern.group40.A6.A6Activity;
-import edu.northeastern.group40.A8.A8Activity;
+import edu.northeastern.group40.A8.LogInActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onA8Activity(View view) {
-        openNewActivity(A8Activity.class);
+        openNewActivity(LogInActivity.class);
     }
 
     public void onAboutActivity(View view) {
