@@ -81,7 +81,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void writeNewUser(String email, String userId) {
-        User user = new User(email, userId);
+        String name = email.substring(0, email.indexOf("@"));
+        User user = new User(email, userId, name);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("Users").child(userId).setValue(user);
     }

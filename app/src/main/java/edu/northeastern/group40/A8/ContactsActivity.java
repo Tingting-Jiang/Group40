@@ -25,7 +25,7 @@ public class ContactsActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private DatabaseReference databaseRef;
     private UserAdapter UserAdapter;
-    private ArrayList<User> Userlist;
+    private ArrayList<User> UserList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,8 @@ public class ContactsActivity extends AppCompatActivity{
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Userlist = new ArrayList<>();
-        UserAdapter = new UserAdapter(this,Userlist);
+        UserList = new ArrayList<>();
+        UserAdapter = new UserAdapter(this,UserList);
         recyclerView.setAdapter(UserAdapter);
 
         databaseRef.addValueEventListener(new ValueEventListener() {
@@ -46,8 +46,8 @@ public class ContactsActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Map<String,String> td=(HashMap<String, String>)dataSnapshot.getValue();
-                    User user = new User(td.get("userEmail"), td.get("userId"));
-                    Userlist.add(user);
+                    User user = new User(td.get("userEmail"), td.get("userId"), td.get("userName"));
+                    UserList.add(user);
                 }
                 UserAdapter.notifyDataSetChanged();
             }
