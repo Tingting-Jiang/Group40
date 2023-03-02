@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
-
-import edu.northeastern.group40.A8.Models.User;
 import edu.northeastern.group40.R;
 
 public class A8Activity extends AppCompatActivity {
@@ -83,8 +78,6 @@ public class A8Activity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(A8Activity.this, "Log in successful!", Toast.LENGTH_SHORT).show();
-
-
                         //things to do
                         //such as updateUI();
                         startActivity(new Intent(this, ContactsActivity.class));

@@ -44,16 +44,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         return list.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView userName, userEmail;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.tvName);
             userEmail = itemView.findViewById(R.id.tvEmail);
         }
+
     }
 
-    public interface onUserListener{
-        void onUserClick(int position);
-    }
 }

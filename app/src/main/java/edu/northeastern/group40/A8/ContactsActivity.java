@@ -20,7 +20,7 @@ import edu.northeastern.group40.A8.Models.User;
 import edu.northeastern.group40.A8.RecyclerView.UserAdapter;
 import edu.northeastern.group40.R;
 
-public class ContactsActivity extends AppCompatActivity implements edu.northeastern.group40.A8.RecyclerView.UserAdapter.onUserListener {
+public class ContactsActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView;
     private DatabaseReference databaseRef;
@@ -56,15 +56,6 @@ public class ContactsActivity extends AppCompatActivity implements edu.northeast
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
-
     }
 
-    @Override
-    public void onUserClick(int position) {
-        Userlist.get(position);
-//        do the send message activity;
-//        Youtube: https://www.youtube.com/watch?v=69C1ljfDvl0
-
-    }
 }
