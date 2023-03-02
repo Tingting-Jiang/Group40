@@ -15,4 +15,8 @@
     <string name="next"> Next </string>
     <string name="choose_a_friend" > Choose a friend </string>
     <string name="the_icon_of_the_friend" >friend icon </string>
+    <string name="june_10">June-10</string>
+    <string name="mike_mickey">Mike Tom</string>
+    <string name="_10_00">09:59</string>
+    <string name="textview">name</string>
 </resources>
