@@ -8,11 +8,11 @@ public class Message {
     String time;
 
 
-    public Message(String message, String sender, String receiver, String createdAt, String time) {
+    public Message(String message, String sender, String receiver, String date, String time) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
-        this.date = createdAt;
+        this.date = date;
         this.time = time;
     }
 

@@ -2,6 +2,7 @@ package edu.northeastern.group40.A8;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -105,7 +106,6 @@ public class MessageActivity extends AppCompatActivity {
 
         // update current message list
         readMsg(firebaseUser.getUid(), friendUserId);
-
     }
 
     private void init() {

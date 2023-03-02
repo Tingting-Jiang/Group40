@@ -1,14 +1,22 @@
 package edu.northeastern.group40.A8.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
 
 import edu.northeastern.group40.A8.Models.ItemCheckedListener;
@@ -40,8 +48,9 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     @Override
     public void onBindViewHolder(@NonNull StickerAdapter.StickerViewHolder holder, int position) {
-        String singleImage = images.get(position).getStickerId();
-        holder.image.setImageResource(Integer.parseInt(singleImage));
+        Sticker currSticker = images.get(position);
+        holder.image.setImageResource(Integer.parseInt(currSticker.getStickerId()));
+        holder.stickerName.setText(currSticker.getStickerName());
     }
 
     @Override
@@ -49,13 +58,26 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
         return images.size();
     }
 
+
     public class StickerViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
+        TextView stickerName;
+        ImageButton sendButton;
 
 
         public StickerViewHolder(@NonNull View itemView, ItemCheckedListener listener) {
             super(itemView);
             this.image = itemView.findViewById(R.id.sticker_id);
+            this.sendButton = itemView.findViewById(R.id.send_btn);
+            this.stickerName = itemView.findViewById(R.id.sticker_name);
+
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext,
+                            "button clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
