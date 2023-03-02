@@ -1,5 +1,6 @@
 package edu.northeastern.group40.A6.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -23,7 +24,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     private final RatingBar ratingBar;
     private final TextView tvNumReviews;
     private final TextView tvAddress;
-    private final TextView tvCatogory;
+    private final TextView tvCategory;
     private final TextView tvPrice;
 
     public RestaurantViewHolder(@NonNull View itemView) {
@@ -33,12 +34,15 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         ratingBar=itemView.findViewById(R.id.ratingBar);
         tvNumReviews=itemView.findViewById(R.id.tvNumReviews);
         tvAddress=itemView.findViewById(R.id.tvAddress);
-        tvCatogory=itemView.findViewById(R.id.tvCatgory);
+        tvCategory=itemView.findViewById(R.id.tvCategory);
         tvPrice=itemView.findViewById(R.id.tvPrice);
     }
 
     public String categoriesToString(List<Category> categories){
         StringBuilder sb=new StringBuilder();
+        if (categories.size() > 2)
+            categories = categories.subList(0 ,2);
+
         for(Category category: categories){
             sb.append(category.getTitle());
             sb.append(" & ");
@@ -49,6 +53,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         return sb.toString();
     }
 
+    @SuppressLint("SetTextI18n")
     public void bindThisData(Restaurant restaurantToBind){
         Picasso.get()
                 .load(restaurantToBind.getImageUrl())
@@ -59,7 +64,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         ratingBar.setRating(restaurantToBind.getRating().floatValue());
         tvNumReviews.setText(restaurantToBind.getReviewCount().toString()+" Reviews");
         tvAddress.setText(restaurantToBind.getLocation().getAddress());
-        tvCatogory.setText(categoriesToString(restaurantToBind.getCategories()));
+        tvCategory.setText(categoriesToString(restaurantToBind.getCategories()));
         tvPrice.setText(restaurantToBind.getPrice());
     }
 }

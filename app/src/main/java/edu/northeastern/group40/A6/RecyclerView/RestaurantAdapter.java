@@ -1,5 +1,6 @@
 package edu.northeastern.group40.A6.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,18 +15,16 @@ import edu.northeastern.group40.R;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 
-    private List<Restaurant> resraurants;
+    private final List<Restaurant> restaurants;
     private final Context context;
 
-    public RestaurantAdapter(List<Restaurant> resraurants, Context context) {
-        this.resraurants = resraurants;
+    public RestaurantAdapter(List<Restaurant> restaurants, Context context) {
+        this.restaurants = restaurants;
         this.context=context;
     }
 
-    public void setRestaurants(List<Restaurant> restaurants){
-        this.resraurants=restaurants;
-    }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,11 +33,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        holder.bindThisData(resraurants.get(position));
+        holder.bindThisData(restaurants.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return resraurants.size();
+        return restaurants.size();
     }
 }
