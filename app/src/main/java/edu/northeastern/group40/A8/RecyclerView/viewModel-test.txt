@@ -1,0 +1,203 @@
+package edu.northeastern.group40.A8;
+
+import android.annotation.SuppressLint;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.sql.Array;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.northeastern.group40.A8.Models.Message;
+import edu.northeastern.group40.A8.Models.Sticker;
+import edu.northeastern.group40.R;
+
+public class DatabaseViewModel {
+
+    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm";
+    private static final String TAG = "DatabaseViewModel";
+    private final MutableLiveData<List<Sticker>> stickerLD = new MutableLiveData<>();
+    private final MutableLiveData<List<Message>> messageLD = new MutableLiveData<>();
+    private String friendUId;
+
+    private static final HashMap<Integer, String> IMAGE_LIST = new HashMap<Integer, String>(){
+        {
+            put(R.drawable.cat, "cat");
+            put(R.drawable.rabbit, "rabbit");
+
+        }
+    };
+
+    public void setFriendUId(String uid) {
+        this.friendUId = uid;
+    }
+
+    private static DatabaseViewModel instance; // set this class to be singleton pattern
+
+    // database to store the user info
+    private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference stickerDRef;
+    private DatabaseReference messageDRef;
+    private String myId;
+
+
+
+    // Constructor
+    public DatabaseViewModel() {
+        stickerDRef = database.child("Stickers");
+        messageDRef = database.child("Messages");
+        myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // add current resource file to db
+        addStickersToDB();
+
+
+        // get stickers from db
+        loadStickerList();
+
+    }
+
+    public MutableLiveData<List<Message>> observeMessageLD() {
+        return messageLD;
+    }
+
+    public MutableLiveData<List<Sticker>> observeStickerLD() {
+        return stickerLD;
+    }
+
+    public void loadMessageDataFromDB(String friendUserId) {
+        Thread thread = new Thread(() -> {
+            List<Message> tempMessages = messageLD.getValue();
+            if (tempMessages == null) {
+                tempMessages = new ArrayList<>();
+            }
+            List<Message> finalTempMessages = tempMessages;
+            messageDRef.addValueEventListener(new ValueEventListener() {
+
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int idx = 0;
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                        Message msg = dataSnapshot.getValue(Message.class);
+                        if (msg.getReceiver().equals(myId) && msg.getSender().equals(friendUserId) ||
+                                msg.getReceiver().equals(friendUserId) && msg.getSender().equals(myId)) {
+                            if (idx > 0 && !TextUtils.isEmpty(finalTempMessages.get(idx-1).getDate())) {
+                                msg.setDate();
+                            }
+                            finalTempMessages.add(msg);
+                            idx++;
+                        }
+                    }
+                    Log.i(TAG, "MESSAGE item --" + finalTempMessages.size());
+                    messageLD.postValue(finalTempMessages);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        });
+        thread.start();
+
+
+    }
+
+    private void addStickersToDB() {
+
+        List<Sticker> tempStickerList = new ArrayList<>();
+
+        Thread thread = new Thread(() -> {
+            for (Map.Entry<Integer, String> pair : IMAGE_LIST.entrySet()) {
+                Sticker currSticker = new Sticker(String.valueOf(pair.getKey()), pair.getValue());
+                tempStickerList.add(currSticker);
+                stickerDRef.push().setValue(currSticker);
+            }
+            stickerLD.postValue(tempStickerList);
+        });
+        thread.start();
+    }
+
+
+    // after the user registered or logged in, display the watch list
+    public void loadStickerList() {
+        //if uer is signed in, load his watch list and update data accordingly
+        // if this user is newly registered, display nothing
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        List<Sticker> stickerList = new ArrayList<>();
+
+        if (user != null) { // if the user logged in
+            ValueEventListener eventListener = new ValueEventListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Thread thread = new Thread(() -> {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Sticker currSticker = ds.getValue(Sticker.class);
+                            // show users except current user
+                            assert currSticker != null;
+                            stickerList.add(currSticker);
+                            Log.i(TAG, "get id: " + currSticker.getStickerId());
+                            Log.i(TAG, "get name: " + currSticker.getStickerName());
+                        }
+
+                    });
+                    thread.start();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+            stickerDRef.addValueEventListener(eventListener);
+        }
+    }
+
+    public void sendMessage(String sender, String receiver, String textContent) {
+        Thread thread = new Thread(()-> {
+            @SuppressLint("SimpleDateFormat")
+            String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
+            Message newMsg = new Message(
+                    textContent, sender, receiver, timestamp.substring(0, 10), timestamp.substring(11));
+            List<Message> tempMessages = messageLD.getValue();
+            // this is the first message between two users
+            if (tempMessages == null) {
+                tempMessages = new ArrayList<>();
+            }
+
+            // add the new message into db
+            messageDRef.push().setValue(newMsg);
+            tempMessages.add(newMsg);
+            messageLD.postValue(tempMessages);
+        });
+        thread.start();
+    }
+
+
+    public static DatabaseViewModel getInstance() {
+        if (instance == null) {
+            instance = new DatabaseViewModel();
+        }
+        return instance;
+    }
+
+}
