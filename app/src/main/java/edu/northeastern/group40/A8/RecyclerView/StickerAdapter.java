@@ -40,7 +40,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     @Override
     public void onBindViewHolder(@NonNull StickerAdapter.StickerViewHolder holder, int position) {
-        String singleImage = images.get(position).getImageId();
+        String singleImage = images.get(position).getStickerId();
         holder.image.setImageResource(Integer.parseInt(singleImage));
     }
 

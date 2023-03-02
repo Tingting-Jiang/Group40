@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +44,6 @@ public class MessageActivity extends AppCompatActivity {
     private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm";
     private static final String EMAIL_SUFFIX = "@123.com";
     private String friendUserId;
-    private ImageButton sendMsgButton;
-    private EditText msgEditTxt;
     private TextView title;
     private MessageListAdapter mMsgAdapter;
     private StickerAdapter stickerAdapter;
@@ -70,18 +69,6 @@ public class MessageActivity extends AppCompatActivity {
         init();
         createMsgRecView();
         createStickersRecView();
-
-//        sendMsgButton.setOnClickListener(v -> {
-//            String textContent = msgEditTxt.getText().toString();
-//            if (TextUtils.isEmpty(textContent)) {
-//                Toast.makeText(MessageActivity.this, "You cannot send empty message", Toast.LENGTH_SHORT).show();
-//            } else {
-//                sendMsg(firebaseUser.getUid(), friendUserId, textContent);
-//            }
-//            msgEditTxt.setText("");
-//
-//        });
-
         reference = FirebaseDatabase.getInstance().getReference("Users").child(friendUserId);
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -114,7 +101,6 @@ public class MessageActivity extends AppCompatActivity {
         map.put("message", textContent);
         map.put("date", timestamp.substring(0, 10));
         map.put("time", timestamp.substring(11));
-//        map.put("senderFullName", myName);
         dbRef.child("Messages").push().setValue(map);
 
         // update current message list
@@ -122,10 +108,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void init() {
-//        sendMsgButton = findViewById(R.id.send_button);
-//        msgEditTxt = findViewById(R.id.message_edit_txt);
         title = findViewById(R.id.title);
         this.friendUserId = getIntent().getStringExtra("chosenFriend");
 
@@ -139,8 +122,7 @@ public class MessageActivity extends AppCompatActivity {
 
         RecyclerView msgRecView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setStackFromEnd(true);
-        msgRecView.setHasFixedSize(true); //TODO: READ DOC
+//        msgRecView.setHasFixedSize(true); //TODO: READ DOC
         msgRecView.setLayoutManager(layoutManager);
         mMsgAdapter = new MessageListAdapter(MessageActivity.this, messageList);
         msgRecView.setAdapter(mMsgAdapter);
@@ -166,7 +148,20 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        DatabaseReference usersDRef = mDatabase.child("Stickers");
+        DatabaseReference stickersDRef = mDatabase.child("Stickers");
+//        HashMap<String, Object> map1 = new HashMap<>();
+//
+//        map1.put("stickerName", "cat");
+//        map1.put("stickerId", "2131165430");
+//
+//        stickersDRef.push().setValue(map1);
+//
+//        HashMap<String, Object> map2 = new HashMap<>();
+//
+//        map2.put("stickerName", "rabbit");
+//        map2.put("stickerId", "2131165431");
+//
+//        stickersDRef.push().setValue(map2);
         ValueEventListener eventListener = new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -176,18 +171,19 @@ public class MessageActivity extends AppCompatActivity {
                     // show users except current user
                     assert currSticker != null;
                     stickerList.add(currSticker);
+                    Log.i(TAG, "get id: " + currSticker.getStickerId());
+                    Log.i(TAG, "get name: " + currSticker.getStickerName());
                 }
 
                 handler.post(() -> {
                     getDataDone = true;
                     Log.i(TAG, "GET data NUM: " + stickerList.size());
                     stickerAdapter.notifyDataSetChanged();
+                    Log.i(TAG,  "finished notify");
 
-                    if (stickerList.size() == 0) {
-                        stickerList.add(new Sticker(String.valueOf(R.drawable.cat)));
-                        stickerList.add(new Sticker(String.valueOf(R.drawable.rabbit)));
-                        stickerList.add(new Sticker(String.valueOf(R.drawable.cat)));
-                    }
+//                    // update current message list
+//                    readMsg(firebaseUser.getUid(), friendUserId);
+
                 });
             }
             @Override
@@ -195,12 +191,10 @@ public class MessageActivity extends AppCompatActivity {
                 Toast.makeText(MessageActivity.this, "Failed to load sticker list from DB", Toast.LENGTH_SHORT).show();
             }
         };
-        usersDRef.addListenerForSingleValueEvent(eventListener);
+        stickersDRef.addListenerForSingleValueEvent(eventListener);
     }
 
     private void createStickersRecView() {
-
-        getStickerDataFromDB();
         RecyclerView stickerRecView = findViewById(R.id.sticker_rec_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         stickerRecView.setLayoutManager(layoutManager);
@@ -208,13 +202,17 @@ public class MessageActivity extends AppCompatActivity {
 
         ItemCheckedListener itemCheckedListener = position -> {
             stickerList.get(position).onItemChecked(position);
-            chosenStickerId = stickerList.get(position).getImageId();
+            chosenStickerId = stickerList.get(position).getStickerId();
+
             sendMsg( firebaseUser.getUid(), friendUserId, chosenStickerId);
+
 //            stickerAdapter.notifyItemChanged(position);
         };
         stickerAdapter.setOnItemCheckedListener(itemCheckedListener);
 
         stickerRecView.setAdapter(stickerAdapter);
+
+        getStickerDataFromDB();
     }
 
 
