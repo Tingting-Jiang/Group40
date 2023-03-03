@@ -33,6 +33,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     public MessageListAdapter(Context context, List<Message> messageList) {
         mContext = context;
         mMessages = messageList;
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
@@ -54,7 +55,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         Message message = mMessages.get(position);
 
         if (message.getSender().equals(firebaseUser.getUid())) {
@@ -72,7 +73,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         Message message = mMessages.get(position);
         holder.sticker.setImageResource(Integer.parseInt(message.getMessage()));
         holder.timeText.setText(message.getTime());
-        holder.nameText.setText(message.getSender());
+        holder.nameText.setText(message.getSenderFullName());
         holder.dateText.setText(message.getDate());
 
     }

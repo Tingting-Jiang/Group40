@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,18 +52,31 @@ public class MessageActivity extends AppCompatActivity {
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference messageDB;
     private DatabaseReference usersDB;
-    private DatabaseReference stickerDB;
     private String myId;
     private User myInfo;
     private final List<Message> messageList = new ArrayList<>();
     private String friendUserName;
-    private final List<Sticker> stickerList = new ArrayList<>();
     private final Handler handler = new Handler();
     private volatile boolean getDataDone = false;
     private String stickerTotalInfo = "";
 //    private String myName = "default name";
 
 
+    private static final List<Sticker> stickerList = new ArrayList<Sticker>(){
+        {
+            add(new Sticker(String.valueOf(R.drawable.cat), "cat"));
+            add(new Sticker(String.valueOf(R.drawable.rabbit), "rabbit"));
+            add(new Sticker(String.valueOf(R.drawable.dog), "dog"));
+            add(new Sticker(String.valueOf(R.drawable.horse), "horse"));
+            add(new Sticker(String.valueOf(R.drawable.cow), "cow"));
+            add(new Sticker(String.valueOf(R.drawable.sheep), "sheep"));
+            add(new Sticker(String.valueOf(R.drawable.chick), "chick"));
+            add(new Sticker(String.valueOf(R.drawable.duck), "duck"));
+            add(new Sticker(String.valueOf(R.drawable.giraffe), "giraffe"));
+            add(new Sticker(String.valueOf(R.drawable.pig), "pig"));
+            add(new Sticker(String.valueOf(R.drawable.panda), "panda"));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,26 +85,17 @@ public class MessageActivity extends AppCompatActivity {
         init();
         createMsgRecView();
         createStickersRecView();
-//        usersDB.child(friendUserId).addValueEventListener(new ValueEventListener() {
-//            @SuppressLint("SetTextI18n")
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User user = snapshot.getValue(User.class);
-//                assert user != null;
-//                friendUserName = user.getNickname();
-//                title.setText("Message to " + friendUserName);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         usersDB.addChildEventListener(new ChildEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                User user = snapshot.getValue(User.class);
+                if (user.getUserId().equals(friendUserId)) {
+                    title.setText("Message to " + user.getNickname());
+                } else if (user.getUserId().equals(myId)) {
+                    myInfo = user;
+                }
             }
 
             @Override
@@ -115,30 +120,22 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
     private void updateUserInfo(DataSnapshot snapshot) {
         User currUser = snapshot.getValue(User.class);
         if (currUser.getUserId().equals(myId)) {
             myInfo = currUser;
             Log.i(TAG, myInfo.displayStickerSend());
-        } else {
-            friendUserName = currUser.getNickname();
-            title.setText("Message to " + friendUserName);
-
         }
     }
 
     private void sendMsg(String sender, String receiver, Sticker chosenSticker) {
         // save message to database
-
         @SuppressLint("SimpleDateFormat")
         String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
-        Message newMsg = new Message(chosenSticker.getStickerId(), sender, receiver, timestamp.substring(0, 10),timestamp.substring(11));
+        Message newMsg = new Message(chosenSticker.getStickerId(), sender, receiver, timestamp.substring(0, 10),timestamp.substring(11), myInfo.getNickname());
         messageDB.push().setValue(newMsg);
 
         Toast.makeText(MessageActivity.this, chosenSticker.getStickerName() + " sent :)", Toast.LENGTH_SHORT).show();
-
-        // TODO: SAVE current sticker to my profile
 
         updateUserStickerData(chosenSticker);
 
@@ -162,6 +159,7 @@ public class MessageActivity extends AppCompatActivity {
                     Log.i(TAG, "create empty origin data");
                 }
                 Integer originNum = originData.getOrDefault(chosenSticker.getStickerName(), 0);
+                assert originNum != null;
                 originData.put(chosenSticker.getStickerName(), originNum + 1);
                 user.setStickerSend(originData);
                 currentData.setValue(user);
@@ -171,7 +169,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed,
                                    @Nullable DataSnapshot currentData) {
-                Log.d(TAG, "postTransaction: onComplete: " + error);
+//                Log.d(TAG, "postTransaction: onComplete: " + error);
                 Toast.makeText(MessageActivity.this, "Get DB error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -180,81 +178,25 @@ public class MessageActivity extends AppCompatActivity {
 
     private void init() {
         messageDB = mDatabase.child("Messages");
-        stickerDB = mDatabase.child("Stickers");
         usersDB = mDatabase.child("Users");
         title = findViewById(R.id.title);
         this.friendUserId = getIntent().getStringExtra("chosenFriend");
-
-        myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currUser != null;
+        myId = currUser.getUid();
     }
 
 
 
     private void createMsgRecView() {
-
         RecyclerView msgRecView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        msgRecView.setHasFixedSize(true); //TODO: READ DOC
         msgRecView.setLayoutManager(layoutManager);
         mMsgAdapter = new MessageListAdapter(MessageActivity.this, messageList);
         msgRecView.setAdapter(mMsgAdapter);
 
         // after set up Recycler UI, connect to database to see if there is unread msg
         readMsg(myId, friendUserId);
-    }
-
-    private void getStickerDataFromDB() {
-        FetchStickerDataFromDB runnableThread = new FetchStickerDataFromDB();
-        new Thread(runnableThread).start();
-    }
-
-    class FetchStickerDataFromDB implements Runnable {
-        @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
-        @Override
-        public void run() {
-            if (!getDataDone) {
-                fetchData();
-
-            }
-        }
-    }
-
-    private void fetchData() {
-//        HashMap<String, Object> map1 = new HashMap<>();
-//
-//        map1.put("stickerName", "cat");
-//        map1.put("stickerId", "2131165430");
-//
-//        stickersDRef.push().setValue(map1);
-//
-//        HashMap<String, Object> map2 = new HashMap<>();
-//
-//        map2.put("stickerName", "rabbit");
-//        map2.put("stickerId", "2131165431");
-//
-//        stickersDRef.push().setValue(map2);
-        ValueEventListener eventListener = new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Sticker currSticker = ds.getValue(Sticker.class);
-                    // show users except current user
-                    assert currSticker != null;
-                    stickerList.add(currSticker);
-                }
-
-                handler.post(() -> {
-                    getDataDone = true;
-                    stickerAdapter.notifyDataSetChanged();
-                });
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MessageActivity.this, "Failed to load sticker list from DB", Toast.LENGTH_SHORT).show();
-            }
-        };
-        stickerDB.addListenerForSingleValueEvent(eventListener);
     }
 
     private void createStickersRecView() {
@@ -267,18 +209,12 @@ public class MessageActivity extends AppCompatActivity {
             Sticker chosenSticker = stickerList.get(position);
             chosenSticker.onItemChecked(position);
             sendMsg(myId, friendUserId, chosenSticker);
-
-//            stickerAdapter.notifyItemChanged(position);
         };
         stickerAdapter.setOnItemCheckedListener(itemCheckedListener);
 
         stickerRecView.setAdapter(stickerAdapter);
-
-        getStickerDataFromDB();
     }
-
-
-
+    
     private void readMsg(String myId, String friendUserId) {
         DatabaseReference msgDRef = FirebaseDatabase.getInstance().getReference("Messages");
         msgDRef.addValueEventListener(new ValueEventListener() {
