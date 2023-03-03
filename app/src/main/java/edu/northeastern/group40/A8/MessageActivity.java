@@ -214,7 +214,7 @@ public class MessageActivity extends AppCompatActivity {
 
         stickerRecView.setAdapter(stickerAdapter);
     }
-    
+
     private void readMsg(String myId, String friendUserId) {
         DatabaseReference msgDRef = FirebaseDatabase.getInstance().getReference("Messages");
         msgDRef.addValueEventListener(new ValueEventListener() {
