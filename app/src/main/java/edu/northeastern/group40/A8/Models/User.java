@@ -38,12 +38,16 @@ public class User implements ItemCheckedListener {
     }
 
     public String displayStickerSend() {
+        if (stickerSend == null ||stickerSend.size() == 0) {
+            return "Nothing";
+        }
         StringBuilder sb = new StringBuilder();
-        sb.append("You've sent: ");
         for (Map.Entry<String, Integer> pairs: stickerSend.entrySet()) {
             sb.append(pairs.getKey());
             sb.append(": ").append(pairs.getValue()).append(", ");
         }
+        int lastComma = sb.length()-2;
+        sb.deleteCharAt(lastComma);
         return sb.toString();
     }
 
