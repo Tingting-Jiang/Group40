@@ -76,7 +76,7 @@ public class LogInActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(LogInActivity.this, "Log in successful!", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(LogInActivity.this, FriendListActivity.class);
+                        Intent intent = new Intent(LogInActivity.this, ContactsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 

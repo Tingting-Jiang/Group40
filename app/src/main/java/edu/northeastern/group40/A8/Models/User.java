@@ -5,20 +5,29 @@ import java.util.Map;
 
 public class User implements ItemCheckedListener {
     private String nickname;
+    private String email;
     private String userId;
     private HashMap<String, Integer> stickerSend;
+    private boolean isChosen;
 
-    public User(String nickname, String userId, HashMap<String, Integer> stickerSend) {
+
+    public User(String nickname, String userId, HashMap<String, Integer> stickerSend, String email, boolean isChosen) {
         this.nickname = nickname;
         this.userId = userId;
         this.stickerSend = stickerSend;
+        this.email = email;
+        this.isChosen = isChosen;
     }
 
     public User() {}
 
     public String getNickname() {
 
-        return nickname;
+        return nickname + (isChosen ? "(checked)" : "");
+    }
+
+    public boolean isChosen() {
+        return isChosen;
     }
 
     public HashMap<String, Integer> getStickerSend() {
@@ -41,6 +50,14 @@ public class User implements ItemCheckedListener {
             sb.append(": ").append(pairs.getValue()).append(", ");
         }
         return sb.toString();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean getStatus() {
+        return isChosen;
     }
 
 

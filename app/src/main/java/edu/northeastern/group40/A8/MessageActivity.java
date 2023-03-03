@@ -56,8 +56,7 @@ public class MessageActivity extends AppCompatActivity {
     private User myInfo;
     private final List<Message> messageList = new ArrayList<>();
     private String friendUserName;
-    private final Handler handler = new Handler();
-    private volatile boolean getDataDone = false;
+
     private String stickerTotalInfo = "";
 //    private String myName = "default name";
 

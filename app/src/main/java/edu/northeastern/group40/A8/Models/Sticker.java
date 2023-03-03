@@ -3,12 +3,12 @@ package edu.northeastern.group40.A8.Models;
 public class Sticker implements ItemCheckedListener {
     private String stickerId;
     private String stickerName;
-    private Boolean isChosen;
+//    private Boolean isChosen;
 
     public Sticker(String stickerId, String stickerName) {
         this.stickerId = stickerId;
         this.stickerName = stickerName;
-        isChosen = false;
+//        isChosen = false;
     }
 
     public Sticker() {}
@@ -30,13 +30,15 @@ public class Sticker implements ItemCheckedListener {
         return sb.toString();
     }
 
-    public void unChosen() {
-        isChosen = false;
-    }
+//    public void unChosen() {
+//        isChosen = false;
+//    }
 
     @Override
     public void onItemChecked(int position) {
-        isChosen = true;
+//        isChosen = true;
 
     }
+
+
 }

@@ -71,12 +71,10 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView() {
-        Log.d(TAG, "current size---: " + friends.size());
         RecyclerView friendListRecView = findViewById(R.id.user_list_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
         adapter = new FriendListAdapter(friends);
-
 
         ItemCheckedListener itemCheckedListener = position -> {
             friends.get(position).onItemChecked(position);

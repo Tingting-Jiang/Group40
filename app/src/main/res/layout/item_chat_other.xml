@@ -19,20 +19,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/image"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:contentDescription="User Icon"-->
-    <!--        app:layout_constraintEnd_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/date_txt" />-->
-
     <TextView
         android:id="@+id/user_name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="John Grady Cole"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"

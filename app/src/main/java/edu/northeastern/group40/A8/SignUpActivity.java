@@ -3,7 +3,9 @@ package edu.northeastern.group40.A8;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,7 +29,6 @@ import edu.northeastern.group40.R;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUp";
 
-
     private FirebaseAuth mAuth;
     private EditText EmailEditText;
     private EditText PasswordEditText;
@@ -50,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         signUpButton.setOnClickListener(v -> {
             String email = EmailEditText.getText().toString();
-            if(email.isEmpty()){
+            if (email.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "Please Input email", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -74,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         String userId = firebaseUser.getUid();
-                        User newUser = new User(userName, userId, new HashMap<>());
+                        User newUser = new User(userName, userId, new HashMap<>(), email, false);
                         saveNewUserToDB(newUser);
 
                         Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
@@ -88,13 +89,14 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+
     private void saveNewUserToDB(User newUser) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(newUser.getUserId());
         reference.setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Intent intent = new Intent(SignUpActivity.this, FriendListActivity.class);
+                    Intent intent = new Intent(SignUpActivity.this, ContactsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
@@ -103,7 +105,5 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-
 }
