@@ -2,8 +2,8 @@
 <resources>
     <string name="input_password">Input password</string>
     <string name="sign_up">Sign Up</string>
-    <string name="sign_in">Sign In</string>
+    <string name="log_in">Sign In</string>
     <string name="input_email">Input Email</string>
     <string name="sign_up_button">sign up</string>
-    <string name="go_to_sign_in">go to sign in</string>
+    <string name="go_to_log_in">go to sign in</string>
 </resources>

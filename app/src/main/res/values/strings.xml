@@ -8,10 +8,10 @@
     <string name="about_us">About Us</string>
     <string name="input_password">Input password</string>
     <string name="sign_up">Go to sign up</string>
-    <string name="sign_in">Sign In</string>
+    <string name="log_in">Log In</string>
     <string name="input_email">Input Email</string>
     <string name="sign_up_button">sign up</string>
-    <string name="go_to_sign_in">go to sign in</string>
+    <string name="go_to_log_in">go to log in</string>
     <string name="next"> Next </string>
     <string name="choose_a_friend" > Choose a friend </string>
     <string name="the_icon_of_the_friend" >friend icon </string>
@@ -23,4 +23,6 @@
     <string name="more">Details</string>
     <string name="ok">OK</string>
     <string name="details_of_the_stickers_you_sent_n">Stickers you sent:</string>
+    <string name="sign_up_title">Sign up</string>
+    <string name="log_in_title">Log In</string>
 </resources>
