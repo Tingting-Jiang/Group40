@@ -80,7 +80,7 @@ public class FriendListActivity extends AppCompatActivity {
 
         ItemCheckedListener itemCheckedListener = position -> {
             friends.get(position).onItemChecked(position);
-            chosenFriend = friends.get(position).userId;
+            chosenFriend = friends.get(position).getUserId();
             adapter.notifyItemChanged(position);
         };
         adapter.setOnItemCheckedListener(itemCheckedListener);
@@ -122,7 +122,7 @@ public class FriendListActivity extends AppCompatActivity {
                     User currUser = ds.getValue(User.class);
                     // show users except current user
                     assert currUser != null;
-                    if (!currUser.userId.equals(currentUserId)) {
+                    if (!currUser.getUserId().equals(currentUserId)) {
                         friends.add(currUser);
                     }
                 }

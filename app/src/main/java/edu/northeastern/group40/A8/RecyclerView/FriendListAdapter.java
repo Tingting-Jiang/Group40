@@ -35,7 +35,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListViewHolder
     @Override
     public void onBindViewHolder(@NonNull FriendListViewHolder holder, int position) {
         User currentUser = friends.get(position);
-        holder.name.setText(currentUser.nickname);
+        holder.name.setText(currentUser.getNickname());
 
     }
 

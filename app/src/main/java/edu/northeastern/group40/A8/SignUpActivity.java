@@ -77,7 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
                         User newUser = new User(userName, userId, new HashMap<>());
                         saveNewUserToDB(newUser);
 
-
                         Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, FriendListActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -90,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void saveNewUserToDB(User newUser) {
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(newUser.userId);
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(newUser.getUserId());
         reference.setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

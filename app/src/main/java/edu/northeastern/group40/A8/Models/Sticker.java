@@ -1,6 +1,6 @@
 package edu.northeastern.group40.A8.Models;
 
-public class Sticker implements ItemCheckedListener{
+public class Sticker implements ItemCheckedListener {
     private String stickerId;
     private String stickerName;
     private Boolean isChosen;
@@ -19,6 +19,15 @@ public class Sticker implements ItemCheckedListener{
 
     public String getStickerName() {
         return stickerName;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[Name: ").append(stickerName).append(", ");
+        sb.append("Id: ").append(stickerId).append("]");
+
+        return sb.toString();
     }
 
     public void unChosen() {

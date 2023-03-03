@@ -1,17 +1,16 @@
 package edu.northeastern.group40.A8.Models;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class User implements ItemCheckedListener {
-    public String nickname;
-    public String userId;
-    public Boolean isChosen;
-    public HashMap<String, Integer> stickerSend;
+    private String nickname;
+    private String userId;
+    private HashMap<String, Integer> stickerSend;
 
     public User(String nickname, String userId, HashMap<String, Integer> stickerSend) {
         this.nickname = nickname;
         this.userId = userId;
-        this.isChosen = false;
         this.stickerSend = stickerSend;
     }
 
@@ -19,7 +18,7 @@ public class User implements ItemCheckedListener {
 
     public String getNickname() {
 
-        return nickname + (isChosen ? "(chosen)" : "");
+        return nickname;
     }
 
     public HashMap<String, Integer> getStickerSend() {
@@ -30,10 +29,23 @@ public class User implements ItemCheckedListener {
         return userId;
     }
 
+    public void setStickerSend(HashMap<String, Integer> updatedStickerSend) {
+        this.stickerSend = updatedStickerSend;
+    }
+
+    public String displayStickerSend() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("You've sent: ");
+        for (Map.Entry<String, Integer> pairs: stickerSend.entrySet()) {
+            sb.append(pairs.getKey());
+            sb.append(": ").append(pairs.getValue()).append(", ");
+        }
+        return sb.toString();
+    }
+
 
     @Override
     public void onItemChecked(int position) {
-        this.isChosen = !isChosen;
 
     }
 }
