@@ -24,13 +24,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".A8.FriendListActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".A8.LogInActivity"
             android:exported="false">
             <meta-data
