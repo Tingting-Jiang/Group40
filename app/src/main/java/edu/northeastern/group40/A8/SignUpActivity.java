@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import edu.northeastern.group40.A8.Models.User;
@@ -73,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         String userId = firebaseUser.getUid();
-                        User newUser = new User(userName, userId);
+                        User newUser = new User(userName, userId, new HashMap<>());
                         saveNewUserToDB(newUser);
 
 

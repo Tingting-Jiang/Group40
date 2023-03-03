@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.northeastern.group40.A8.Models.ButtonClickedListener;
 import edu.northeastern.group40.A8.Models.ItemCheckedListener;
 import edu.northeastern.group40.A8.Models.Sticker;
 import edu.northeastern.group40.R;
@@ -50,7 +52,9 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
     public void onBindViewHolder(@NonNull StickerAdapter.StickerViewHolder holder, int position) {
         Sticker currSticker = images.get(position);
         holder.image.setImageResource(Integer.parseInt(currSticker.getStickerId()));
-        holder.stickerName.setText(currSticker.getStickerName());
+        String stickerName = currSticker.getStickerName();
+        holder.setStickerName(stickerName);
+        holder.sendButton.setText(stickerName);
     }
 
     @Override
@@ -61,23 +65,23 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
 
     public class StickerViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView stickerName;
-        ImageButton sendButton;
+        Button sendButton;
+        String stickerName = "default";
 
 
         public StickerViewHolder(@NonNull View itemView, ItemCheckedListener listener) {
             super(itemView);
             this.image = itemView.findViewById(R.id.sticker_id);
             this.sendButton = itemView.findViewById(R.id.send_btn);
-            this.stickerName = itemView.findViewById(R.id.sticker_name);
 
-            sendButton.setOnClickListener(new View.OnClickListener() {
+            this.sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,
-                            "button clicked", Toast.LENGTH_SHORT).show();
+                    listener.onItemChecked(getLayoutPosition());
+                    Toast.makeText(mContext, stickerName + "sent :)", Toast.LENGTH_SHORT).show();
                 }
             });
+
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
@@ -87,6 +91,10 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
                     }
                 }
             });
+        }
+
+        public void setStickerName(String name) {
+            stickerName = name;
         }
     }
 }

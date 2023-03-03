@@ -2,7 +2,6 @@ package edu.northeastern.group40.A8;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,20 +85,15 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    private void sendMsg(String sender, String receiver, String textContent) {
+    private void sendMsg(String sender, String receiver, String textContent, String stickerName) {
         // save message to database
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-        HashMap<String, Object> map = new HashMap<>();
-
         @SuppressLint("SimpleDateFormat")
         String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
+        Message newMsg = new Message(textContent, sender, receiver, timestamp.substring(0, 10),timestamp.substring(11));
+        dbRef.child("Messages").push().setValue(newMsg);
 
-        map.put("sender", sender);
-        map.put("receiver", receiver);
-        map.put("message", textContent);
-        map.put("date", timestamp.substring(0, 10));
-        map.put("time", timestamp.substring(11));
-        dbRef.child("Messages").push().setValue(map);
+        Toast.makeText(MessageActivity.this, stickerName + " sent :)", Toast.LENGTH_SHORT).show();
 
         // update current message list
         readMsg(firebaseUser.getUid(), friendUserId);
@@ -201,10 +192,11 @@ public class MessageActivity extends AppCompatActivity {
         stickerAdapter = new StickerAdapter(MessageActivity.this, stickerList);
 
         ItemCheckedListener itemCheckedListener = position -> {
-            stickerList.get(position).onItemChecked(position);
-            chosenStickerId = stickerList.get(position).getStickerId();
-
-            sendMsg( firebaseUser.getUid(), friendUserId, chosenStickerId);
+            Sticker chosenSticker = stickerList.get(position);
+            chosenSticker.onItemChecked(position);
+            chosenStickerId = chosenSticker.getStickerId();
+            String stickerName = chosenSticker.getStickerName();
+            sendMsg( firebaseUser.getUid(), friendUserId, chosenStickerId, stickerName);
 
 //            stickerAdapter.notifyItemChanged(position);
         };
