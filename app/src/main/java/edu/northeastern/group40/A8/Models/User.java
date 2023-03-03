@@ -8,27 +8,22 @@ public class User implements ItemCheckedListener {
     private String email;
     private String userId;
     private HashMap<String, Integer> stickerSend;
-    private boolean isChosen;
 
 
-    public User(String nickname, String userId, HashMap<String, Integer> stickerSend, String email, boolean isChosen) {
+    public User(String nickname, String userId, HashMap<String, Integer> stickerSend, String email) {
         this.nickname = nickname;
         this.userId = userId;
         this.stickerSend = stickerSend;
         this.email = email;
-        this.isChosen = isChosen;
     }
 
     public User() {}
 
     public String getNickname() {
 
-        return nickname + (isChosen ? "(checked)" : "");
+        return nickname;
     }
 
-    public boolean isChosen() {
-        return isChosen;
-    }
 
     public HashMap<String, Integer> getStickerSend() {
         return stickerSend;
@@ -56,9 +51,6 @@ public class User implements ItemCheckedListener {
         return email;
     }
 
-    public boolean getStatus() {
-        return isChosen;
-    }
 
 
     @Override

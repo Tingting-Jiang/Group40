@@ -1,12 +1,9 @@
 package edu.northeastern.group40.A8.RecyclerView;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +38,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         User user = list.get(position);
         holder.userName.setText(user.getNickname());
         holder.userEmail.setText(user.getEmail());
-        holder.checkBox.setChecked(!user.getStatus());
     }
 
     @Override
@@ -55,12 +51,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView userName, userEmail;
-        CheckBox checkBox;
         public MyViewHolder(@NonNull View itemView, ItemCheckedListener listener) {
             super(itemView);
             userName = itemView.findViewById(R.id.tvName);
             userEmail = itemView.findViewById(R.id.tvEmail);
-            checkBox = itemView.findViewById(R.id.checkBox);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {

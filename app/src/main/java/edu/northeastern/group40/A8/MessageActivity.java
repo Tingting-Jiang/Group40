@@ -169,7 +169,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onComplete(@Nullable DatabaseError error, boolean committed,
                                    @Nullable DataSnapshot currentData) {
 //                Log.d(TAG, "postTransaction: onComplete: " + error);
-                Toast.makeText(MessageActivity.this, "Get DB error: " + error, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MessageActivity.this, "Get DB error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
 

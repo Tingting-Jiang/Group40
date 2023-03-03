@@ -75,11 +75,11 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         String userId = firebaseUser.getUid();
-                        User newUser = new User(userName, userId, new HashMap<>(), email, false);
+                        User newUser = new User(userName, userId, new HashMap<>(), email);
                         saveNewUserToDB(newUser);
 
                         Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignUpActivity.this, FriendListActivity.class);
+                        Intent intent = new Intent(SignUpActivity.this, ContactsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {

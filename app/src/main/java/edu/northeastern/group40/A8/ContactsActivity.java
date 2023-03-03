@@ -34,7 +34,6 @@ public class ContactsActivity extends AppCompatActivity{
     private UserAdapter userAdapter;
     private ArrayList<User> userList;
     private String chosenFriend = null;
-    private int chooseNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class ContactsActivity extends AppCompatActivity{
         ItemCheckedListener itemCheckedListener = position -> {
             userList.get(position).onItemChecked(position);
             chosenFriend = userList.get(position).getUserId();
-            userAdapter.notifyItemChanged(position);
+            startChat();
         };
         userAdapter.setOnItemCheckedListener(itemCheckedListener);
 
@@ -79,7 +78,7 @@ public class ContactsActivity extends AppCompatActivity{
         });
     }
 
-    public void startChat(View view) {
+    public void startChat() {
         if (chosenFriend == null) {
             Toast.makeText(ContactsActivity.this, "Please choose a friend to talk with", Toast.LENGTH_SHORT).show();
         } else {
