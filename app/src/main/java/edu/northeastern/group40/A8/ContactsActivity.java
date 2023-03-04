@@ -1,6 +1,7 @@
 package edu.northeastern.group40.A8;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,8 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import edu.northeastern.group40.A8.Models.ItemCheckedListener;
 import edu.northeastern.group40.A8.Models.User;
@@ -39,7 +41,6 @@ public class ContactsActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-
         recyclerView = findViewById(R.id.contacts_recycler_list);
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
 //        recyclerView.setHasFixedSize(true);
@@ -48,6 +49,10 @@ public class ContactsActivity extends AppCompatActivity{
         userList = new ArrayList<>();
         userAdapter = new UserAdapter(this, userList);
 
+        FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currUser != null;
+        String myId = currUser.getUid();
+        FirebaseDatabase.getInstance().getReference("Messages").addChildEventListener(new NotificationListener(myId,this));
 
         ItemCheckedListener itemCheckedListener = position -> {
             userList.get(position).onItemChecked(position);

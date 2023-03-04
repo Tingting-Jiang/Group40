@@ -210,10 +210,12 @@ public class MessageActivity extends AppCompatActivity {
         messageDB = mDatabase.child("Messages");
         usersDB = mDatabase.child("Users");
         title = findViewById(R.id.title);
-        this.friendUserId = getIntent().getStringExtra("chosenFriend");
+        this.friendUserId = getIntent().getStringExtra("friendUserId");
+        if(this.friendUserId ==null) this.friendUserId = getIntent().getStringExtra("chosenFriend");
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         myId = currUser.getUid();
+        usersDB.addChildEventListener(new NotificationListener(myId, this));
     }
 
 
@@ -265,38 +267,6 @@ public class MessageActivity extends AppCompatActivity {
                     }
                 }
                 mMsgAdapter.notifyDataSetChanged();
-                if(!messageList.isEmpty()) {
-                    Message lastMsg = messageList.get(messageList.size() - 1);
-                    if (lastMsg.getSender().equals(friendUserId)) {
-
-//                        Intent intent = new Intent(MessageActivity.this, MessageActivity.class);
-//                        intent.putExtra("friendUserId", friendUserId);
-//                        PendingIntent pendingIntent = PendingIntent.getActivity(MessageActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                        String stickerID = lastMsg.getMessage();
-
-                        int id = getResources().getIdentifier(stickerID, "drawable", getPackageName());
-
-                        Bitmap graph = BitmapFactory.decodeResource(getResources(), id);
-
-                        NotificationCompat.Builder builder = new NotificationCompat
-                                .Builder(MessageActivity.this, "default")
-                                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setContentTitle("New message from " + lastMsg.getSenderFullName())
-                                .setLargeIcon(graph)
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//                                .setContentIntent(pendingIntent)
-//                                .setAutoCancel(true);
-                        NotificationManagerCompat notificationManager =
-                                NotificationManagerCompat
-                                        .from(MessageActivity.this);
-                        try {
-                            notificationManager.notify(NOTIFICATION_ID, builder.build());
-                        } catch (SecurityException e) {
-                            Toast.makeText(MessageActivity.this, "Get DB error: " + e, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
 
 
             }
