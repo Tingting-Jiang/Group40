@@ -4,10 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -63,6 +68,8 @@ public class MessageActivity extends AppCompatActivity {
     private String friendUserName;
     private String stickerTotalInfo = "Nothing";
 
+    private static final int NOTIFICATION_ID = 1;
+
 
     private static final List<Sticker> stickerList = new ArrayList<Sticker>(){
         {
@@ -87,6 +94,7 @@ public class MessageActivity extends AppCompatActivity {
         init();
         createMsgRecView();
         createStickersRecView();
+        createNotificationChannel();
 
         usersDB.addChildEventListener(new ChildEventListener() {
             @SuppressLint("SetTextI18n")
@@ -122,6 +130,18 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default", "Channel name",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Channel description");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+
     private void updateUserInfo(DataSnapshot snapshot) {
         User currUser = snapshot.getValue(User.class);
         if (currUser.getUserId().equals(myId)) {
@@ -135,6 +155,9 @@ public class MessageActivity extends AppCompatActivity {
         // save message to database
         @SuppressLint("SimpleDateFormat")
         String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
+        Log.i(TAG, "sender: " + (sender == null));
+        Log.i(TAG, "receiver: " + (receiver == null));
+        Log.i(TAG, "chosenSticker: " + (chosenSticker == null));
         Message newMsg = new Message(chosenSticker.getStickerId(), sender, receiver, timestamp.substring(0, 10),timestamp.substring(11), myInfo.getNickname());
         messageDB.push().setValue(newMsg);
 
@@ -238,6 +261,27 @@ public class MessageActivity extends AppCompatActivity {
                     }
                 }
                 mMsgAdapter.notifyDataSetChanged();
+                if(!messageList.isEmpty()) {
+                    Message lastMsg = messageList.get(messageList.size() - 1);
+                    if (lastMsg.getSender().equals(friendUserId)) {
+                        NotificationCompat.Builder builder = new NotificationCompat
+                                .Builder(MessageActivity.this, "default")
+                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setContentTitle("New message from " + lastMsg.getSenderFullName())
+                                .setContentText(lastMsg.getMessage())
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        NotificationManagerCompat notificationManager =
+                                NotificationManagerCompat
+                                        .from(MessageActivity.this);
+                        try {
+                            notificationManager.notify(NOTIFICATION_ID, builder.build());
+                        } catch (SecurityException e) {
+                            Toast.makeText(MessageActivity.this, "Get DB error: " + e, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+
             }
 
             @Override
