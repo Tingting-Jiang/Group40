@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -155,9 +159,9 @@ public class MessageActivity extends AppCompatActivity {
         // save message to database
         @SuppressLint("SimpleDateFormat")
         String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
-        Log.i(TAG, "sender: " + (sender == null));
-        Log.i(TAG, "receiver: " + (receiver == null));
-        Log.i(TAG, "chosenSticker: " + (chosenSticker == null));
+//        Log.i(TAG, "sender: " + (sender == null));
+//        Log.i(TAG, "receiver: " + (receiver == null));
+//        Log.i(TAG, "chosenSticker: " + (chosenSticker == null));
         Message newMsg = new Message(chosenSticker.getStickerId(), sender, receiver, timestamp.substring(0, 10),timestamp.substring(11), myInfo.getNickname());
         messageDB.push().setValue(newMsg);
 
@@ -264,12 +268,25 @@ public class MessageActivity extends AppCompatActivity {
                 if(!messageList.isEmpty()) {
                     Message lastMsg = messageList.get(messageList.size() - 1);
                     if (lastMsg.getSender().equals(friendUserId)) {
+
+//                        Intent intent = new Intent(MessageActivity.this, MessageActivity.class);
+//                        intent.putExtra("friendUserId", friendUserId);
+//                        PendingIntent pendingIntent = PendingIntent.getActivity(MessageActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                        String stickerID = lastMsg.getMessage();
+
+                        int id = getResources().getIdentifier(stickerID, "drawable", getPackageName());
+
+                        Bitmap graph = BitmapFactory.decodeResource(getResources(), id);
+
                         NotificationCompat.Builder builder = new NotificationCompat
                                 .Builder(MessageActivity.this, "default")
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                                 .setContentTitle("New message from " + lastMsg.getSenderFullName())
-                                .setContentText(lastMsg.getMessage())
+                                .setLargeIcon(graph)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//                                .setContentIntent(pendingIntent)
+//                                .setAutoCancel(true);
                         NotificationManagerCompat notificationManager =
                                 NotificationManagerCompat
                                         .from(MessageActivity.this);
