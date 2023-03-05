@@ -52,7 +52,7 @@ public class ContactsActivity extends AppCompatActivity{
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         String myId = currUser.getUid();
-        FirebaseDatabase.getInstance().getReference("Messages").orderByChild("timestamp").startAt(System.currentTimeMillis()).addChildEventListener(new NotificationListener(myId,this));
+        FirebaseDatabase.getInstance().getReference("Messages").addChildEventListener(new NotificationListener(myId,this));
 
         ItemCheckedListener itemCheckedListener = position -> {
             userList.get(position).onItemChecked(position);

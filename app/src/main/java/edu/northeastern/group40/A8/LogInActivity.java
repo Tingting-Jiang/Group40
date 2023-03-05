@@ -77,7 +77,9 @@ public class LogInActivity extends AppCompatActivity {
                         Toast.makeText(LogInActivity.this, "Log in successful!", Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(LogInActivity.this, ContactsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        // back to Main or home?
+                        finish();
                         startActivity(intent);
 
                     } else {
