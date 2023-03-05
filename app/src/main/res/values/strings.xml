@@ -25,4 +25,8 @@
     <string name="details_of_the_stickers_you_sent_n">Stickers you sent:</string>
     <string name="sign_up_title">Sign up</string>
     <string name="log_in_title">Log In</string>
+    <string name="name">Name:</string>
+    <string name="jack">Jack</string>
+    <string name="email">Email:</string>
+    <string name="stark">Stark</string>
 </resources>

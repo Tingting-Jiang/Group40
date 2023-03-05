@@ -23,8 +23,6 @@
         android:id="@+id/check_more_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
         android:layout_margin="8dp"
         android:backgroundTint="@color/purple_200"
         android:onClick="checkMore"
