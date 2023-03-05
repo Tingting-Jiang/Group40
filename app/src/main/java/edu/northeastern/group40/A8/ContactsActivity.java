@@ -43,7 +43,7 @@ public class ContactsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_contacts);
         recyclerView = findViewById(R.id.contacts_recycler_list);
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-//        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         userList = new ArrayList<>();
@@ -52,7 +52,7 @@ public class ContactsActivity extends AppCompatActivity{
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         String myId = currUser.getUid();
-        FirebaseDatabase.getInstance().getReference("Messages").addChildEventListener(new NotificationListener(myId,this));
+        FirebaseDatabase.getInstance().getReference("Messages").orderByChild("timestamp").startAt(System.currentTimeMillis()).addChildEventListener(new NotificationListener(myId,this));
 
         ItemCheckedListener itemCheckedListener = position -> {
             userList.get(position).onItemChecked(position);

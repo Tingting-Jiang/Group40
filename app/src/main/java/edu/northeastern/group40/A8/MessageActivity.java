@@ -194,7 +194,7 @@ public class MessageActivity extends AppCompatActivity {
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         myId = currUser.getUid();
-        messageDB.addChildEventListener(new NotificationListener(myId, this));
+        messageDB.orderByChild("timestamp").startAt(System.currentTimeMillis()).addChildEventListener(new NotificationListener(myId, this));
     }
 
 
