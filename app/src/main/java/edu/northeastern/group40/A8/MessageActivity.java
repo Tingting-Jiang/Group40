@@ -2,7 +2,6 @@ package edu.northeastern.group40.A8;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,12 +12,10 @@ import android.app.NotificationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -57,7 +54,6 @@ public class MessageActivity extends AppCompatActivity {
     private String myId;
     private User myInfo;
     private final List<Message> messageList = new ArrayList<>();
-    private String stickerTotalInfo = "Nothing";
 
 
     private static final List<Sticker> stickerList = new ArrayList<Sticker>(){
@@ -134,8 +130,6 @@ public class MessageActivity extends AppCompatActivity {
         assert currUser != null;
         if (currUser.getUserId().equals(myId)) {
             myInfo = currUser;
-            stickerTotalInfo = myInfo.displayStickerSend();
-            Log.i(TAG, myInfo.displayStickerSend());
         }
     }
 
@@ -262,23 +256,6 @@ public class MessageActivity extends AppCompatActivity {
         onBackPressed();
     }
 
-    public void checkMore(View view) {
-        View dialogView = LayoutInflater.from(MessageActivity.this)
-                .inflate(R.layout.dialog_more, null);
-
-        TextView details = dialogView.findViewById(R.id.details_txt);
-        details.setText(stickerTotalInfo);
-        AlertDialog detailsDialog = new MaterialAlertDialogBuilder(MessageActivity.this)
-                .setTitle("Details")
-                .setView(dialogView)
-                .setPositiveButton(R.string.ok, (dialog, which) ->
-                        dialog.dismiss()
-                )
-                .create();
-        detailsDialog.show();
-        detailsDialog.setCancelable(true);
-
-    }
 
 
 }

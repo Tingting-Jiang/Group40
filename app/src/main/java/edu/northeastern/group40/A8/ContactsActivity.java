@@ -1,7 +1,7 @@
 package edu.northeastern.group40.A8;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,18 +33,17 @@ import edu.northeastern.group40.R;
 
 public class ContactsActivity extends AppCompatActivity{
 
-    private RecyclerView recyclerView;
-    private DatabaseReference databaseRef;
     private UserAdapter userAdapter;
     private ArrayList<User> userList;
     private String chosenFriend = null;
+    private User myInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-        recyclerView = findViewById(R.id.contacts_recycler_list);
-        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        RecyclerView recyclerView = findViewById(R.id.contacts_recycler_list);
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -71,8 +72,12 @@ public class ContactsActivity extends AppCompatActivity{
                 userList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     User currUser =dataSnapshot.getValue(User.class);
+                    assert currUser != null;
                     if (!currUser.getUserId().equals(currUid))
                         userList.add(currUser);
+                    else {
+                        myInfo = currUser;
+                    }
                 }
                 userAdapter.notifyDataSetChanged();
             }
@@ -91,6 +96,24 @@ public class ContactsActivity extends AppCompatActivity{
             intent.putExtra("chosenFriend", chosenFriend);
             startActivity(intent);
         }
+    }
+
+    public void checkMore(View view) {
+        View dialogView = LayoutInflater.from(ContactsActivity.this)
+                .inflate(R.layout.dialog_more, null);
+
+        TextView details = dialogView.findViewById(R.id.details_txt);
+        details.setText(myInfo.displayStickerSend());
+        AlertDialog detailsDialog = new MaterialAlertDialogBuilder(ContactsActivity.this)
+                .setTitle("Details")
+                .setView(dialogView)
+                .setPositiveButton(R.string.ok, (dialog, which) ->
+                        dialog.dismiss()
+                )
+                .create();
+        detailsDialog.show();
+        detailsDialog.setCancelable(true);
+
     }
 
 }

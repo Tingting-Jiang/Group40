@@ -44,17 +44,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/check_more_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/purple_200"
-            android:onClick="checkMore"
-            android:text="@string/more"
-            android:textColor="#311B92" />
+
 
     </RelativeLayout>
 

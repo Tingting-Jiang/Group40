@@ -19,6 +19,18 @@
         android:textSize="34sp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/check_more_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/purple_200"
+        android:onClick="checkMore"
+        android:text="@string/more"
+        android:textColor="#311B92" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contacts_recycler_list"
         android:layout_width="match_parent"

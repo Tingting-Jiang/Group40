@@ -24,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:text="Name: "
                 android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvName"
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:text="Email: "
                 android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvEmail"
