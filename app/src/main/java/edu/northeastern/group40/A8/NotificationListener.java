@@ -34,7 +34,8 @@ public class NotificationListener implements ChildEventListener {
     @Override
     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         Message lastMsg = snapshot.getValue(Message.class);
-        if (lastMsg.getReceiver().equals(userId)) {
+        assert lastMsg != null;
+        if (lastMsg.getReceiver() != null && lastMsg.getReceiver().equals(userId)) {
             Intent intent = new Intent(context, MessageActivity.class);
             intent.putExtra("friendUserId", lastMsg.getSender());
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

@@ -4,26 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,22 +48,16 @@ public class MessageActivity extends AppCompatActivity {
 
     private static final String TAG = "MessageActivity";
     private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm";
-    private static final String EMAIL_SUFFIX = "@123.com";
     private String friendUserId;
     private TextView title;
     private MessageListAdapter mMsgAdapter;
-    private StickerAdapter stickerAdapter;
-    private DatabaseReference reference;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference messageDB;
     private DatabaseReference usersDB;
     private String myId;
     private User myInfo;
     private final List<Message> messageList = new ArrayList<>();
-    private String friendUserName;
     private String stickerTotalInfo = "Nothing";
-
-    private static final int NOTIFICATION_ID = 1;
 
 
     private static final List<Sticker> stickerList = new ArrayList<Sticker>(){
@@ -105,9 +90,9 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User user = snapshot.getValue(User.class);
-                if (user.getUserId().equals(friendUserId)) {
-                    title.setText("Message to " + user.getNickname());
-                } else if (user.getUserId().equals(myId)) {
+                if (user != null && user.getUserId().equals(friendUserId)) {
+                    title.setText("To " + user.getNickname());
+                } else if (user != null && user.getUserId().equals(myId)) {
                     updateUserInfo(snapshot);
                 }
             }
@@ -135,19 +120,18 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("default", "Channel name",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("Channel description");
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel("default", "Channel name",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Channel description");
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
 
 
     private void updateUserInfo(DataSnapshot snapshot) {
         User currUser = snapshot.getValue(User.class);
+        assert currUser != null;
         if (currUser.getUserId().equals(myId)) {
             myInfo = currUser;
             stickerTotalInfo = myInfo.displayStickerSend();
@@ -159,9 +143,6 @@ public class MessageActivity extends AppCompatActivity {
         // save message to database
         @SuppressLint("SimpleDateFormat")
         String timestamp = new SimpleDateFormat(TIME_FORMAT).format(new Date());
-//        Log.i(TAG, "sender: " + (sender == null));
-//        Log.i(TAG, "receiver: " + (receiver == null));
-//        Log.i(TAG, "chosenSticker: " + (chosenSticker == null));
         Message newMsg = new Message(chosenSticker.getStickerId(), sender, receiver, timestamp.substring(0, 10),timestamp.substring(11), myInfo.getNickname());
         messageDB.push().setValue(newMsg);
 
@@ -199,8 +180,6 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed,
                                    @Nullable DataSnapshot currentData) {
-//                Log.d(TAG, "postTransaction: onComplete: " + error);
-//                Toast.makeText(MessageActivity.this, "Get DB error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -215,7 +194,7 @@ public class MessageActivity extends AppCompatActivity {
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         myId = currUser.getUid();
-        usersDB.addChildEventListener(new NotificationListener(myId, this));
+        messageDB.addChildEventListener(new NotificationListener(myId, this));
     }
 
 
@@ -235,7 +214,7 @@ public class MessageActivity extends AppCompatActivity {
         RecyclerView stickerRecView = findViewById(R.id.sticker_rec_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         stickerRecView.setLayoutManager(layoutManager);
-        stickerAdapter = new StickerAdapter(MessageActivity.this, stickerList);
+        StickerAdapter stickerAdapter = new StickerAdapter(MessageActivity.this, stickerList);
 
         ItemCheckedListener itemCheckedListener = position -> {
             Sticker chosenSticker = stickerList.get(position);
@@ -257,6 +236,7 @@ public class MessageActivity extends AppCompatActivity {
                 int idx = 0;
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Message msg = dataSnapshot.getValue(Message.class);
+                    assert msg != null;
                     if (msg.getReceiver().equals(myId) && msg.getSender().equals(friendUserId) ||
                             msg.getReceiver().equals(friendUserId) && msg.getSender().equals(myId)) {
                         if (idx > 0 && !TextUtils.isEmpty(messageList.get(idx-1).getDate())) {
@@ -291,9 +271,9 @@ public class MessageActivity extends AppCompatActivity {
         AlertDialog detailsDialog = new MaterialAlertDialogBuilder(MessageActivity.this)
                 .setTitle("Details")
                 .setView(dialogView)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        dialog.dismiss();
-                })
+                .setPositiveButton(R.string.ok, (dialog, which) ->
+                        dialog.dismiss()
+                )
                 .create();
         detailsDialog.show();
         detailsDialog.setCancelable(true);
