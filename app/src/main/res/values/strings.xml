@@ -13,8 +13,8 @@
     <string name="sign_up_button">sign up</string>
     <string name="go_to_log_in">go to log in</string>
     <string name="next"> Next </string>
-    <string name="choose_a_friend" > Choose a friend </string>
-    <string name="the_icon_of_the_friend" >friend icon </string>
+    <string name="choose_a_friend"> Choose a friend </string>
+    <string name="the_icon_of_the_friend">friend icon </string>
     <string name="june_10">June-10</string>
     <string name="mike_mickey">Mike Tom</string>
     <string name="_10_00">09:59</string>
@@ -29,4 +29,5 @@
     <string name="jack">Jack</string>
     <string name="email">Email:</string>
     <string name="stark">Stark</string>
+    <string name="project">Project</string>
 </resources>
