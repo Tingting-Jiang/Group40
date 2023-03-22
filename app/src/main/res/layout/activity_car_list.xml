@@ -43,21 +43,27 @@
                 android:id="@+id/car_type_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/sky_blue"
+                android:checked="true"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                app:chipBackgroundColor="@color/filter_color"
                 tools:text="Sedan" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rent_time_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/sky_blue"
+                android:checked="true"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                app:chipBackgroundColor="@color/filter_color"
                 tools:text="Apr3-7"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rent_price_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/sky_blue"
+                app:chipBackgroundColor="@color/filter_color"
+                android:checked="true"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 tools:text="Low to High"/>
 
 

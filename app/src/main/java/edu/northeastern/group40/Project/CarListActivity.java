@@ -50,12 +50,6 @@ public class CarListActivity extends AppCompatActivity {
         this.rentDate = getIntent().getStringExtra("filter-date");
         this.displayPriceLowToHigh = getIntent().getBooleanExtra("filter-price", false);
 
-
-        Log.i(TAG, "chip: " + (this.rentTypeChip == null));
-        Log.i(TAG, "date-chip: " + (this.rentDateChip == null));
-        Log.i(TAG, "price-chip: " + (this.rentPriceChip == null));
-        Log.i(TAG, "word: " + (this.rentCarType == null));
-
         this.rentTypeChip.setText(this.rentCarType);
         this.rentDateChip.setText(this.rentDate);
         this.rentPriceChip.setText(this.displayPriceLowToHigh ? PRICE_LOW_TO_HIGH: PRICE_HIGH_TO_LOW);
@@ -65,6 +59,18 @@ public class CarListActivity extends AppCompatActivity {
                 Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
             }
         });
+//        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (rentPriceChip.isChecked()) {
+//                    rentPriceChip.setChecked(false);
+//                    rentPriceChip.setText(PRICE_HIGH_TO_LOW);
+//                } else if (!rentPriceChip.isChecked()) {
+//                    rentPriceChip.setChecked(true);
+//                    rentPriceChip.setText(PRICE_LOW_TO_HIGH);
+//                }
+//            }
+//        });
 
 
         //TODO: GET DATA FROM DB
