@@ -24,8 +24,8 @@
 
         <ImageButton
             android:id="@+id/back_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -37,34 +37,38 @@
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/car_type_chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:textSize="12sp"
                 app:chipBackgroundColor="@color/filter_color"
                 tools:text="Sedan" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rent_time_chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:textSize="12sp"
                 app:chipBackgroundColor="@color/filter_color"
-                tools:text="Apr3-7"/>
+                tools:text="Apr3-7" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rent_price_chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/filter_color"
                 android:checked="true"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                tools:text="Low to High"/>
+                android:textSize="12sp"
+                app:chipBackgroundColor="@color/filter_color"
+                tools:text="Low to High" />
 
 
         </com.google.android.material.chip.ChipGroup>
