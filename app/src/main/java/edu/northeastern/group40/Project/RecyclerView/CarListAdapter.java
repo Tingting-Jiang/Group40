@@ -41,6 +41,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         holder.totalMiles.setText(currCar.getTotalMiles() + " miles");
         holder.distance.setText(currCar.getDistance() + "miles");
         holder.review_num.setText(currCar.getReview_result() + " by " + currCar.getReview_num());
+        holder.rent_price.setText(currCar.getRentPrice() + " per day");
         //TODO: ADD AN IMAGE RESOURCE
 
     }
@@ -52,7 +53,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
 
     public class CarListViewHolder extends RecyclerView.ViewHolder  {
         ImageView carImage;
-        TextView carTitle, totalMiles, review_num, distance;
+        TextView carTitle, totalMiles, review_num, distance, rent_price;
         public CarListViewHolder(@NonNull View itemView) {
             super(itemView);
             this.carImage = itemView.findViewById(R.id.car_image);
@@ -60,6 +61,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
             this.totalMiles = itemView.findViewById(R.id.total_miles);
             this.review_num = itemView.findViewById(R.id.review_num);
             this.distance = itemView.findViewById(R.id.distance);
+            this.rent_price = itemView.findViewById(R.id.rent_price_num);
 
         }
     }

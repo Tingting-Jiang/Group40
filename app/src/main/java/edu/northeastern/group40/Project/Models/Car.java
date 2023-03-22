@@ -8,14 +8,16 @@ public class Car {
     private String review_num;
     private String distance;
     private String carImage;
+    private String rentPrice;
 
-    public Car(String carTitle, String totalMiles, String review_result, String review_num, String distance, String carImage) {
+    public Car(String carTitle, String totalMiles, String review_result, String review_num, String distance, String carImage, String rentPrice) {
         this.carTitle = carTitle;
         this.totalMiles = totalMiles;
         this.review_result = review_result;
         this.review_num = review_num;
         this.distance = distance;
         this.carImage = carImage;
+        this.rentPrice = rentPrice;
     }
 
     public String getCarTitle() {
@@ -40,5 +42,9 @@ public class Car {
 
     public String getCarImage() {
         return carImage;
+    }
+
+    public String getRentPrice() {
+        return rentPrice;
     }
 }

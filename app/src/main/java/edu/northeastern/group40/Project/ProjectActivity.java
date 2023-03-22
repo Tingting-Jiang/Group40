@@ -19,6 +19,9 @@ public class ProjectActivity extends AppCompatActivity {
 
     public void onCarListActivity(View view) {
         Intent intent = new Intent(ProjectActivity.this, CarListActivity.class);
+        intent.putExtra("filter-type", "SUV");
+        intent.putExtra("filter-date", "April 23-27");
+        intent.putExtra("filter-price", true);
         startActivity(intent);
     }
 }
