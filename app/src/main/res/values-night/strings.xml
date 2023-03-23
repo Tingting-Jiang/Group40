@@ -6,4 +6,5 @@
     <string name="input_email">Input Email</string>
     <string name="sign_up_button">sign up</string>
     <string name="go_to_log_in">go to sign in</string>
+    <string name="color">color</string>
 </resources>

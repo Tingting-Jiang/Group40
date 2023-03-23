@@ -30,4 +30,5 @@
     <string name="email">Email:</string>
     <string name="stark">Stark</string>
     <string name="project">Project</string>
+    <string name="color">color</string>
 </resources>
