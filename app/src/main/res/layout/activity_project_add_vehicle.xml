@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/add_vehicle_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/add_a_vehicle"
+        android:textColor="@color/ocean_blue"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/colorInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/colorInput"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"
+        app:layout_constraintBottom_toTopOf="@id/bodyStyleInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_vehicle_title">
 
         <AutoCompleteTextView
             android:id="@+id/colorMenu"
@@ -22,7 +41,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose Color" />
+            android:text="@string/choose_color"
+            android:textColor="#757575" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -31,15 +51,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@id/brandInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.131">
+        app:layout_constraintTop_toBottomOf="@id/colorInput">
 
         <AutoCompleteTextView
             android:id="@+id/bodyStyleMenu"
@@ -47,7 +63,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose body style" />
+            android:textColor="#757575"
+            android:text="@string/choose_body_style" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,15 +73,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@id/modelInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.273">
+        app:layout_constraintTop_toBottomOf="@id/bodyStyleInput">
 
         <AutoCompleteTextView
             android:id="@+id/brandMenu"
@@ -72,7 +85,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose brand" />
+            android:textColor="#757575"
+            android:text="@string/choose_brand" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,15 +95,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.392">
+        app:layout_constraintTop_toBottomOf="@id/brandInput"
+        app:layout_constraintBottom_toTopOf="@id/fuelInput">
 
         <AutoCompleteTextView
             android:id="@+id/modelMenu"
@@ -97,7 +108,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose model" />
+            android:textColor="#757575"
+            android:text="@string/choose_model" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,13 +118,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/modelInput"
+        app:layout_constraintBottom_toTopOf="@id/mileageInput">
 
         <AutoCompleteTextView
             android:id="@+id/fuelMenu"
@@ -120,7 +130,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose fuel" />
+            android:text="@string/choose_fuel"
+            android:textColor="#757575" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,15 +140,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@id/capacityInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617">
+        app:layout_constraintTop_toBottomOf="@id/fuelInput">
 
         <AutoCompleteTextView
             android:id="@+id/mileageMenu"
@@ -145,7 +152,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose mileage" />
+            android:textColor="#757575"
+            android:text="@string/choose_mileage" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,15 +162,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.738">
+        app:layout_constraintTop_toBottomOf="@id/mileageInput"
+        app:layout_constraintBottom_toTopOf="@id/placeInput">
 
         <AutoCompleteTextView
             android:id="@+id/capacityMenu"
@@ -170,67 +174,78 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:text="Choose capacity" />
+            android:text="@string/choose_capacity"
+            android:textColor="#757575" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <AutoCompleteTextView
         android:id="@+id/placeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Input street"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:hint="@string/input_street"
+        android:minHeight="48dp"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/zip_code"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.81" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/capacityInput" />
 
     <AutoCompleteTextView
         android:id="@+id/zip_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="zip code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:minHeight="48dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/zip_code"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintEnd_toStartOf="@id/city"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintTop_toBottomOf="@+id/placeInput" />
 
     <AutoCompleteTextView
         android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="city"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="@string/city"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintEnd_toStartOf="@id/state"
+        app:layout_constraintStart_toEndOf="@id/zip_code"
+        app:layout_constraintTop_toBottomOf="@id/placeInput" />
 
     <AutoCompleteTextView
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:text="state"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/state"
+        android:textColor="#757575"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toEndOf="@id/city"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.913" />
+        app:layout_constraintTop_toBottomOf="@id/placeInput"
+        app:layout_constraintBottom_toTopOf="@id/submit" />
 
     <Button
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="submit"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/submit_str"
+        android:textColor="#757575"
+        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
-
+        android:backgroundTint="@color/sky_blue"
+        app:layout_constraintTop_toBottomOf="@id/state"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>
