@@ -7,11 +7,11 @@
     tools:context=".Project.ProjectActivity">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/add_vehicle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onAddVehicleActivity"
-        android:text="Button"
+        android:text="Add vehicle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

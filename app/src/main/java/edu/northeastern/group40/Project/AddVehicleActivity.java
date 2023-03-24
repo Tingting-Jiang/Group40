@@ -131,6 +131,7 @@ public class AddVehicleActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                inputPlace = null;
                 String input = s.toString();
                 FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
                         .setQuery(input)
@@ -151,31 +152,28 @@ public class AddVehicleActivity extends AppCompatActivity {
         });
 
         Button submit = findViewById(R.id.submit);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Color selectedColor = getResult(colorMenu, Color.class);
-                VehicleBodyStyle selectedVehicleBodyStyle = getResult(bodyStyleMenu, VehicleBodyStyle.class);
-                Brand selectedBrand = getResult(brandMenu, Brand.class);
-                Brand.Model selectedModel = getResult(modelMenu, Brand.Model.class);
-                Fuel selectedFuel = getResult(fuelMenu, Fuel.class);
-                Mileage selectedMileage = Mileage.fromString(mileageMenu.getText().toString());
-                if(selectedMileage == null) mileageMenu.setError("Choose mileage");
-                Integer capacity = null;
-                try {
-                    capacity=Integer.valueOf(capacityMenu.getText().toString());
-                } catch (IllegalArgumentException e) {
-                    capacityMenu.setError("Invalid value");
-                }
-                if(inputPlace == null) streetInput.setError("Input valid street");
-                if(selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
-                    && selectedModel != null && selectedFuel != null && selectedMileage != null
-                    && capacity != null && inputPlace != null){
-                    Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
-                            selectedFuel, selectedMileage, capacity, inputPlace);
-                    Log.w(TAG,vehicle.toString());
-                    // missing user
-                }
+        submit.setOnClickListener(v -> {
+            Color selectedColor = getResult(colorMenu, Color.class);
+            VehicleBodyStyle selectedVehicleBodyStyle = getResult(bodyStyleMenu, VehicleBodyStyle.class);
+            Brand selectedBrand = getResult(brandMenu, Brand.class);
+            Brand.Model selectedModel = getResult(modelMenu, Brand.Model.class);
+            Fuel selectedFuel = getResult(fuelMenu, Fuel.class);
+            Mileage selectedMileage = Mileage.fromString(mileageMenu.getText().toString());
+            if(selectedMileage == null) mileageMenu.setError("Choose mileage");
+            Integer capacity = null;
+            try {
+                capacity=Integer.valueOf(capacityMenu.getText().toString());
+            } catch (IllegalArgumentException e) {
+                capacityMenu.setError("Invalid value");
+            }
+            if(inputPlace == null) streetInput.setError("Input valid street");
+            if(selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
+                && selectedModel != null && selectedFuel != null && selectedMileage != null
+                && capacity != null && inputPlace != null){
+                Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
+                        selectedFuel, selectedMileage, capacity, inputPlace);
+                Log.w(TAG,vehicle.toString());
+                // missing user
             }
         });
 
