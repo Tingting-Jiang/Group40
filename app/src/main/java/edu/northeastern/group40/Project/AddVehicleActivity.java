@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -80,9 +81,9 @@ public class AddVehicleActivity extends AppCompatActivity {
         PlacesClient placesClient = Places.createClient(this);
 
         AutoCompleteTextView streetInput = findViewById(R.id.placeInput);
-        AutoCompleteTextView cityInput = findViewById(R.id.city);
-        AutoCompleteTextView stateInput = findViewById(R.id.state);
-        AutoCompleteTextView zipCodeInput = findViewById(R.id.zip_code);
+        TextView cityInput = findViewById(R.id.city);
+        TextView stateInput = findViewById(R.id.state);
+        TextView zipCodeInput = findViewById(R.id.zip_code);
 
         List<AutocompletePrediction> predictions = new ArrayList<>();
         PlaceAutocompleteAdapter placeAdapter = new PlaceAutocompleteAdapter(this, predictions);

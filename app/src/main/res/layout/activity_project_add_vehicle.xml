@@ -193,7 +193,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/capacityInput" />
 
-    <AutoCompleteTextView
+    <TextView
         android:id="@+id/zip_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeInput" />
 
-    <AutoCompleteTextView
+    <TextView
         android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
         app:layout_constraintStart_toEndOf="@id/zip_code"
         app:layout_constraintTop_toBottomOf="@id/placeInput" />
 
-    <AutoCompleteTextView
+    <TextView
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
