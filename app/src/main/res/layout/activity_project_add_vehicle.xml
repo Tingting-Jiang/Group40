@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -200,7 +199,7 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:layout_marginStart="20dp"
-        android:text="@string/zip_code"
+        android:hint="@string/zip_code"
         android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintEnd_toStartOf="@id/city"
@@ -213,7 +212,7 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:text="@string/city"
+        android:hint="@string/city"
         android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintEnd_toStartOf="@id/state"
@@ -224,7 +223,7 @@
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/state"
+        android:hint="@string/state"
         android:textColor="#757575"
         android:layout_marginEnd="20dp"
         app:layout_constraintStart_toEndOf="@id/city"
