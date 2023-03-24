@@ -200,7 +200,7 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:layout_marginStart="20dp"
-        android:text="@string/zip_code"
+        android:hint="@string/zip_code"
         android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintEnd_toStartOf="@id/city"
@@ -213,7 +213,7 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:text="@string/city"
+        android:hint="@string/city"
         android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintEnd_toStartOf="@id/state"
@@ -224,13 +224,14 @@
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/state"
-        android:textColor="#757575"
         android:layout_marginEnd="20dp"
-        app:layout_constraintStart_toEndOf="@id/city"
+        android:hint="@string/state"
+        android:minHeight="48dp"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeInput"
-        app:layout_constraintBottom_toTopOf="@id/submit" />
+        app:layout_constraintStart_toEndOf="@id/city"
+        app:layout_constraintTop_toBottomOf="@id/placeInput" />
 
     <Button
         android:id="@+id/submit"
