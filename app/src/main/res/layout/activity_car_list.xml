@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,14 +18,16 @@
 <!--        app:iconifiedByDefault="false"-->
 <!--        app:queryHint="Search Here..." />-->
     <LinearLayout
+        android:id="@+id/filter_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/car_list_recView"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/back_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -77,9 +79,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/car_list_recView"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
+        android:layout_weight="1"
+        android:layout_below="@id/filter_linear"
         android:layout_marginBottom="8dp" />
 
 <!--    <androidx.appcompat.widget.LinearLayoutCompat-->
@@ -97,5 +101,17 @@
 
 <!--    </androidx.appcompat.widget.LinearLayoutCompat>-->
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/car_list_recView"
+        app:menu="@menu/bottom_nav_bar">
 
-</LinearLayout>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

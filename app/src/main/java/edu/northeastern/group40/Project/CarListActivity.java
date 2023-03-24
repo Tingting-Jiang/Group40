@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -90,6 +91,11 @@ public class CarListActivity extends AppCompatActivity {
         carListAdapter = new CarListAdapter(CarListActivity.this, carList);
         carRecView.setAdapter(carListAdapter);
 
+    }
+
+    public void backToFilterPage(View view) {
+        Intent intent = new Intent(CarListActivity.this, ProjectActivity.class);
+        startActivity(intent);
     }
 
 
