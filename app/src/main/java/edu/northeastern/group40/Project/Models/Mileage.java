@@ -24,12 +24,28 @@ public enum Mileage {
     @Override
     public String toString() {
         if (this == LESS_THAN_10K) {
-            return "0-10000";
+            return "0-10000 miles";
         } else if(this == OVER_100K){
-            return "more than 100000";
+            return "more than 100000 miles";
         }
         else {
-            return String.format("%d-%d", lowerBound, upperBound);
+            return String.format("%d-%d miles", lowerBound, upperBound);
         }
     }
+
+    public static Mileage fromString(String str) {
+        switch (str) {
+            case "0-10000 miles":
+                return LESS_THAN_10K;
+            case "more than 100000 miles":
+                return OVER_100K;
+            case "5000-10000 miles":
+                return BETWEEN_5K_AND_10K;
+            case "10000-100000 miles":
+                return BETWEEN_10K_AND_100K;
+            default:
+                return null;
+        }
+    }
+
 }

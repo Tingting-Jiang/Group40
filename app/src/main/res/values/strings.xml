@@ -37,11 +37,11 @@
     <string name="choose_body_style">Choose body style</string>
     <string name="choose_brand">Choose brand</string>
     <string name="choose_model">Choose model</string>
-    <string name="input_street">Input street</string>
-    <string name="zip_code">zip code</string>
-    <string name="city">city</string>
+    <string name="input_street">Street</string>
+    <string name="zip_code">Zip code</string>
+    <string name="city">City</string>
     <string name="choose_mileage">Choose mileage</string>
-    <string name="state">state</string>
+    <string name="state">State</string>
     <string name="choose_capacity">Choose capacity</string>
     <string name="choose_fuel">Choose fuel</string>
 </resources>
