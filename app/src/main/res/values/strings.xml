@@ -32,6 +32,12 @@
     <string name="project">Project</string>
     <string name="car_type">Car Type</string>
     <string name="start_date_none"><u>Start Date: None</u></string>
-    <string name="select_date">Select Date</string>
+    <string name="select">Select</string>
     <string name="end_date_none"><u>End Date: None</u></string>
+    <string name="searchactivity">SearchActivity</string>
+    <string name="car_type_title">Car Type:</string>
+    <string name="availability">Availability:</string>
+    <string name="location_city">Location(City):</string>
+    <string name="input_the_city">Input the city</string>
+    <string name="search">SEARCH</string>
 </resources>
