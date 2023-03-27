@@ -33,4 +33,9 @@ public class ProjectActivity extends AppCompatActivity {
         Intent intent = new Intent (ProjectActivity.this, targetActivityClass);
         startActivity(intent);
     }
+
+    public void openSearchActivity(View view) {
+        Intent intent = new Intent (ProjectActivity.this, SearchActivity.class);
+        startActivity(intent);
+    }
 }
