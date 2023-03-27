@@ -32,6 +32,10 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".Project.AddVehicleActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".A8.MessageActivity"
             android:exported="false">
             <meta-data

@@ -31,4 +31,18 @@
     <string name="stark">Stark</string>
     <string name="project">Project</string>
     <string name="_9_7miles">9.7miles</string>
+    <string name="color">color</string>
+    <string name="add_a_vehicle">Add A Vehicle</string>
+    <string name="submit_str">submit</string>
+    <string name="choose_color">Choose Color</string>
+    <string name="choose_body_style">Choose body style</string>
+    <string name="choose_brand">Choose brand</string>
+    <string name="choose_model">Choose model</string>
+    <string name="input_street">Street</string>
+    <string name="zip_code">Zip code</string>
+    <string name="city">City</string>
+    <string name="choose_mileage">Choose mileage</string>
+    <string name="state">State</string>
+    <string name="choose_capacity">Choose capacity</string>
+    <string name="choose_fuel">Choose fuel</string>
 </resources>
