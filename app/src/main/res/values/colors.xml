@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="chat_bg">#ede9e9</color>
+    <color name="sky_blue">#a8d0e6</color>
+    <color name="ocean_blue">#374785</color>
+    <color name="watermelon">#F76c6c</color>
+    <color name="light_yellow">#F8e9a1</color>
+    <color name="dark_blue">#24305e</color>
 </resources>
