@@ -11,12 +11,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#F76C6C"
-        android:text="@string/searchactivity"
         android:onClick="openSearchActivity"
+        android:text="@string/search_activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.963" />
+        app:layout_constraintTop_toBottomOf="@+id/add_vehicle_button" />
+
+    <Button
+        android:id="@+id/car_list_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onCarListActivity"
+        android:text="car List"
+        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/add_vehicle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onAddVehicleActivity"
+        android:text="Add vehicle"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/car_list_btn" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

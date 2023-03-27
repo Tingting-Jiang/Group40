@@ -34,10 +34,25 @@
     <string name="start_date_none"><u>Start Date: None</u></string>
     <string name="select">Select</string>
     <string name="end_date_none"><u>End Date: None</u></string>
-    <string name="searchactivity">SearchActivity</string>
+    <string name="search_activity">Search Activity</string>
     <string name="car_type_title">Car Type:</string>
     <string name="availability">Availability:</string>
     <string name="location_city">Location(City):</string>
     <string name="input_the_city">Input the city</string>
     <string name="search">SEARCH</string>
+    <string name="_9_7miles">9.7miles</string>
+    <string name="color">color</string>
+    <string name="add_a_vehicle">Add A Vehicle</string>
+    <string name="submit_str">submit</string>
+    <string name="choose_color">Choose Color</string>
+    <string name="choose_body_style">Choose body style</string>
+    <string name="choose_brand">Choose brand</string>
+    <string name="choose_model">Choose model</string>
+    <string name="input_street">Street</string>
+    <string name="zip_code">Zip code</string>
+    <string name="city">City</string>
+    <string name="choose_mileage">Choose mileage</string>
+    <string name="state">State</string>
+    <string name="choose_capacity">Choose capacity</string>
+    <string name="choose_fuel">Choose fuel</string>
 </resources>
