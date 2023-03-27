@@ -29,11 +29,11 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     public RestaurantViewHolder(@NonNull View itemView) {
         super(itemView);
-        imageView=itemView.findViewById(R.id.imageView);
-        restaurant_name=itemView.findViewById(R.id.restaurant_name);
+        imageView=itemView.findViewById(R.id.car_image);
+        restaurant_name=itemView.findViewById(R.id.car_title);
         ratingBar=itemView.findViewById(R.id.ratingBar);
-        tvNumReviews=itemView.findViewById(R.id.tvNumReviews);
-        tvAddress=itemView.findViewById(R.id.tvAddress);
+        tvNumReviews=itemView.findViewById(R.id.total_miles);
+        tvAddress=itemView.findViewById(R.id.review_num);
         tvCategory=itemView.findViewById(R.id.tvCategory);
         tvPrice=itemView.findViewById(R.id.tvPrice);
     }
