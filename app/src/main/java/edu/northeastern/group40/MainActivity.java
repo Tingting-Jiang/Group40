@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onProjectActivity(View view) {
-        openNewActivity(ProjectSignUpActivity.class);
-    } // For test purpose only
+        openNewActivity(ProjectActivity.class);
+    }
 
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (MainActivity.this, targetActivityClass);

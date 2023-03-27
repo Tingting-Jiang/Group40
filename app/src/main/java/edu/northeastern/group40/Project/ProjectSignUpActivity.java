@@ -2,6 +2,7 @@ package edu.northeastern.group40.Project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -42,7 +43,8 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
         // Set click listener for sign in link
         mSignInLink.setOnClickListener(v -> {
-            // TODO: Turn to sign in activity
+            Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
+            startActivity(intent);
         });
     }
 
