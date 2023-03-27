@@ -10,6 +10,7 @@ import edu.northeastern.group40.A6.A6Activity;
 import edu.northeastern.group40.A8.LogInActivity;
 import edu.northeastern.group40.Project.AddVehicleActivity;
 import edu.northeastern.group40.Project.ProjectActivity;
+import edu.northeastern.group40.Project.ProjectSignUpActivity;
 
 public class MainActivity extends AppCompatActivity {
 

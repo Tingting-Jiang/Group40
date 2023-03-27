@@ -133,6 +133,7 @@
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#F76C6C"
         android:text="@string/search"
         app:layout_constraintBottom_toBottomOf="parent"
