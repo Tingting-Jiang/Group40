@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8E9A1"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".Project.SearchActivity">
 
     <TextView
@@ -84,7 +88,7 @@
         app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selected_start_date_text_view"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.232" />
 
     <Button
         android:id="@+id/show_end_date_picker_button"
@@ -98,7 +102,7 @@
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toEndOf="@+id/selected_end_date_text_view"
         app:layout_constraintTop_toBottomOf="@+id/show_start_date_picker_button"
-        app:layout_constraintVertical_bias="0.011" />
+        app:layout_constraintVertical_bias="0.091" />
 
     <TextView
         android:id="@+id/Location"
@@ -137,3 +141,4 @@
         app:layout_constraintTop_toBottomOf="@+id/City" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
