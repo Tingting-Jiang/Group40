@@ -5,23 +5,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
+
+import android.view.View;
 
 import edu.northeastern.group40.R;
 
 public class ProjectActivity extends AppCompatActivity {
-    Button mSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
+    }
 
-        mSignInButton = findViewById(R.id.sign_in_button_in_project_activity);
+    public void onCarListActivity(View view) {
+        Intent intent = new Intent(ProjectActivity.this, CarListActivity.class);
+        intent.putExtra("filter-type", "SUV");
+        intent.putExtra("filter-date", "April 23-27");
+        intent.putExtra("filter-price", true);
+        startActivity(intent);
+    }
+    public void onAddVehicleActivity(View view) {
+        openNewActivity(AddVehicleActivity.class);
+    }
 
-        mSignInButton.setOnClickListener(v -> {
-           Intent intent = new Intent(ProjectActivity.this, ProjectSignInActivity.class);
-           startActivity(intent);
-        });
+
+    private void openNewActivity(Class targetActivityClass) {
+        Intent intent = new Intent (ProjectActivity.this, targetActivityClass);
+        startActivity(intent);
+    }
+
+    public void onSignInActivity(View view) {
+        openNewActivity(ProjectSignInActivity.class);
+    }
+
+    public void openSearchActivity(View view) {
+        openNewActivity(SearchActivity.class);
     }
 }

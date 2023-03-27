@@ -22,9 +22,34 @@
             android:exported="false" />
         <activity
             android:name=".Project.ProjectSignUpActivity"
-            android:exported="false" />
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Project.CarListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".Project.ProjectActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Project.AddVehicleActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Project.SearchActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
