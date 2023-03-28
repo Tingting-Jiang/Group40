@@ -12,15 +12,29 @@
         android:id="@+id/add_vehicle_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="@string/add_a_vehicle"
         android:textColor="@color/ocean_blue"
+        android:layout_marginVertical="10dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/colorInput"
+        app:layout_constraintBottom_toTopOf="@id/titleInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/titleInput"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:hint="@string/input_vehicle_title"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/colorInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_vehicle_title">
+    </AutoCompleteTextView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/colorInput"
@@ -28,11 +42,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="5dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toTopOf="@id/bodyStyleInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/add_vehicle_title">
+        app:layout_constraintTop_toBottomOf="@id/titleInput">
 
         <AutoCompleteTextView
             android:id="@+id/colorMenu"
@@ -51,6 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toTopOf="@id/brandInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,6 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toTopOf="@id/modelInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-
+        android:layout_marginVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/brandInput"
@@ -118,6 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/modelInput"
@@ -140,6 +157,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toTopOf="@id/capacityInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,10 +180,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mileageInput"
-        app:layout_constraintBottom_toTopOf="@id/placeInput">
+        app:layout_constraintBottom_toTopOf="@id/priceInput">
 
         <AutoCompleteTextView
             android:id="@+id/capacityMenu"
@@ -178,20 +197,49 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <AutoCompleteTextView
+        android:id="@+id/priceInput"
+        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginVertical="10dp"
+        android:hint="@string/input_price_in_usd_per_day"
+        android:textAlignment="center"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/placeInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/capacityInput">
+    </AutoCompleteTextView>
 
+    <TextView
+        android:id="@+id/priceUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:text="@string/per_day"
+        android:textColor="#757575"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/placeInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toEndOf="@id/priceInput"
+        app:layout_constraintTop_toBottomOf="@id/capacityInput">
+    </TextView>
 
     <AutoCompleteTextView
         android:id="@+id/placeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
         android:hint="@string/input_street"
         android:minHeight="48dp"
         android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/zip_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/capacityInput" />
+        app:layout_constraintTop_toBottomOf="@id/priceInput" />
 
     <TextView
         android:id="@+id/zip_code"
@@ -199,9 +247,10 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:layout_marginStart="20dp"
+        android:layout_marginVertical="20dp"
         android:hint="@string/zip_code"
         android:textColor="#757575"
-        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintBottom_toTopOf="@id/carImage"
         app:layout_constraintEnd_toStartOf="@id/city"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeInput" />
@@ -212,9 +261,10 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="48dp"
+        android:layout_marginVertical="20dp"
         android:hint="@string/city"
         android:textColor="#757575"
-        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintBottom_toTopOf="@id/carImage"
         app:layout_constraintEnd_toStartOf="@id/state"
         app:layout_constraintStart_toEndOf="@id/zip_code"
         app:layout_constraintTop_toBottomOf="@id/placeInput" />
@@ -224,26 +274,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
+        android:layout_marginVertical="20dp"
         android:hint="@string/state"
         android:minHeight="48dp"
         android:textColor="#757575"
-        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintBottom_toTopOf="@id/carImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/city"
         app:layout_constraintTop_toBottomOf="@id/placeInput" />
+
+
+    <ImageView
+        android:id="@+id/carImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:contentDescription="@string/upload_car_image"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeInput"
+        app:srcCompat="@drawable/upload" />
 
     <Button
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/sky_blue"
         android:text="@string/submit_str"
         android:textColor="#757575"
-        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/sky_blue"
-        app:layout_constraintTop_toBottomOf="@id/state"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/carImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -55,4 +55,8 @@
     <string name="state">State</string>
     <string name="choose_capacity">Choose capacity</string>
     <string name="choose_fuel">Choose fuel</string>
+    <string name="input_vehicle_title">Input Vehicle Title</string>
+    <string name="input_price_in_usd_per_day">Input price</string>
+    <string name="per_day">$ per day</string>
+    <string name="upload_car_image">upload car image</string>
 </resources>
