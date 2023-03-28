@@ -1,18 +1,19 @@
 package edu.northeastern.group40.Project;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
@@ -20,6 +21,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.snackbar.Snackbar;
 
 
 import java.util.ArrayList;
@@ -38,14 +40,17 @@ import edu.northeastern.group40.R;
 public class AddVehicleActivity extends AppCompatActivity {
 
     private static final String TAG = "AddVehicle";
-    private final String API_KEY="AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
+    private static final String API_KEY="AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
     private List<Place.Field> placeFields;
     private Place inputPlace;
+    private ActivityResultLauncher<String> imagePickerLauncher;
+    private boolean uploadedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputPlace = null;
+        uploadedImage = false;
         setContentView(R.layout.activity_project_add_vehicle);
         placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID);
         AutoCompleteTextView colorMenu = findViewById(R.id.colorMenu);
@@ -100,6 +105,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 inputPlace = place;
                 String address = place.getAddress();
                 Log.w(TAG, address);
+                assert address != null;
                 String[] parts = address.split(", ");
                 int len = parts.length;
                 String stateCode = parts[len-2];
@@ -151,14 +157,20 @@ public class AddVehicleActivity extends AppCompatActivity {
             }
         });
 
+        AutoCompleteTextView vehicleTitle = findViewById(R.id.titleInput);
+        AutoCompleteTextView rentPrice = findViewById(R.id.priceInput);
+        ImageView carImageView = findViewById(R.id.carImage);
+
         Button submit = findViewById(R.id.submit);
         submit.setOnClickListener(v -> {
+            String title = vehicleTitle.getText().toString();
             Color selectedColor = getResult(colorMenu, Color.class);
             VehicleBodyStyle selectedVehicleBodyStyle = getResult(bodyStyleMenu, VehicleBodyStyle.class);
             Brand selectedBrand = getResult(brandMenu, Brand.class);
             Brand.Model selectedModel = getResult(modelMenu, Brand.Model.class);
             Fuel selectedFuel = getResult(fuelMenu, Fuel.class);
             Mileage selectedMileage = Mileage.fromString(mileageMenu.getText().toString());
+            if(title.isEmpty()) vehicleTitle.setError("Input title");
             if(selectedMileage == null) mileageMenu.setError("Choose mileage");
             Integer capacity = null;
             try {
@@ -166,18 +178,44 @@ public class AddVehicleActivity extends AppCompatActivity {
             } catch (IllegalArgumentException e) {
                 capacityMenu.setError("Invalid value");
             }
+            if(rentPrice.getText().toString().isEmpty()){
+                rentPrice.setError("Input price");
+                return;
+            }
+            int price = Integer.parseInt(rentPrice.getText().toString());
             if(inputPlace == null) streetInput.setError("Input valid street");
+            if(!uploadedImage){
+                Snackbar.make(carImageView, "Please upload an image of the vehicle", Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+            }
+            Bitmap carImage = ((BitmapDrawable)carImageView.getDrawable()).getBitmap();
             if(selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
                 && selectedModel != null && selectedFuel != null && selectedMileage != null
                 && capacity != null && inputPlace != null){
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
-                        selectedFuel, selectedMileage, capacity, inputPlace);
+                        selectedFuel, selectedMileage, capacity, inputPlace, price, title, carImage);
                 Log.w(TAG,vehicle.toString());
                 // missing user
             }
         });
 
+
+
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                result -> {
+                    // Handle the selected image URI here
+                    if(result == null) return;
+                    Log.w(TAG, String.valueOf(result));
+                    carImageView.setImageURI(result);
+                    uploadedImage = true;
+                });
+
+        carImageView.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+
     }
+
+
 
     public <T extends Enum<T>> void initDropDownMenu(AutoCompleteTextView menu, Class<T> enumType){
         T[] items = enumType.getEnumConstants();

@@ -58,4 +58,8 @@
     <string name="description_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_n">description here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\ndescription here\n</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="_2023_lexus">2023 Lexus</string>
+    <string name="input_vehicle_title">Input Vehicle Title</string>
+    <string name="input_price_in_usd_per_day">Input price</string>
+    <string name="per_day">$ per day</string>
+    <string name="upload_car_image">upload car image</string>
 </resources>
