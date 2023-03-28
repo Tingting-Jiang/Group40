@@ -25,6 +25,16 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_sign_up);
 
+        View rootView = findViewById(R.id.sign_up_layout);
+
+        if (rootView.getParent() != null) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.addView(rootView);
+        setContentView(scrollView);
+
         // Bind UI elements to Java variables
         mUsernameEditText = findViewById(R.id.username_edit_text);
         mEmailEditText = findViewById(R.id.email_edit_text);
