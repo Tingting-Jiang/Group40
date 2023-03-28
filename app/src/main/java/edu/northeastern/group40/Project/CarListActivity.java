@@ -17,10 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.northeastern.group40.Project.Models.Car;
+import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;
 import edu.northeastern.group40.R;
 
-public class CarListActivity extends AppCompatActivity {
+public class CarListActivity extends AppCompatActivity implements SelectListener {
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
     private final List<Car> carList = new ArrayList<>();
@@ -88,8 +89,10 @@ public class CarListActivity extends AppCompatActivity {
         RecyclerView carRecView = findViewById(R.id.car_list_recView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         carRecView.setLayoutManager(layoutManager);
-        carListAdapter = new CarListAdapter(CarListActivity.this, carList);
+        carListAdapter = new CarListAdapter(CarListActivity.this, carList, this);
         carRecView.setAdapter(carListAdapter);
+
+
 
     }
 
@@ -99,4 +102,14 @@ public class CarListActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onCarSelect(Car car) {
+        Intent intent = new Intent(CarListActivity.this, CarDetailActivity.class);
+        intent.putExtra("carDetail", car);
+        intent.putExtra("rentLength", 5);
+        startActivity(intent);
+       // TODO: PUT OBJECT  INTO INTENT
+        // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
+        // 1. OBJECT implements Serializable and
+    }
 }

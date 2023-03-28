@@ -1,6 +1,8 @@
 package edu.northeastern.group40.Project.Models;
 
-public class Car {
+import java.io.Serializable;
+
+public class Car implements Serializable {
 
     private String carTitle;
     private String totalMiles;
@@ -9,6 +11,7 @@ public class Car {
     private String distance;
     private String carImage;
     private String rentPrice;
+    private String CarId;
 
     public Car(String carTitle, String totalMiles, String review_result, String review_num, String distance, String carImage, String rentPrice) {
         this.carTitle = carTitle;
