@@ -37,7 +37,7 @@
     <string name="search_activity">Search Activity</string>
     <string name="car_type_title">Car Type:</string>
     <string name="availability">Availability:</string>
-    <string name="location_city">Location(City):</string>
+    <string name="location_city">Location:</string>
     <string name="input_the_city">Input the city</string>
     <string name="search">SEARCH</string>
     <string name="_9_7miles">9.7miles</string>
