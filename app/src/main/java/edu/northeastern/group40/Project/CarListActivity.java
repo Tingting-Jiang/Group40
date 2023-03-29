@@ -99,7 +99,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
         //TODO: GET DATA FROM DB
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000348-Tue%20Mar%2028%2018%3A55%3A01%20PDT%202023?alt=media&token=ae842409-2594-4c9e-b5db-e1af597cd6e3";
+        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
 
         fetchDataFromDB();
         if (vehicleList.size() == 0) {

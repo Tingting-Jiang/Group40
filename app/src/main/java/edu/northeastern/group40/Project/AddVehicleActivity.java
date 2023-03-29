@@ -43,6 +43,7 @@ import java.util.List;
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
@@ -56,8 +57,8 @@ public class AddVehicleActivity extends AppCompatActivity {
     private Place inputPlace;
     private ActivityResultLauncher<String> imagePickerLauncher;
     private boolean uploadedImage;
-    Uri imageUri;
-    String filePath;
+    private Uri imageUploadUri;
+    private String imageUrlInDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class AddVehicleActivity extends AppCompatActivity {
         inputPlace = null;
         uploadedImage = false;
         setContentView(R.layout.activity_project_add_vehicle);
-        placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID);
+        placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID, Place.Field.LAT_LNG);
         AutoCompleteTextView colorMenu = findViewById(R.id.colorMenu);
         AutoCompleteTextView bodyStyleMenu = findViewById(R.id.bodyStyleMenu);
         AutoCompleteTextView brandMenu = findViewById(R.id.brandMenu);
@@ -116,6 +117,7 @@ public class AddVehicleActivity extends AppCompatActivity {
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 Place place = response.getPlace();
                 inputPlace = place;
+
                 String address = place.getAddress();
                 Log.w(TAG, address);
                 assert address != null;
@@ -207,8 +209,9 @@ public class AddVehicleActivity extends AppCompatActivity {
                     && selectedModel != null && selectedFuel != null && selectedMileage != null
                     && capacity != null && inputPlace != null) {
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
-                        selectedFuel, selectedMileage, capacity, inputPlace, price, title, filePath);
-                Log.w(TAG, vehicle.toString());
+
+                        selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace), price, title, imageUrlInDB);
+                Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
         });
@@ -218,7 +221,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 result -> {
                     // Handle the selected image URI here
                     if (result == null) return;
-                    imageUri = result;
+                    imageUploadUri = result;
                     Log.w(TAG, String.valueOf(result));
                     carImageView.setImageURI(result);
                     uploadedImage = true;
@@ -228,36 +231,23 @@ public class AddVehicleActivity extends AppCompatActivity {
 
         carImageView.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
-
-
     }
 
     public void getImageURL() {
-        File file = new File(String.valueOf(imageUri)+ "-"+ new Date());
+        File file = new File(String.valueOf(imageUploadUri)+ "-"+ new Date());
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("images");
 
-        storageRef.child(file.getName()).putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        storageRef.child(file.getName()).putFile(imageUploadUri)
+                .addOnSuccessListener(taskSnapshot -> {
 
-                        Toast.makeText(AddVehicleActivity.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                filePath = uri.toString();
-                                Log.i(TAG, "STORED PATH: " + filePath);
-                            }
-                        });
-                    }
+                    Toast.makeText(AddVehicleActivity.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                        imageUrlInDB = uri.toString();
+                        Log.i(TAG, "STORED PATH: " + imageUrlInDB);
+                    });
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "FAILED UPLOAD");
-                    }
-                });
+                .addOnFailureListener(e -> Log.i(TAG, "FAILED UPLOAD"));
 
     }
 
@@ -277,10 +267,6 @@ public class AddVehicleActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
-
-
 
 
 }

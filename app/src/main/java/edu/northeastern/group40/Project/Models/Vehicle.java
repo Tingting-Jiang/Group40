@@ -18,7 +18,7 @@ public class Vehicle implements Serializable {
     private Fuel fuel;
     private Mileage mileage;
     private int capacity;
-    private Place place;
+    private MyLocation place;
     private String reviewResult;
     private int reviewTotalNumber;
     private String vehicleTitle;
@@ -26,7 +26,7 @@ public class Vehicle implements Serializable {
     private String carImage;
 
     public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
-                   Fuel fuel, Mileage mileage, int capacity, Place place, int rentPrice,
+                   Fuel fuel, Mileage mileage, int capacity, MyLocation place, int rentPrice,
                    String vehicleTitle, String carImage){
         this.brand = brand;
         this.model = model;
@@ -89,12 +89,12 @@ public class Vehicle implements Serializable {
         return capacity;
     }
 
-    public Place getPlace() {
-        return place;
-    }
-
     public String getImage() {
         return carImage;
+    }
+
+    public MyLocation getPlace() {
+        return place;
     }
 
     public String getTitle() {
@@ -126,6 +126,6 @@ public class Vehicle implements Serializable {
     public String toString() {
         return "Brand: " + brand + ", Model: " + model + ", Color: " + color +
                 ", Body Style: " + vehicleBodyStyle + ", Fuel: " + fuel + ", Mileage: " +
-                mileage + ", Capacity: " + capacity + ", Image: " + carImage;
+                mileage + ", Capacity: " + capacity;
     }
 }
