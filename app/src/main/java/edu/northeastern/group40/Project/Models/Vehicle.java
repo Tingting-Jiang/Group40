@@ -18,6 +18,8 @@ public class Vehicle implements Serializable {
     private String vehicleTitle;
     private int rentPrice;
     private String carImage;
+    private String ownerID;
+    private String vehicleID;
 
     // date format: "MM/DD/YYYY"
     private String startDate;
@@ -25,7 +27,7 @@ public class Vehicle implements Serializable {
 
     public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
                    Fuel fuel, Mileage mileage, int capacity, MyLocation place, int rentPrice,
-                   String vehicleTitle, String carImage, String startDate, String endDate){
+                   String vehicleTitle, String carImage, String startDate, String endDate, String ownerID, String vehicleID){
         this.brand = brand;
         this.model = model;
         this.color = color;
@@ -41,8 +43,17 @@ public class Vehicle implements Serializable {
         this.reviewTotalNumber = 0;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.ownerID = ownerID;
     }
 
+
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public String getVehicleID(){
+        return vehicleID;
+    }
 
     public Brand getBrand() {
         return brand;
