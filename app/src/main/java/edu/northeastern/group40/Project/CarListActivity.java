@@ -253,7 +253,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                         vehicleList.add(currVehicle);
                     }
                     syncBackupList();
-
                 }
                 carListAdapter.notifyDataSetChanged();
             }
@@ -286,7 +285,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         startActivity(intent);
        // TODO: PUT OBJECT  INTO INTENT
         // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
-        // 1. OBJECT implements Serializable and
     }
 
     static class SortByRentPrice implements Comparator<Vehicle> {

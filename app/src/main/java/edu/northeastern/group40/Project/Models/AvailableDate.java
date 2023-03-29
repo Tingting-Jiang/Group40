@@ -2,11 +2,12 @@ package edu.northeastern.group40.Project.Models;
 
 import android.annotation.SuppressLint;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AvailableDate {
+public class AvailableDate implements Serializable {
     private static final String FORMAT = "MM/dd/yyyy";
     private String startDate;
     private String endDate;
@@ -41,9 +42,6 @@ public class AvailableDate {
 
     @Override
     public String toString() {
-        return "AvailableDate { " +
-                "startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                '}';
+        return "Available Date: " + startDate + " - " + endDate;
     }
 }
