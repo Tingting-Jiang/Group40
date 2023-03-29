@@ -152,7 +152,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             for (int i = 0; i < 3; i++) {
                 Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
                         Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, i,
-                        "2023 Brand New Accord", dbString);
+                        "2023 Brand New Accord", dbString,"may-4", "may-7", "123", "3455");
                 vehicle.setReviewResult("4.2");
                 vehicle.setReviewTotalNumber(i+100);
                 vehicleList.add(vehicle);
@@ -160,7 +160,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             }
             Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
                     Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 100,
-                    "2023 Brand New SUV", dbString);
+                    "2023 Brand New SUV", dbString, "may-4", "may-7", "123", "3455");
             vehicle.setReviewResult("4.2");
             vehicle.setReviewTotalNumber(56);
             vehicleList.add(vehicle);
