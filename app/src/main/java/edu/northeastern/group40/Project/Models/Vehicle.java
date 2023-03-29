@@ -1,12 +1,6 @@
 package edu.northeastern.group40.Project.Models;
 
-
-import android.graphics.Bitmap;
-
 import androidx.annotation.NonNull;
-
-import com.google.android.libraries.places.api.model.Place;
-
 import java.io.Serializable;
 
 public class Vehicle implements Serializable {
@@ -25,9 +19,13 @@ public class Vehicle implements Serializable {
     private int rentPrice;
     private String carImage;
 
+    // date format: "MM/DD/YYYY"
+    private String startDate;
+    private String endDate;
+
     public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
                    Fuel fuel, Mileage mileage, int capacity, MyLocation place, int rentPrice,
-                   String vehicleTitle, String carImage){
+                   String vehicleTitle, String carImage, String startDate, String endDate){
         this.brand = brand;
         this.model = model;
         this.color = color;
@@ -41,25 +39,10 @@ public class Vehicle implements Serializable {
         this.carImage = carImage;
         this.reviewResult = null;
         this.reviewTotalNumber = 0;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
-                   Fuel fuel, Mileage mileage, int capacity, int rentPrice,
-                   String vehicleTitle, String carImage){
-        this.brand = brand;
-        this.model = model;
-        this.color = color;
-        this.vehicleBodyStyle = vehicleBodyStyle;
-        this.fuel = fuel;
-        this.mileage = mileage;
-        this.capacity = capacity;
-        this.place = null;
-        this.rentPrice = rentPrice;
-        this.vehicleTitle = vehicleTitle;
-        this.carImage = carImage;
-        this.reviewResult = null;
-        this.reviewTotalNumber = 0;
-    }
 
     public Brand getBrand() {
         return brand;
@@ -111,6 +94,14 @@ public class Vehicle implements Serializable {
 
     public int getRentPrice() {
         return rentPrice;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
     }
 
     public void setReviewResult(String reviewResult) {

@@ -1,5 +1,7 @@
 package edu.northeastern.group40.Project;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -16,11 +18,8 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
@@ -30,12 +29,12 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -56,15 +55,20 @@ public class AddVehicleActivity extends AppCompatActivity {
     private List<Place.Field> placeFields;
     private Place inputPlace;
     private ActivityResultLauncher<String> imagePickerLauncher;
-    private boolean uploadedImage;
     private Uri imageUploadUri;
     private String imageUrlInDB;
+    private Button showStartDatePickerButton;
+    private TextView selectedStartDateTextView;
+    private Button showEndDatePickerButton;
+    private TextView selectedEndDateTextView;
+    private Calendar startCalendar, endCalendar;
+    private boolean imageUploaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inputPlace = null;
-        uploadedImage = false;
+        imageUploaded = false;
         setContentView(R.layout.activity_project_add_vehicle);
         placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID, Place.Field.LAT_LNG);
         AutoCompleteTextView colorMenu = findViewById(R.id.colorMenu);
@@ -199,22 +203,59 @@ public class AddVehicleActivity extends AppCompatActivity {
             }
             int price = Integer.parseInt(rentPrice.getText().toString());
             if (inputPlace == null) streetInput.setError("Input valid street");
-            if (!uploadedImage) {
+            if (!imageUploaded) {
                 Snackbar.make(carImageView, "Please upload an image of the vehicle", Snackbar.LENGTH_LONG)
                         .show();
                 return;
             }
-            Bitmap carImage = ((BitmapDrawable) carImageView.getDrawable()).getBitmap();
+            if(selectedStartDateTextView.getText().length() != 22 || selectedEndDateTextView.getText().length() != 20){
+                Snackbar.make(selectedStartDateTextView, "Please input availability", Snackbar.LENGTH_LONG)
+                        .show();
+                return;
+            }
+            String startDate = selectedStartDateTextView.getText().toString().substring(12);
+            String endDate = selectedEndDateTextView.getText().toString().substring(10);
+
             if (selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
                     && selectedModel != null && selectedFuel != null && selectedMileage != null
                     && capacity != null && inputPlace != null) {
+                getImageURL();
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
+                        selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
+                        price, title, imageUrlInDB, startDate, endDate);
 
-                        selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace), price, title, imageUrlInDB);
                 Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
         });
+
+        //availability
+        startCalendar = Calendar.getInstance();
+        endCalendar = Calendar.getInstance();
+        selectedStartDateTextView = findViewById(R.id.start_date);
+        selectedEndDateTextView = findViewById(R.id.end_date);
+        showStartDatePickerButton = findViewById(R.id.show_start_date_picker);
+        showEndDatePickerButton = findViewById(R.id.show_end_date_picker);
+
+        showStartDatePickerButton.setOnClickListener(v -> showDatePickerDialog(startCalendar, (view, year, monthOfYear, dayOfMonth) -> {
+            startCalendar.set(Calendar.YEAR, year);
+            startCalendar.set(Calendar.MONTH, monthOfYear);
+            startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateSelectedStartDate();
+        }));
+
+        showEndDatePickerButton.setOnClickListener(v -> showDatePickerDialog(endCalendar, (view, year, monthOfYear, dayOfMonth) -> {
+            endCalendar.set(Calendar.YEAR, year);
+            endCalendar.set(Calendar.MONTH, monthOfYear);
+            endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if (endCalendar.before(startCalendar)) {
+                Toast.makeText(AddVehicleActivity.this, "End date cannot be earlier than start date", Toast.LENGTH_SHORT).show();
+                endCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+                updateSelectedEndDate();
+            } else {
+                updateSelectedEndDate();
+            }
+        }));
 
 
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -224,8 +265,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                     imageUploadUri = result;
                     Log.w(TAG, String.valueOf(result));
                     carImageView.setImageURI(result);
-                    uploadedImage = true;
-                    getImageURL();
+                    imageUploaded = true;
                 });
 
 
@@ -234,7 +274,7 @@ public class AddVehicleActivity extends AppCompatActivity {
     }
 
     public void getImageURL() {
-        File file = new File(String.valueOf(imageUploadUri)+ "-"+ new Date());
+        File file = new File(imageUploadUri + "-"+ new Date());
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("images");
 
@@ -266,6 +306,26 @@ public class AddVehicleActivity extends AppCompatActivity {
             input.setError("Invalid value");
             return null;
         }
+    }
+
+    private void showDatePickerDialog(Calendar calendar, DatePickerDialog.OnDateSetListener listener) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, listener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void updateSelectedStartDate() {
+        selectedStartDateTextView.setText("Start date: " + String.format("%02d/%02d/%d",
+                startCalendar.get(Calendar.MONTH) + 1, startCalendar.get(Calendar.DAY_OF_MONTH),
+                startCalendar.get(Calendar.YEAR)));
+    }
+
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void updateSelectedEndDate() {
+        selectedEndDateTextView.setText("End date: " + String.format("%02d/%02d/%d",
+                endCalendar.get(Calendar.MONTH) + 1, endCalendar.get(Calendar.DAY_OF_MONTH),
+                endCalendar.get(Calendar.YEAR)));
     }
 
 
