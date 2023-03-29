@@ -1,9 +1,9 @@
 package edu.northeastern.group40.Project.Models;
 
+import androidx.annotation.NonNull;
+import java.io.Serializable;
 
-import com.google.android.libraries.places.api.model.Place;
-
-public class Vehicle implements VehicleInterface{
+public class Vehicle implements Serializable {
 
     private Brand brand;
     private Brand.Model model;
@@ -12,10 +12,20 @@ public class Vehicle implements VehicleInterface{
     private Fuel fuel;
     private Mileage mileage;
     private int capacity;
-    private Place place;
+    private MyLocation place;
+    private String reviewResult;
+    private int reviewTotalNumber;
+    private String vehicleTitle;
+    private int rentPrice;
+    private String carImage;
+
+    // date format: "MM/DD/YYYY"
+    private String startDate;
+    private String endDate;
 
     public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
-                   Fuel fuel, Mileage mileage, int capacity, Place place){
+                   Fuel fuel, Mileage mileage, int capacity, MyLocation place, int rentPrice,
+                   String vehicleTitle, String carImage, String startDate, String endDate){
         this.brand = brand;
         this.model = model;
         this.color = color;
@@ -24,52 +34,89 @@ public class Vehicle implements VehicleInterface{
         this.mileage = mileage;
         this.capacity = capacity;
         this.place = place;
+        this.rentPrice = rentPrice;
+        this.vehicleTitle = vehicleTitle;
+        this.carImage = carImage;
+        this.reviewResult = null;
+        this.reviewTotalNumber = 0;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    @Override
+
     public Brand getBrand() {
         return brand;
     }
 
-    @Override
     public Brand.Model getModel() {
         return model;
     }
 
-    @Override
     public Color getColor() {
         return color;
     }
 
-    @Override
     public VehicleBodyStyle getVehicleBodyStyle() {
         return vehicleBodyStyle;
     }
 
-    @Override
     public Fuel getFuel() {
         return fuel;
     }
 
-    @Override
     public Mileage getMileage() {
         return mileage;
     }
 
-    @Override
     public int getCapacity() {
         return capacity;
     }
 
-    @Override
-    public Place getPlace() {
+    public String getImage() {
+        return carImage;
+    }
+
+    public MyLocation getPlace() {
         return place;
     }
 
+    public String getTitle() {
+        return vehicleTitle;
+    }
+
+    public int getReviewTotalNumber() {
+        return reviewTotalNumber;
+    }
+
+    public String getReviewResult() {
+        return reviewResult;
+    }
+
+    public int getRentPrice() {
+        return rentPrice;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setReviewResult(String reviewResult) {
+        this.reviewResult = reviewResult;
+    }
+
+    public void setReviewTotalNumber(int reviewTotalNumber) {
+        this.reviewTotalNumber = reviewTotalNumber;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Brand: " + brand + ", Model: " + model + ", Color: " + color +
                 ", Body Style: " + vehicleBodyStyle + ", Fuel: " + fuel + ", Mileage: " +
-                mileage + ", Capacity: " + capacity + ", Place: " + place;
+                mileage + ", Capacity: " + capacity;
     }
 }
