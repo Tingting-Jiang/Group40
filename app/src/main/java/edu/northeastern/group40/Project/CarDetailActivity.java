@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+
 import edu.northeastern.group40.Project.Models.Car;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
@@ -46,7 +49,11 @@ public class CarDetailActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void setupUI() {
         float totalPriceNeed = rentLength * chosenVehicle.getRentPrice();
-        carPhoto.setImageResource(R.drawable.cat);
+        Picasso.get()
+                .load(chosenVehicle.getImage())
+                .fit()
+                .into(carPhoto);
+
         // TODO: CHANGE the image to car image
         carTitle.setText(chosenVehicle.getTitle());
         ratingBar.setRating(Float.parseFloat(chosenVehicle.getReviewResult()));

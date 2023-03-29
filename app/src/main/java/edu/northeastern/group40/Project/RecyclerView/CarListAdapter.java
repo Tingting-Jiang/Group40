@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -57,12 +59,12 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         holder.distance.setText( "3 miles");
         holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber());
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
-        Log.d(TAG, "get url: " + currVehicle.getImage());
         Picasso.get()
                 .load(currVehicle.getImage())
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .fit()
                 .into(holder.carImage);
-        
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
