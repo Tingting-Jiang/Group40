@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
@@ -51,8 +52,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private final List<Vehicle> backupVehicleList = new ArrayList<>();
     private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
-    private String rentDate;
-    private PriceOrder displayPrice = PriceOrder.PRICE_LOW_TO_HIGH;
+    private AvailableDate targetAvailableDate;
     private Button priceSort, reviewSort, distanceSort, mileageSort;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
@@ -110,7 +110,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
         this.rentCarType = VehicleBodyStyle.valueOf(getIntent().getStringExtra("VehicleBodyStyle"));
-        this.rentDate = getIntent().getStringExtra("filter-date");
+        this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
         if (destinationLocation == null) {
             try {
@@ -249,7 +249,9 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType)) {
+                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType)
+                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+                    ) {
                         vehicleList.add(currVehicle);
                     }
                     syncBackupList();
