@@ -17,19 +17,19 @@ public class User {
 
     boolean isCarRenter;
 
-    List<Car> cars;
+    List<Vehicle> vehicles;
 
-public User(String username, String password, String email, String phone, double balance, boolean isCarRenter) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.balance = balance;
-        this.isCarRenter = false;
-        if (isCarRenter) {
-            changeCarRenterStatus();
+    public User(String username, String password, String email, String phone, double balance, boolean isCarRenter) {
+            this.username = username;
+            this.password = password;
+            this.email = email;
+            this.phone = phone;
+            this.balance = balance;
+            this.isCarRenter = false;
+            if (isCarRenter) {
+                changeCarRenterStatus();
+            }
         }
-    }
 
     public boolean isCarRenter() {
         return isCarRenter;
@@ -38,18 +38,18 @@ public User(String username, String password, String email, String phone, double
     public void changeCarRenterStatus() {
         if (isCarRenter) {
             isCarRenter = false;
-            cars = null;
+            vehicles = null;
         } else {
             isCarRenter = true;
-            cars = new ArrayList<>();
+            vehicles = new ArrayList<>();
         }
     }
 
-    public List<Car> getCars() throws IllegalArgumentException{
+    public List<Vehicle> getVehicles() throws IllegalArgumentException{
         if (!isCarRenter) {
             throw new IllegalArgumentException("This user is not a car renter!");
         }
-        return cars;
+        return vehicles;
     }
 
     public void setCarRenter(boolean carRenter) {
