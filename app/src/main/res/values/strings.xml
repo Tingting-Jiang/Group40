@@ -63,4 +63,8 @@
     <string name="per_day">$ per day</string>
     <string name="upload_car_image">upload car image</string>
     <string name="place_order">Place Order</string>
+    <string name="price_low_to_high">$ - $$$</string>
+    <string name="less_mileage">less mileage</string>
+    <string name="highly_reviewed">highly reviewed</string>
+    <string name="near">near</string>
 </resources>

@@ -2,17 +2,16 @@ package edu.northeastern.group40.Project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
-import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
@@ -47,29 +46,56 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
     private String rentDate;
-    private boolean displayPriceLowToHigh = true;
     private PriceOrder displayPrice = PriceOrder.PRICE_LOW_TO_HIGH;
-    private Chip rentTypeChip, rentDateChip, rentPriceChip;
+    private Button priceSort, reviewSort, distanceSort, timeSort;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
     private MyLocation destinationLocation = null;
+    private SearchView searchView;
+    private RecyclerView carRecView;
+    private String selectedFilter = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_list);
         initUI();
-        setupUI();
         initRecyclerView();
+        setupUI();
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void initUI() {
         // Todo: get  the filter items
-        this.rentTypeChip = findViewById(R.id.car_type_chip);
-        this.rentDateChip = findViewById(R.id.rent_time_chip);
-        this.rentPriceChip = findViewById(R.id.rent_price_chip);
+        this.timeSort = findViewById(R.id.mileageSort);
+        this.priceSort = findViewById(R.id.priceSort);
+        this.distanceSort = findViewById(R.id.distanceSort);
+        this.reviewSort = findViewById(R.id.reviewSort);
+
+        searchView = (SearchView) findViewById(R.id.searchVehicle);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Vehicle> filterList = new ArrayList<>();
+                for (Vehicle v : backupVehicleList) {
+                    if (v.toString().contains(newText.toUpperCase(Locale.ROOT))) {
+                        filterList.add(v);
+                    }
+                }
+                CarListAdapter filterAdapter = new CarListAdapter(CarListActivity.this, filterList, CarListActivity.this, destinationLocation);
+                carRecView.setAdapter(filterAdapter);
+                return false;
+            }
+        });
+
 
         this.rentCarType = VehicleBodyStyle.valueOf(getIntent().getStringExtra("VehicleBodyStyle"));
         this.rentDate = getIntent().getStringExtra("filter-date");
@@ -82,35 +108,29 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             }
         }
 
-        this.rentTypeChip.setText(this.rentCarType.toString());
-        this.rentDateChip.setText(this.rentDate);
-        this.rentPriceChip.setText("$ - $$$");
+    }
 
-        this.rentTypeChip.setOnClickListener(v -> {
-            if (rentTypeChip.isChecked()) {
-                Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
-                vehicleList = vehicleList.stream().filter(vehicle -> vehicle.getVehicleBodyStyle().equals(this.rentCarType)).collect(Collectors.toList());
-                for (Vehicle v1: vehicleList) {
-                    Log.d(TAG, v1.toString());
-                }
-            } else {
-                vehicleList = backupVehicleList;
-            }
-            carListAdapter.notifyDataSetChanged();
-
-        });
-        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onClick(View v) {
-                if (rentTypeChip.isChecked()) {
-                    Collections.sort(vehicleList, new SortByRentPrice());
-                } else {
-                    Collections.shuffle(vehicleList);
-                }
-                carListAdapter.notifyDataSetChanged();
-            }
-        });
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateFilter(String status) {
+        selectedFilter = status;
+        switch (status){
+            case "price":
+                Collections.sort(vehicleList, new SortByRentPrice());
+                break;
+            case "distance":
+                Collections.sort(vehicleList, new SortByDistance(destinationLocation));
+                break;
+            case "review_count":
+                Collections.sort(vehicleList, new SortByReview());
+                break;
+            case "mileage":
+                Collections.sort(vehicleList, new SortByMileage());
+                break;
+            default:
+                Collections.shuffle(vehicleList);
+                break;
+        }
+        carListAdapter.notifyDataSetChanged();
     }
 
     private void setupUI() {
@@ -134,7 +154,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                         Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, i,
                         "2023 Brand New Accord", dbString);
                 vehicle.setReviewResult("4.2");
-                vehicle.setReviewTotalNumber(56);
+                vehicle.setReviewTotalNumber(i+100);
                 vehicleList.add(vehicle);
 
             }
@@ -153,14 +173,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         if (backupVehicleList.size() == 0) {
             backupVehicleList.addAll(vehicleList);
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateFilter() {
-        if (this.rentCarType != null) {
-            this.vehicleList.stream().filter(vehicle -> vehicle.getVehicleBodyStyle().equals(this.rentCarType));
-        }
-        carListAdapter.notifyDataSetChanged();
     }
 
 
@@ -190,7 +202,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     private void initRecyclerView() {
-        RecyclerView carRecView = findViewById(R.id.car_list_recView);
+        carRecView = findViewById(R.id.car_list_recView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         carRecView.setLayoutManager(layoutManager);
         carListAdapter = new CarListAdapter(CarListActivity.this, vehicleList, this, destinationLocation);
@@ -220,5 +232,44 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         public int compare(Vehicle v1, Vehicle v2) {
             return v1.getRentPrice() - v2.getRentPrice();
         }
+    }
+    static class SortByReview implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v2.getReviewTotalNumber() - v1.getReviewTotalNumber();
+        }
+    }
+    static class SortByMileage implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v1.getMileage().compareTo(v2.getMileage());
+        }
+    }
+    static class SortByDistance implements Comparator<Vehicle> {
+        private MyLocation destination;
+
+        public SortByDistance(MyLocation destination) {
+            this.destination = destination;
+        }
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return (int) v2.getPlace().distanceToInMiles(destination) - (int) v1.getPlace().distanceToInMiles(destination);
+        }
+    }
+
+    public void onSortPrice(View view) {
+        updateFilter("price");
+    }
+    public void onSortMileage(View view) {
+        updateFilter("mileage");
+    }
+    public void onSortDistance(View view) {
+        updateFilter("distance");
+    }
+    public void onSortReviewCount(View view) {
+        updateFilter("review_count");
     }
 }
