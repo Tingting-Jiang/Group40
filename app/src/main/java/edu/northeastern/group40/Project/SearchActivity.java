@@ -5,14 +5,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
+import edu.northeastern.group40.Project.Models.Brand;
+import edu.northeastern.group40.Project.Models.Color;
+import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.R;
 
 public class SearchActivity extends AppCompatActivity {
@@ -22,7 +43,12 @@ public class SearchActivity extends AppCompatActivity {
     Button showEndDatePickerButton;
     TextView selectedEndDateTextView;
     Calendar startCalendar, endCalendar;
+//    AutoCompleteTextView brandMenu = findViewById(R.id.brandMenu);
+//    AutoCompleteTextView modelMenu = findViewById(R.id.modelMenu);
+    private Place inputPlace;
+    private static final String API_KEY="AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +57,89 @@ public class SearchActivity extends AppCompatActivity {
         showStartDatePickerButton = findViewById(R.id.show_start_date_picker_button);
         selectedStartDateTextView = findViewById(R.id.selected_start_date_text_view);
         startCalendar = Calendar.getInstance();
+        inputPlace = null;
 
         showEndDatePickerButton = findViewById(R.id.show_end_date_picker_button);
         selectedEndDateTextView = findViewById(R.id.selected_end_date_text_view);
         endCalendar = Calendar.getInstance();
+        AutoCompleteTextView placeInput = findViewById(R.id.placeForSearch);
+
+
+        AutoCompleteTextView brandMenu = findViewById(R.id.brandMenu);
+        AutoCompleteTextView modelMenu = findViewById(R.id.modelMenu);
+        AutoCompleteTextView[] menuList = new AutoCompleteTextView[]
+                {brandMenu, modelMenu};
+        for(AutoCompleteTextView menu: menuList){
+            menu.setOnItemClickListener((parent, view, position, id) -> menu.setError(null));
+        }
+        initDropDownMenu(brandMenu, Brand.class);
+        brandMenu.setOnItemClickListener((parent, view, position, id) -> {
+            brandMenu.setError(null);
+            Brand brand = (Brand) parent.getItemAtPosition(position);
+            ArrayAdapter<Brand.Model> modelAdapter =
+                    new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, brand.getModels());
+            modelMenu.setAdapter(modelAdapter);
+        });
+
+
+        Places.initialize(getApplicationContext(), API_KEY);
+        PlacesClient placesClient = Places.createClient(this);
+
+        List<AutocompletePrediction> predictions = new ArrayList<>();
+        PlaceAutocompleteAdapter placeAdapter = new PlaceAutocompleteAdapter(this, predictions);
+        placeInput.setAdapter(placeAdapter);
+
+        placeInput.setOnItemClickListener((parent, view, position, id) -> {
+            placeInput.setError(null);
+            AutocompletePrediction prediction = (AutocompletePrediction) parent.getItemAtPosition(position);
+            String locationText = String.valueOf(prediction.getFullText(null));
+            locationText = locationText.substring(0, locationText.lastIndexOf(","));
+            placeInput.setText(locationText);
+            FetchPlaceRequest request = FetchPlaceRequest.builder(prediction.getPlaceId(), Arrays.asList(Place.Field.ADDRESS, Place.Field.ID))
+                    .build();
+            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                inputPlace = response.getPlace();
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    ApiException apiException = (ApiException) exception;
+                    int statusCode = apiException.getStatusCode();
+                }
+            });
+        });
+
+
+        placeInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                inputPlace = null;
+                String input = s.toString();
+                FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                        .setQuery(input)
+                        .setCountry("US")
+                        .build();
+                placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                    predictions.clear();
+                    predictions.addAll(response.getAutocompletePredictions());
+                    predictions.removeIf(prediction -> prediction.getFullText(null).toString().split(",").length != 4);
+                    placeAdapter.notifyDataSetChanged();
+                }).addOnFailureListener((exception) -> {
+                    if (exception instanceof ApiException) {
+                        ApiException apiException = (ApiException) exception;
+                    }
+                });
+            }
+        });
 
         // Set listeners for date pickers
         showStartDatePickerButton.setOnClickListener(new View.OnClickListener() {
@@ -92,5 +197,11 @@ public class SearchActivity extends AppCompatActivity {
         selectedEndDateTextView.setText("End date: " + String.format("%02d/%02d/%d",
                 endCalendar.get(Calendar.MONTH) + 1, endCalendar.get(Calendar.DAY_OF_MONTH),
                 endCalendar.get(Calendar.YEAR)));
+    }
+
+    public <T extends Enum<T>> void initDropDownMenu(AutoCompleteTextView menu, Class<T> enumType){
+        T[] items = enumType.getEnumConstants();
+        ArrayAdapter<T> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        menu.setAdapter(adapter);
     }
 }
