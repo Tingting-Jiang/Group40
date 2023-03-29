@@ -2,8 +2,6 @@ package edu.northeastern.group40.Project;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +25,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -57,16 +59,18 @@ public class AddVehicleActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> imagePickerLauncher;
     private Uri imageUploadUri;
     private String imageUrlInDB;
-    private Button showStartDatePickerButton;
     private TextView selectedStartDateTextView;
-    private Button showEndDatePickerButton;
     private TextView selectedEndDateTextView;
     private Calendar startCalendar, endCalendar;
     private boolean imageUploaded;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         inputPlace = null;
         imageUploaded = false;
         setContentView(R.layout.activity_project_add_vehicle);
@@ -223,7 +227,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
                         selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
                         price, title, imageUrlInDB, startDate, endDate);
-
+                addVehicleToDB(vehicle);
                 Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
@@ -234,8 +238,8 @@ public class AddVehicleActivity extends AppCompatActivity {
         endCalendar = Calendar.getInstance();
         selectedStartDateTextView = findViewById(R.id.start_date);
         selectedEndDateTextView = findViewById(R.id.end_date);
-        showStartDatePickerButton = findViewById(R.id.show_start_date_picker);
-        showEndDatePickerButton = findViewById(R.id.show_end_date_picker);
+        Button showStartDatePickerButton = findViewById(R.id.show_start_date_picker);
+        Button showEndDatePickerButton = findViewById(R.id.show_end_date_picker);
 
         showStartDatePickerButton.setOnClickListener(v -> showDatePickerDialog(startCalendar, (view, year, monthOfYear, dayOfMonth) -> {
             startCalendar.set(Calendar.YEAR, year);
@@ -289,6 +293,11 @@ public class AddVehicleActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.i(TAG, "FAILED UPLOAD"));
 
+    }
+
+    public void addVehicleToDB(Vehicle vehicle){
+        // not sure
+        mDatabase.child("users").child(user.getUid()).setValue(vehicle);
     }
 
 

@@ -102,17 +102,17 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
 
         fetchDataFromDB();
-        if (vehicleList.size() == 0) {
-            for (int i = 0; i < 5; i++) {
-                Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, 87,
-                        "2023 Brand New Accord", dbString);
-                vehicle.setReviewResult("4.1");
-                vehicle.setReviewTotalNumber(56);
-                vehicleList.add(vehicle);
-
-            }
-        }
+//        if (vehicleList.size() == 0) {
+//            for (int i = 0; i < 5; i++) {
+//                Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+//                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, 87,
+//                        "2023 Brand New Accord", dbString);
+//                vehicle.setReviewResult("4.1");
+//                vehicle.setReviewTotalNumber(56);
+//                vehicleList.add(vehicle);
+//
+//            }
+//        }
 
 
     }
