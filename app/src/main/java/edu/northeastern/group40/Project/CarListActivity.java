@@ -29,6 +29,7 @@ import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
 import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.MyLocation;
+import edu.northeastern.group40.Project.Models.PriceOrder;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
@@ -39,12 +40,11 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
     private final List<Vehicle> vehicleList = new ArrayList<>();
-    private String rentCarType;
+    private VehicleBodyStyle rentCarType = null;
     private String rentDate;
-    private boolean displayPriceLowToHigh = false;
+    private boolean displayPriceLowToHigh = true;
+    private PriceOrder displayPrice = PriceOrder.PRICE_LOW_TO_HIGH;
     private Chip rentTypeChip, rentDateChip, rentPriceChip;
-    private static final String PRICE_LOW_TO_HIGH = "Low to High";
-    private static final String PRICE_HIGH_TO_LOW = "High to Low";
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
@@ -54,64 +54,71 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_list);
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initUI();
+        setupUI();
         initRecyclerView();
     }
 
-
-    private void init() throws IOException {
+    private void initUI() {
         // Todo: get  the filter items
+        this.rentTypeChip = findViewById(R.id.car_type_chip);
+        this.rentDateChip = findViewById(R.id.rent_time_chip);
+        this.rentPriceChip = findViewById(R.id.rent_price_chip);
+
+        this.rentCarType = VehicleBodyStyle.valueOf(getIntent().getStringExtra("VehicleBodyStyle"));
+        this.rentDate = getIntent().getStringExtra("filter-date");
+        this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
+        if (destinationLocation == null) {
+            try {
+                destinationLocation = new MyLocation(37.40273, -121.95154, this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.rentTypeChip.setText(this.rentCarType.toString());
+        this.rentDateChip.setText(this.rentDate);
+        this.rentPriceChip.setText("$ - $$$");
+
+        this.rentTypeChip.setOnClickListener(v -> {
+            if (rentTypeChip.isChecked()) {
+                Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
+            } else {
+                this.rentCarType = null;
+            }
+            updateFilter();
+        });
+//        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (rentTypeChip.isChecked()) {
+//                    rentPriceChip.setText("$ - $$$");
+//                    displayPriceLowToHigh = true;
+//                } else {
+//                    rentPriceChip.setText("$$$ - $");
+//                    displayPriceLowToHigh = false;
+//                }
+//            }
+//        });
+    }
+
+    private void setupUI() {
         usersDB = mDatabase.child("Users");
         vehicleDB = mDatabase.child("Vehicles");
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
 
-        this.rentTypeChip = findViewById(R.id.car_type_chip);
-        this.rentDateChip = findViewById(R.id.rent_time_chip);
-        this.rentPriceChip = findViewById(R.id.rent_price_chip);
-
-        this.rentCarType = getIntent().getStringExtra("filter-type");
-        this.rentDate = getIntent().getStringExtra("filter-date");
-        this.displayPriceLowToHigh = getIntent().getBooleanExtra("filter-price", false);
-        this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
-        if (destinationLocation == null) {
-            destinationLocation = new MyLocation(37.40273, -121.95154, this);
-        }
-
-
-        this.rentTypeChip.setText(this.rentCarType);
-        this.rentDateChip.setText(this.rentDate);
-        this.rentPriceChip.setText(this.displayPriceLowToHigh ? PRICE_LOW_TO_HIGH: PRICE_HIGH_TO_LOW);
-
-        this.rentTypeChip.setOnClickListener(v -> {
-            if (rentTypeChip.isChecked()) {
-                Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
-            }
-        });
-//        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (rentPriceChip.isChecked()) {
-//                    rentPriceChip.setChecked(false);
-//                    rentPriceChip.setText(PRICE_HIGH_TO_LOW);
-//                } else if (!rentPriceChip.isChecked()) {
-//                    rentPriceChip.setChecked(true);
-//                    rentPriceChip.setText(PRICE_LOW_TO_HIGH);
-//                }
-//            }
-//        });
-
-
         //TODO: GET DATA FROM DB
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = new MyLocation(35.40273, -120.95154, this);
-        fetchDataFromDB();
+        MyLocation testLocation = null;
+        try {
+            testLocation = new MyLocation(35.40273, -120.95154, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 3; i++) {
                 Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
                         Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 87,
                         "2023 Brand New Accord", dbString);
@@ -120,20 +127,36 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 vehicleList.add(vehicle);
 
             }
+            Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 100,
+                    "2023 Brand New Accord", dbString);
+            vehicle.setReviewResult("4.2");
+            vehicle.setReviewTotalNumber(56);
+            vehicleList.add(vehicle);
         }
     }
 
-    private void fetchDataFromDB() {
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateFilter() {
+        if (this.rentCarType != null) {
+            this.vehicleList.stream().filter(vehicle -> vehicle.getVehicleBodyStyle().equals(this.rentCarType));
+        }
+        carListAdapter.notifyDataSetChanged();
+    }
+
+
+    private void fetchDataFromDB(VehicleBodyStyle rentCarType) {
         vehicleDB.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                vehicleList.clear();
+                vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    vehicleList.add(currVehicle);
+                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType))
+                        vehicleList.add(currVehicle);
                 }
                 carListAdapter.notifyDataSetChanged();
             }

@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import android.view.View;
 
+import edu.northeastern.group40.Project.Models.PriceOrder;
+import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.R;
 
 public class ProjectActivity extends AppCompatActivity {
@@ -20,9 +22,8 @@ public class ProjectActivity extends AppCompatActivity {
 
     public void onCarListActivity(View view) {
         Intent intent = new Intent(ProjectActivity.this, CarListActivity.class);
-        intent.putExtra("filter-type", "SUV");
+        intent.putExtra("VehicleBodyStyle", VehicleBodyStyle.SUV.toString());
         intent.putExtra("filter-date", "April 23-27");
-        intent.putExtra("filter-price", true);
         startActivity(intent);
     }
     public void onAddVehicleActivity(View view) {
