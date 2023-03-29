@@ -1,5 +1,5 @@
 package edu.northeastern.group40.Project.Models;
 
 public interface SelectListener {
-    void onCarSelect(Car car);
+    void onCarSelect(Vehicle vehicle);
 }

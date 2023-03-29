@@ -11,11 +11,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import edu.northeastern.group40.Project.Models.Car;
+import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 
 public class CarDetailActivity extends AppCompatActivity {
 
-    private Car chosenCar;
+    private Vehicle chosenVehicle;
     private TextView carTitle, carReviewNumber, carPrice, carDescription, totalPrice;
     private RatingBar ratingBar;
     private ImageView carPhoto;
@@ -25,7 +26,7 @@ public class CarDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_detail);
         initUI();
-        chosenCar = (Car) getIntent().getSerializableExtra("carDetail");
+        chosenVehicle = (Vehicle) getIntent().getSerializableExtra("carDetail");
         rentLength = getIntent().getIntExtra("rentLength", 0);
         setupUI();
     }
@@ -44,16 +45,16 @@ public class CarDetailActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void setupUI() {
-        float totalPriceNeed = rentLength * Float.parseFloat(chosenCar.getRentPrice());
+        float totalPriceNeed = rentLength * chosenVehicle.getRentPrice();
         carPhoto.setImageResource(R.drawable.cat);
         // TODO: CHANGE the image to car image
-        carTitle.setText(chosenCar.getCarTitle());
-        ratingBar.setRating(Float.parseFloat(chosenCar.getReview_result()));
-        carReviewNumber.setText("by "+ chosenCar.getReview_num()+ " users ");
-        carPrice.setText("$ " + chosenCar.getRentPrice());
-        carDescription.setText("This is the car description");
+        carTitle.setText(chosenVehicle.getTitle());
+        ratingBar.setRating(Float.parseFloat(chosenVehicle.getReviewResult()));
+        carReviewNumber.setText("by "+ chosenVehicle.getReviewTotalNumber()+ " users ");
+        carPrice.setText("$ " + chosenVehicle.getRentPrice());
+        carDescription.setText(chosenVehicle.toString());
         totalPrice.setText("Total: $ " + totalPriceNeed);
-        //TODO: CHANGE CAR description to real car description
+        //TODO: CHANGE CAR this to real car total price
     }
 
     public void onBackToCarList(View view) {

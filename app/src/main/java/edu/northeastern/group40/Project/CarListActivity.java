@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,15 +26,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.northeastern.group40.A8.Models.User;
+import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Car;
+import edu.northeastern.group40.Project.Models.Color;
+import edu.northeastern.group40.Project.Models.Fuel;
+import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.SelectListener;
+import edu.northeastern.group40.Project.Models.Vehicle;
+import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;
 import edu.northeastern.group40.R;
 
 public class CarListActivity extends AppCompatActivity implements SelectListener {
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
-    private final List<Car> vehicleList = new ArrayList<>();
+    private final List<Vehicle> vehicleList = new ArrayList<>();
     private String rentCarType;
     private String rentDate;
     private boolean displayPriceLowToHigh = false;
@@ -91,11 +99,18 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
         //TODO: GET DATA FROM DB
+        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000348-Tue%20Mar%2028%2018%3A55%3A01%20PDT%202023?alt=media&token=ae842409-2594-4c9e-b5db-e1af597cd6e3";
 
         fetchDataFromDB();
         if (vehicleList.size() == 0) {
             for (int i = 0; i < 5; i++) {
-                vehicleList.add(new Car("2022 Lexus", "3000", "5.0", String.valueOf(i), "9.8", "123","88"));
+                Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, 87,
+                        "2023 Brand New Accord", dbString);
+                vehicle.setReviewResult("4.1");
+                vehicle.setReviewTotalNumber(56);
+                vehicleList.add(vehicle);
+
             }
         }
 
@@ -109,10 +124,10 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Car currCar = dataSnapshot.getValue(Car.class);
-                    assert currCar != null;
+                    Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
+                    assert currVehicle != null;
                     // todo: filter cars that meet requirement
-
+                    vehicleList.add(currVehicle);
                 }
                 carListAdapter.notifyDataSetChanged();
             }
@@ -141,7 +156,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
     @Override
-    public void onCarSelect(Car car) {
+    public void onCarSelect(Vehicle car) {
         Intent intent = new Intent(CarListActivity.this, CarDetailActivity.class);
         intent.putExtra("carDetail", car);
         intent.putExtra("rentLength", 5);

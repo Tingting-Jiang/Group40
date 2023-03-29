@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.google.android.libraries.places.api.model.Place;
 
-public class Vehicle implements VehicleInterface{
+import java.io.Serializable;
+
+public class Vehicle implements Serializable {
 
     private Brand brand;
     private Brand.Model model;
@@ -21,11 +23,11 @@ public class Vehicle implements VehicleInterface{
     private int reviewTotalNumber;
     private String vehicleTitle;
     private int rentPrice;
-    private Bitmap carImage;
+    private String carImage;
 
     public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
                    Fuel fuel, Mileage mileage, int capacity, Place place, int rentPrice,
-                   String vehicleTitle, Bitmap carImage){
+                   String vehicleTitle, String carImage){
         this.brand = brand;
         this.model = model;
         this.color = color;
@@ -41,69 +43,82 @@ public class Vehicle implements VehicleInterface{
         this.reviewTotalNumber = 0;
     }
 
-    @Override
+    public Vehicle(Brand brand, Brand.Model model, Color color, VehicleBodyStyle vehicleBodyStyle,
+                   Fuel fuel, Mileage mileage, int capacity, int rentPrice,
+                   String vehicleTitle, String carImage){
+        this.brand = brand;
+        this.model = model;
+        this.color = color;
+        this.vehicleBodyStyle = vehicleBodyStyle;
+        this.fuel = fuel;
+        this.mileage = mileage;
+        this.capacity = capacity;
+        this.place = null;
+        this.rentPrice = rentPrice;
+        this.vehicleTitle = vehicleTitle;
+        this.carImage = carImage;
+        this.reviewResult = null;
+        this.reviewTotalNumber = 0;
+    }
+
     public Brand getBrand() {
         return brand;
     }
 
-    @Override
     public Brand.Model getModel() {
         return model;
     }
 
-    @Override
     public Color getColor() {
         return color;
     }
 
-    @Override
     public VehicleBodyStyle getVehicleBodyStyle() {
         return vehicleBodyStyle;
     }
 
-    @Override
     public Fuel getFuel() {
         return fuel;
     }
 
-    @Override
     public Mileage getMileage() {
         return mileage;
     }
 
-    @Override
     public int getCapacity() {
         return capacity;
     }
 
-    @Override
     public Place getPlace() {
         return place;
     }
 
-    @Override
-    public Bitmap getImage() {
+    public String getImage() {
         return carImage;
     }
 
-    @Override
     public String getTitle() {
         return vehicleTitle;
     }
 
-    @Override
     public int getReviewTotalNumber() {
         return reviewTotalNumber;
     }
 
-    @Override
     public String getReviewResult() {
         return reviewResult;
     }
 
-    @Override
     public int getRentPrice() {
         return rentPrice;
+    }
+
+    public void setReviewResult(String reviewResult) {
+        this.reviewResult = reviewResult;
+    }
+
+    public void setReviewTotalNumber(int reviewTotalNumber) {
+        this.reviewTotalNumber = reviewTotalNumber;
     }
 
     @NonNull
@@ -111,6 +126,6 @@ public class Vehicle implements VehicleInterface{
     public String toString() {
         return "Brand: " + brand + ", Model: " + model + ", Color: " + color +
                 ", Body Style: " + vehicleBodyStyle + ", Fuel: " + fuel + ", Mileage: " +
-                mileage + ", Capacity: " + capacity + ", Place: " + place;
+                mileage + ", Capacity: " + capacity + ", Image: " + carImage;
     }
 }

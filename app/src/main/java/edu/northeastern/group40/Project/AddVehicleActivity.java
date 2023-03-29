@@ -2,6 +2,7 @@ package edu.northeastern.group40.Project;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,10 +12,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
@@ -22,10 +28,15 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,11 +51,13 @@ import edu.northeastern.group40.R;
 public class AddVehicleActivity extends AppCompatActivity {
 
     private static final String TAG = "AddVehicle";
-    private static final String API_KEY="AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
+    private static final String API_KEY = "AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
     private List<Place.Field> placeFields;
     private Place inputPlace;
     private ActivityResultLauncher<String> imagePickerLauncher;
     private boolean uploadedImage;
+    Uri imageUri;
+    String filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +75,7 @@ public class AddVehicleActivity extends AppCompatActivity {
         AutoCompleteTextView capacityMenu = findViewById(R.id.capacityMenu);
         AutoCompleteTextView[] menuList = new AutoCompleteTextView[]
                 {colorMenu, bodyStyleMenu, brandMenu, modelMenu, fuelMenu, mileageMenu, capacityMenu};
-        for(AutoCompleteTextView menu: menuList){
+        for (AutoCompleteTextView menu : menuList) {
             menu.setOnItemClickListener((parent, view, position, id) -> menu.setError(null));
         }
         initDropDownMenu(colorMenu, Color.class);
@@ -80,7 +93,7 @@ public class AddVehicleActivity extends AppCompatActivity {
 
         initDropDownMenu(fuelMenu, Fuel.class);
         initDropDownMenu(mileageMenu, Mileage.class);
-        capacityMenu.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Arrays.asList(1,2,3,4,5,6)));
+        capacityMenu.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Arrays.asList(1, 2, 3, 4, 5, 6)));
 
         Places.initialize(getApplicationContext(), API_KEY);
         PlacesClient placesClient = Places.createClient(this);
@@ -108,9 +121,9 @@ public class AddVehicleActivity extends AppCompatActivity {
                 assert address != null;
                 String[] parts = address.split(", ");
                 int len = parts.length;
-                String stateCode = parts[len-2];
+                String stateCode = parts[len - 2];
                 String[] stateAndCode = stateCode.split(" ");
-                cityInput.setText(parts[len-3]);
+                cityInput.setText(parts[len - 3]);
                 stateInput.setText(stateAndCode[0]);
                 zipCodeInput.setText(stateAndCode[1]);
             }).addOnFailureListener((exception) -> {
@@ -170,48 +183,81 @@ public class AddVehicleActivity extends AppCompatActivity {
             Brand.Model selectedModel = getResult(modelMenu, Brand.Model.class);
             Fuel selectedFuel = getResult(fuelMenu, Fuel.class);
             Mileage selectedMileage = Mileage.fromString(mileageMenu.getText().toString());
-            if(title.isEmpty()) vehicleTitle.setError("Input title");
-            if(selectedMileage == null) mileageMenu.setError("Choose mileage");
+            if (title.isEmpty()) vehicleTitle.setError("Input title");
+            if (selectedMileage == null) mileageMenu.setError("Choose mileage");
             Integer capacity = null;
             try {
-                capacity=Integer.valueOf(capacityMenu.getText().toString());
+                capacity = Integer.valueOf(capacityMenu.getText().toString());
             } catch (IllegalArgumentException e) {
                 capacityMenu.setError("Invalid value");
             }
-            if(rentPrice.getText().toString().isEmpty()){
+            if (rentPrice.getText().toString().isEmpty()) {
                 rentPrice.setError("Input price");
                 return;
             }
             int price = Integer.parseInt(rentPrice.getText().toString());
-            if(inputPlace == null) streetInput.setError("Input valid street");
-            if(!uploadedImage){
+            if (inputPlace == null) streetInput.setError("Input valid street");
+            if (!uploadedImage) {
                 Snackbar.make(carImageView, "Please upload an image of the vehicle", Snackbar.LENGTH_LONG)
                         .show();
                 return;
             }
-            Bitmap carImage = ((BitmapDrawable)carImageView.getDrawable()).getBitmap();
-            if(selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
-                && selectedModel != null && selectedFuel != null && selectedMileage != null
-                && capacity != null && inputPlace != null){
+            Bitmap carImage = ((BitmapDrawable) carImageView.getDrawable()).getBitmap();
+            if (selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
+                    && selectedModel != null && selectedFuel != null && selectedMileage != null
+                    && capacity != null && inputPlace != null) {
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
-                        selectedFuel, selectedMileage, capacity, inputPlace, price, title, carImage);
-                Log.w(TAG,vehicle.toString());
+                        selectedFuel, selectedMileage, capacity, inputPlace, price, title, filePath);
+                Log.w(TAG, vehicle.toString());
                 // missing user
             }
         });
 
 
-
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 result -> {
                     // Handle the selected image URI here
-                    if(result == null) return;
+                    if (result == null) return;
+                    imageUri = result;
                     Log.w(TAG, String.valueOf(result));
                     carImageView.setImageURI(result);
                     uploadedImage = true;
+                    getImageURL();
                 });
 
+
         carImageView.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+
+
+
+    }
+
+    public void getImageURL() {
+        File file = new File(String.valueOf(imageUri)+ "-"+ new Date());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("images");
+
+        storageRef.child(file.getName()).putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Toast.makeText(AddVehicleActivity.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                filePath = uri.toString();
+                                Log.i(TAG, "STORED PATH: " + filePath);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "FAILED UPLOAD");
+                    }
+                });
 
     }
 
