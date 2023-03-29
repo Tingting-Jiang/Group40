@@ -228,6 +228,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
                         selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
                         price, title, imageUrlInDB, startDate, endDate, user.getUid(), vehicleKey);
+//                Log.d(TAG, vehicle.toString());
                 assert vehicleKey != null;
                 mDatabase.child(vehicleKey).setValue(vehicle);
 
