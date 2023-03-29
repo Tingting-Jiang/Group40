@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,15 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.northeastern.group40.A8.Models.User;
 import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Car;
 import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
 import edu.northeastern.group40.Project.Models.Mileage;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
@@ -50,17 +48,22 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
+    private MyLocation destinationLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_list);
-        init();
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initRecyclerView();
     }
 
 
-    private void init() {
+    private void init() throws IOException {
         // Todo: get  the filter items
         usersDB = mDatabase.child("Users");
         vehicleDB = mDatabase.child("Vehicles");
@@ -74,6 +77,11 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.rentCarType = getIntent().getStringExtra("filter-type");
         this.rentDate = getIntent().getStringExtra("filter-date");
         this.displayPriceLowToHigh = getIntent().getBooleanExtra("filter-price", false);
+        this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
+        if (destinationLocation == null) {
+            destinationLocation = new MyLocation(37.40273, -121.95154, this);
+        }
+
 
         this.rentTypeChip.setText(this.rentCarType);
         this.rentDateChip.setText(this.rentDate);
@@ -100,21 +108,19 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
         //TODO: GET DATA FROM DB
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-
+        MyLocation testLocation = new MyLocation(35.40273, -120.95154, this);
         fetchDataFromDB();
         if (vehicleList.size() == 0) {
             for (int i = 0; i < 5; i++) {
                 Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, 87,
+                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 87,
                         "2023 Brand New Accord", dbString);
-                vehicle.setReviewResult("4.1");
+                vehicle.setReviewResult("4.2");
                 vehicle.setReviewTotalNumber(56);
                 vehicleList.add(vehicle);
 
             }
         }
-
-
     }
 
     private void fetchDataFromDB() {
@@ -142,11 +148,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         RecyclerView carRecView = findViewById(R.id.car_list_recView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         carRecView.setLayoutManager(layoutManager);
-        carListAdapter = new CarListAdapter(CarListActivity.this, vehicleList, this);
+        carListAdapter = new CarListAdapter(CarListActivity.this, vehicleList, this, destinationLocation);
         carRecView.setAdapter(carListAdapter);
-
-
-
     }
 
     public void backToFilterPage(View view) {

@@ -66,8 +66,8 @@
                 android:layout_marginTop="16dp"
                 android:numStars="5"
                 android:progressTint="@color/light_yellow"
-                android:rating="4.5"
-                android:stepSize="0.1"
+                android:rating="1.0"
+                android:stepSize="0.2"
                 android:text="@string/availability"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/car_title_txt" />

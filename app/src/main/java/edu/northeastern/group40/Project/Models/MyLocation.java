@@ -9,10 +9,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class MyLocation {
+public class MyLocation implements Serializable {
 
     public final String address;
     final double latitude;
