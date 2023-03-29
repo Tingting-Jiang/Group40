@@ -24,6 +24,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,9 @@ import java.util.List;
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.Mileage;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.R;
@@ -52,7 +55,7 @@ public class AddVehicleActivity extends AppCompatActivity {
         inputPlace = null;
         uploadedImage = false;
         setContentView(R.layout.activity_project_add_vehicle);
-        placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID);
+        placeFields = Arrays.asList(Place.Field.ADDRESS, Place.Field.ID, Place.Field.LAT_LNG);
         AutoCompleteTextView colorMenu = findViewById(R.id.colorMenu);
         AutoCompleteTextView bodyStyleMenu = findViewById(R.id.bodyStyleMenu);
         AutoCompleteTextView brandMenu = findViewById(R.id.brandMenu);
@@ -103,6 +106,7 @@ public class AddVehicleActivity extends AppCompatActivity {
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 Place place = response.getPlace();
                 inputPlace = place;
+
                 String address = place.getAddress();
                 Log.w(TAG, address);
                 assert address != null;
@@ -194,8 +198,8 @@ public class AddVehicleActivity extends AppCompatActivity {
                 && selectedModel != null && selectedFuel != null && selectedMileage != null
                 && capacity != null && inputPlace != null){
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
-                        selectedFuel, selectedMileage, capacity, inputPlace, price, title, carImage);
-                Log.w(TAG,vehicle.toString());
+                        selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace), price, title, carImage);
+                Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
         });
