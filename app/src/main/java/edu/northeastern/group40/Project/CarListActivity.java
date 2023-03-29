@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,7 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
@@ -39,7 +43,8 @@ import edu.northeastern.group40.R;
 public class CarListActivity extends AppCompatActivity implements SelectListener {
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
-    private final List<Vehicle> vehicleList = new ArrayList<>();
+    private final List<Vehicle> backupVehicleList = new ArrayList<>();
+    private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
     private String rentDate;
     private boolean displayPriceLowToHigh = true;
@@ -59,6 +64,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         initRecyclerView();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void initUI() {
         // Todo: get  the filter items
         this.rentTypeChip = findViewById(R.id.car_type_chip);
@@ -83,23 +89,28 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.rentTypeChip.setOnClickListener(v -> {
             if (rentTypeChip.isChecked()) {
                 Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
+                vehicleList = vehicleList.stream().filter(vehicle -> vehicle.getVehicleBodyStyle().equals(this.rentCarType)).collect(Collectors.toList());
+                for (Vehicle v1: vehicleList) {
+                    Log.d(TAG, v1.toString());
+                }
             } else {
-                this.rentCarType = null;
+                vehicleList = backupVehicleList;
             }
-            updateFilter();
+            carListAdapter.notifyDataSetChanged();
+
         });
-//        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (rentTypeChip.isChecked()) {
-//                    rentPriceChip.setText("$ - $$$");
-//                    displayPriceLowToHigh = true;
-//                } else {
-//                    rentPriceChip.setText("$$$ - $");
-//                    displayPriceLowToHigh = false;
-//                }
-//            }
-//        });
+        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onClick(View v) {
+                if (rentTypeChip.isChecked()) {
+                    Collections.sort(vehicleList, new SortByRentPrice());
+                } else {
+                    Collections.shuffle(vehicleList);
+                }
+                carListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void setupUI() {
@@ -120,7 +131,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         if (vehicleList.size() == 0) {
             for (int i = 0; i < 3; i++) {
                 Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 87,
+                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, i,
                         "2023 Brand New Accord", dbString);
                 vehicle.setReviewResult("4.2");
                 vehicle.setReviewTotalNumber(56);
@@ -129,10 +140,18 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             }
             Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
                     Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 100,
-                    "2023 Brand New Accord", dbString);
+                    "2023 Brand New SUV", dbString);
             vehicle.setReviewResult("4.2");
             vehicle.setReviewTotalNumber(56);
             vehicleList.add(vehicle);
+        }
+
+        syncBackupList();
+    }
+
+    private void syncBackupList() {
+        if (backupVehicleList.size() == 0) {
+            backupVehicleList.addAll(vehicleList);
         }
     }
 
@@ -155,8 +174,11 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType))
+                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType)) {
                         vehicleList.add(currVehicle);
+                    }
+                    syncBackupList();
+
                 }
                 carListAdapter.notifyDataSetChanged();
             }
@@ -190,5 +212,13 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
        // TODO: PUT OBJECT  INTO INTENT
         // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
         // 1. OBJECT implements Serializable and
+    }
+
+    static class SortByRentPrice implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v1.getRentPrice() - v2.getRentPrice();
+        }
     }
 }

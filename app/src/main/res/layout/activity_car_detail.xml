@@ -128,7 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="@color/sky_blue"
-        android:text="@string/add_to_cart"
+        android:text="@string/place_order"
         android:textColor="#FFF"
         app:layout_constraintTop_toBottomOf="@id/detailed_scroll_view"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -62,4 +62,5 @@
     <string name="input_price_in_usd_per_day">Input price</string>
     <string name="per_day">$ per day</string>
     <string name="upload_car_image">upload car image</string>
+    <string name="place_order">Place Order</string>
 </resources>
