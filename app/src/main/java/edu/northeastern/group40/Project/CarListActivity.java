@@ -62,7 +62,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private RecyclerView carRecView;
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
-
+    private String currentSearchText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +96,16 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                
                 ArrayList<Vehicle> filterList = new ArrayList<>();
                 for (Vehicle v : backupVehicleList) {
                     if (v.toString().contains(newText.toUpperCase(Locale.ROOT))) {
                         filterList.add(v);
                     }
                 }
-                CarListAdapter filterAdapter = new CarListAdapter(CarListActivity.this, filterList, CarListActivity.this, destinationLocation);
-                carRecView.setAdapter(filterAdapter);
+                vehicleList.clear();
+                vehicleList.addAll(filterList);
+                carListAdapter.notifyDataSetChanged();
                 return false;
             }
         });
