@@ -90,6 +90,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:textSize="20sp"
+                android:textColor="@color/watermelon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/car_rating"
                 tools:text="$1.23" />
@@ -99,7 +100,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:lineSpacingExtra="8sp"
                 android:text="@string/description_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_n"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/car_price" />
 

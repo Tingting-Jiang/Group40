@@ -67,4 +67,5 @@
     <string name="less_mileage">less mileage</string>
     <string name="highly_reviewed">highly reviewed</string>
     <string name="near">near</string>
+    <string name="est_total_includes_taxes_and_fees">Est Total (includes taxes and fees):</string>
 </resources>

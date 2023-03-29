@@ -3,6 +3,8 @@ package edu.northeastern.group40.Project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,12 +44,16 @@ import edu.northeastern.group40.R;
 public class CarListActivity extends AppCompatActivity implements SelectListener {
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
+    private static final String PRICE = "PRICE";
+    private static final String MILEAGE = "MILEAGE";
+    private static final String DISTANCE = "DISTANCE";
+    private static final String REVIEW_COUNT = "REVIEW_COUNT";
     private final List<Vehicle> backupVehicleList = new ArrayList<>();
     private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
     private String rentDate;
     private PriceOrder displayPrice = PriceOrder.PRICE_LOW_TO_HIGH;
-    private Button priceSort, reviewSort, distanceSort, timeSort;
+    private Button priceSort, reviewSort, distanceSort, mileageSort;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
@@ -55,6 +61,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private SearchView searchView;
     private RecyclerView carRecView;
     private String selectedFilter = "";
+    private Integer yellow, blue, black, white;
 
 
     @Override
@@ -70,10 +77,15 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     @SuppressLint("NotifyDataSetChanged")
     private void initUI() {
         // Todo: get  the filter items
-        this.timeSort = findViewById(R.id.mileageSort);
+        this.mileageSort = findViewById(R.id.mileageSort);
         this.priceSort = findViewById(R.id.priceSort);
         this.distanceSort = findViewById(R.id.distanceSort);
         this.reviewSort = findViewById(R.id.reviewSort);
+        this.yellow = ContextCompat.getColor(getApplicationContext(),R.color.light_yellow);
+        this.blue = ContextCompat.getColor(getApplicationContext(),R.color.sky_blue);
+        this.black = ContextCompat.getColor(getApplicationContext(),R.color.black);
+        this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
+
 
         searchView = (SearchView) findViewById(R.id.searchVehicle);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -110,27 +122,65 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
     }
 
+    private void lookSelected(Button button) {
+        button.setTextColor(black);
+        button.setBackgroundColor(yellow);
+    }
+
+    private void lookUnselected(Button button) {
+        button.setTextColor(white);
+        button.setBackgroundColor(blue);
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    private void updateFilter(String status) {
-        selectedFilter = status;
-        switch (status){
-            case "price":
+    private void updateFilter() {
+        switch (selectedFilter){
+            case PRICE:
                 Collections.sort(vehicleList, new SortByRentPrice());
                 break;
-            case "distance":
+            case DISTANCE:
                 Collections.sort(vehicleList, new SortByDistance(destinationLocation));
                 break;
-            case "review_count":
+            case REVIEW_COUNT:
                 Collections.sort(vehicleList, new SortByReview());
                 break;
-            case "mileage":
+            case MILEAGE:
                 Collections.sort(vehicleList, new SortByMileage());
                 break;
             default:
                 Collections.shuffle(vehicleList);
+                unSelectAll();
                 break;
         }
         carListAdapter.notifyDataSetChanged();
+    }
+
+    private void unselectOtherSort(String originSort) {
+        switch (originSort){
+            case "price":
+                lookUnselected(priceSort);
+                break;
+            case "distance":
+                lookUnselected(distanceSort);
+                break;
+            case "review_count":
+                lookUnselected(reviewSort);
+                break;
+            case "mileage":
+                lookUnselected(mileageSort);
+                break;
+            default:
+                unSelectAll();
+                break;
+        }
+
+    }
+
+    private void unSelectAll() {
+        lookUnselected(priceSort);
+        lookUnselected(distanceSort);
+        lookUnselected(reviewSort);
+        lookUnselected(mileageSort);
     }
 
     private void setupUI() {
@@ -149,21 +199,34 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         }
         fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
-            for (int i = 0; i < 3; i++) {
-                Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, i,
-                        "2023 Brand New Accord", dbString,"may-4", "may-7", "123", "3455");
-                vehicle.setReviewResult("4.2");
-                vehicle.setReviewTotalNumber(i+100);
-                vehicleList.add(vehicle);
-
-            }
-            Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 100,
+            // NO-1
+            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
+                    "2023 Brand New Accord", dbString,"may-4", "may-7", "123", "3455");
+            vehicle1.setReviewResult("4.2");
+            vehicle1.setReviewTotalNumber(100);
+            vehicleList.add(vehicle1);
+            // NO-2
+            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
+                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "may-4", "may-7", "123", "3455");
+            vehicle2.setReviewResult("4.2");
+            vehicle2.setReviewTotalNumber(56);
+            vehicleList.add(vehicle2);
+            // NO-3
+            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
                     "2023 Brand New SUV", dbString, "may-4", "may-7", "123", "3455");
-            vehicle.setReviewResult("4.2");
-            vehicle.setReviewTotalNumber(56);
-            vehicleList.add(vehicle);
+            vehicle3.setReviewResult("4.2");
+            vehicle3.setReviewTotalNumber(90);
+            vehicleList.add(vehicle3);
+            // NO-4
+            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
+                    "2023 Brand New SUV", dbString, "may-4", "may-7", "123", "3455");
+            vehicle4.setReviewResult("4.2");
+            vehicle4.setReviewTotalNumber(130);
+            vehicleList.add(vehicle4);
         }
 
         syncBackupList();
@@ -261,15 +324,53 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     public void onSortPrice(View view) {
-        updateFilter("price");
+        if (selectedFilter.equals(PRICE)) {
+            selectedFilter = "";
+            lookUnselected(priceSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(priceSort);
+            selectedFilter = PRICE;
+        }
+        updateFilter();
     }
     public void onSortMileage(View view) {
-        updateFilter("mileage");
+        if (selectedFilter.equals(MILEAGE)) {
+            selectedFilter = "";
+            lookUnselected(mileageSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(mileageSort);
+            selectedFilter = MILEAGE;
+        }
+        updateFilter();
     }
     public void onSortDistance(View view) {
-        updateFilter("distance");
+        if (selectedFilter.equals(DISTANCE)) {
+            selectedFilter = "";
+            lookUnselected(distanceSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(distanceSort);
+            selectedFilter = DISTANCE;
+        }
+        updateFilter();
+
     }
     public void onSortReviewCount(View view) {
-        updateFilter("review_count");
+        if (selectedFilter.equals(REVIEW_COUNT)) {
+            selectedFilter = "";
+            lookUnselected(reviewSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(reviewSort);
+            selectedFilter = REVIEW_COUNT;
+        }
+        updateFilter();
+
     }
 }

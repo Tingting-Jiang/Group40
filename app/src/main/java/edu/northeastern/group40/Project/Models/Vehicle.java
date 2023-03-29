@@ -126,8 +126,8 @@ public class Vehicle implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Brand: " + brand + ", Model: " + model + ", Color: " + color +
-                ", Body Style: " + vehicleBodyStyle + ", Fuel: " + fuel + ", Mileage: " +
-                mileage + ", Capacity: " + capacity;
+        return " Brand: " + brand + "\n Model: " + model + "\n Color: " + color +
+                "\n Body Style: " + vehicleBodyStyle + "\n Fuel: " + fuel + "\n Mileage: " +
+                mileage + "\n Capacity: " + capacity;
     }
 }

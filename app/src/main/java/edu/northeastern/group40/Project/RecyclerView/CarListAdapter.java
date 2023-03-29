@@ -51,7 +51,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         holder.carTitle.setText(currVehicle.getTitle());
         holder.totalMiles.setText(currVehicle.getMileage() + " miles");
         holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles");
-        holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber());
+        holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber() + " users");
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
         Picasso.get()
                 .load(currVehicle.getImage())
