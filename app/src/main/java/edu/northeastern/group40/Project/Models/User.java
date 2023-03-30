@@ -5,6 +5,8 @@ import java.util.List;
 
 public class User {
 
+    static final int INITIAL_BALANCE = 1000;
+
     String username;
 
     String password;
@@ -13,22 +15,27 @@ public class User {
 
     String phone;
 
-    double balance;
+    int balance;
 
     boolean isCarRenter;
 
     List<Vehicle> vehicles;
 
-    public User(String username, String password, String email, String phone, double balance, boolean isCarRenter) {
+    List<Order> ordersAsCarOwner;
+
+    List<Order> ordersAsCarUser;
+
+    public User(String username, String password, String email, String phone, boolean isCarRenter) {
             this.username = username;
             this.password = password;
             this.email = email;
             this.phone = phone;
-            this.balance = balance;
             this.isCarRenter = false;
             if (isCarRenter) {
                 changeCarRenterStatus();
             }
+            this.balance = INITIAL_BALANCE;
+            this.ordersAsCarUser = new ArrayList<>();
         }
 
     public boolean isCarRenter() {
@@ -41,6 +48,9 @@ public class User {
             vehicles = null;
         } else {
             isCarRenter = true;
+            if (ordersAsCarOwner == null) {
+                ordersAsCarOwner = new ArrayList<>();
+            }
             vehicles = new ArrayList<>();
         }
     }
@@ -92,7 +102,4 @@ public class User {
         return balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
 }
