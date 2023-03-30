@@ -49,6 +49,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private static final String MILEAGE = "MILEAGE";
     private static final String DISTANCE = "DISTANCE";
     private static final String REVIEW_COUNT = "REVIEW_COUNT";
+    private static final String DEFAULT = "";
     private final List<Vehicle> backupVehicleList = new ArrayList<>();
     private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
@@ -276,8 +277,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     public void backToFilterPage(View view) {
-        Intent intent = new Intent(CarListActivity.this, ProjectActivity.class);
-        startActivity(intent);
+        onBackPressed();
     }
 
 
@@ -326,51 +326,28 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     public void onSortPrice(View view) {
-        if (selectedFilter.equals(PRICE)) {
-            selectedFilter = "";
-            lookUnselected(priceSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(priceSort);
-            selectedFilter = PRICE;
-        }
-        updateFilter();
+        updateSort(PRICE, priceSort);
     }
     public void onSortMileage(View view) {
-        if (selectedFilter.equals(MILEAGE)) {
-            selectedFilter = "";
-            lookUnselected(mileageSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(mileageSort);
-            selectedFilter = MILEAGE;
-        }
-        updateFilter();
+        updateSort(MILEAGE, mileageSort);
     }
     public void onSortDistance(View view) {
-        if (selectedFilter.equals(DISTANCE)) {
-            selectedFilter = "";
-            lookUnselected(distanceSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(distanceSort);
-            selectedFilter = DISTANCE;
-        }
-        updateFilter();
+        updateSort(DISTANCE, distanceSort);
 
     }
     public void onSortReviewCount(View view) {
-        if (selectedFilter.equals(REVIEW_COUNT)) {
-            selectedFilter = "";
-            lookUnselected(reviewSort);
+       updateSort(REVIEW_COUNT, reviewSort);
+    }
+
+    private void updateSort(String status, Button button) {
+        if (selectedFilter.equals(status)) {
+            selectedFilter = DEFAULT;
+            lookUnselected(button);
         }
         else {
             unselectOtherSort(selectedFilter);
-            lookSelected(reviewSort);
-            selectedFilter = REVIEW_COUNT;
+            lookSelected(button);
+            selectedFilter = status;
         }
         updateFilter();
 
