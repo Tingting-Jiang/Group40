@@ -63,7 +63,6 @@ public class CarDetailActivity extends AppCompatActivity {
     }
 
     public void onBackToCarList(View view) {
-        Intent intent = new Intent(this, CarListActivity.class);
-        startActivity(intent);
+        onBackPressed();
     }
 }
