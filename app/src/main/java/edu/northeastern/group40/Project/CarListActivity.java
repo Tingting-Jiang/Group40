@@ -2,18 +2,18 @@ package edu.northeastern.group40.Project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,15 +22,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
-import edu.northeastern.group40.A8.Models.User;
+import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Car;
 import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
 import edu.northeastern.group40.Project.Models.Mileage;
+import edu.northeastern.group40.Project.Models.MyLocation;
+import edu.northeastern.group40.Project.Models.PriceOrder;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
@@ -40,94 +45,218 @@ import edu.northeastern.group40.R;
 public class CarListActivity extends AppCompatActivity implements SelectListener {
     private CarListAdapter carListAdapter;
     private static final String TAG = "CarListActivity";
-    private final List<Vehicle> vehicleList = new ArrayList<>();
-    private String rentCarType;
-    private String rentDate;
-    private boolean displayPriceLowToHigh = false;
-    private Chip rentTypeChip, rentDateChip, rentPriceChip;
-    private static final String PRICE_LOW_TO_HIGH = "Low to High";
-    private static final String PRICE_HIGH_TO_LOW = "High to Low";
+    private static final String PRICE = "PRICE";
+    private static final String MILEAGE = "MILEAGE";
+    private static final String DISTANCE = "DISTANCE";
+    private static final String REVIEW_COUNT = "REVIEW_COUNT";
+    private final List<Vehicle> backupVehicleList = new ArrayList<>();
+    private List<Vehicle> vehicleList = new ArrayList<>();
+    private VehicleBodyStyle rentCarType = null;
+    private AvailableDate targetAvailableDate;
+    private Button priceSort, reviewSort, distanceSort, mileageSort;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
+    private MyLocation destinationLocation = null;
+    private SearchView searchView;
+    private RecyclerView carRecView;
+    private String selectedFilter = "";
+    private Integer yellow, blue, black, white;
+    private String currentSearchText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_list);
-        init();
+        initUI();
         initRecyclerView();
+        setupUI();
+
     }
 
-
-    private void init() {
+    @SuppressLint("NotifyDataSetChanged")
+    private void initUI() {
         // Todo: get  the filter items
+        this.mileageSort = findViewById(R.id.mileageSort);
+        this.priceSort = findViewById(R.id.priceSort);
+        this.distanceSort = findViewById(R.id.distanceSort);
+        this.reviewSort = findViewById(R.id.reviewSort);
+        this.yellow = ContextCompat.getColor(getApplicationContext(),R.color.light_yellow);
+        this.blue = ContextCompat.getColor(getApplicationContext(),R.color.sky_blue);
+        this.black = ContextCompat.getColor(getApplicationContext(),R.color.black);
+        this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
+
+
+        searchView = (SearchView) findViewById(R.id.searchVehicle);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                
+                ArrayList<Vehicle> filterList = new ArrayList<>();
+                for (Vehicle v : backupVehicleList) {
+                    if (v.toString().contains(newText.toUpperCase(Locale.ROOT))) {
+                        filterList.add(v);
+                    }
+                }
+                vehicleList.clear();
+                vehicleList.addAll(filterList);
+                carListAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+
+        this.rentCarType = VehicleBodyStyle.valueOf(getIntent().getStringExtra("VehicleBodyStyle"));
+        this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
+        this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
+        if (destinationLocation == null) {
+            try {
+                destinationLocation = new MyLocation(37.40273, -121.95154, this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void lookSelected(Button button) {
+        button.setTextColor(black);
+        button.setBackgroundColor(yellow);
+    }
+
+    private void lookUnselected(Button button) {
+        button.setTextColor(white);
+        button.setBackgroundColor(blue);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateFilter() {
+        switch (selectedFilter){
+            case PRICE:
+                Collections.sort(vehicleList, new SortByRentPrice());
+                break;
+            case DISTANCE:
+                Collections.sort(vehicleList, new SortByDistance(destinationLocation));
+                break;
+            case REVIEW_COUNT:
+                Collections.sort(vehicleList, new SortByReview());
+                break;
+            case MILEAGE:
+                Collections.sort(vehicleList, new SortByMileage());
+                break;
+            default:
+                Collections.shuffle(vehicleList);
+                unSelectAll();
+                break;
+        }
+        carListAdapter.notifyDataSetChanged();
+    }
+
+    private void unselectOtherSort(String originSort) {
+        switch (originSort){
+            case "price":
+                lookUnselected(priceSort);
+                break;
+            case "distance":
+                lookUnselected(distanceSort);
+                break;
+            case "review_count":
+                lookUnselected(reviewSort);
+                break;
+            case "mileage":
+                lookUnselected(mileageSort);
+                break;
+            default:
+                unSelectAll();
+                break;
+        }
+
+    }
+
+    private void unSelectAll() {
+        lookUnselected(priceSort);
+        lookUnselected(distanceSort);
+        lookUnselected(reviewSort);
+        lookUnselected(mileageSort);
+    }
+
+    private void setupUI() {
         usersDB = mDatabase.child("Users");
         vehicleDB = mDatabase.child("Vehicles");
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
 
-        this.rentTypeChip = findViewById(R.id.car_type_chip);
-        this.rentDateChip = findViewById(R.id.rent_time_chip);
-        this.rentPriceChip = findViewById(R.id.rent_price_chip);
-
-        this.rentCarType = getIntent().getStringExtra("filter-type");
-        this.rentDate = getIntent().getStringExtra("filter-date");
-        this.displayPriceLowToHigh = getIntent().getBooleanExtra("filter-price", false);
-
-        this.rentTypeChip.setText(this.rentCarType);
-        this.rentDateChip.setText(this.rentDate);
-        this.rentPriceChip.setText(this.displayPriceLowToHigh ? PRICE_LOW_TO_HIGH: PRICE_HIGH_TO_LOW);
-
-        this.rentTypeChip.setOnClickListener(v -> {
-            if (rentTypeChip.isChecked()) {
-                Toast.makeText(CarListActivity.this, "Add car type filter", Toast.LENGTH_SHORT).show();
-            }
-        });
-//        this.rentPriceChip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (rentPriceChip.isChecked()) {
-//                    rentPriceChip.setChecked(false);
-//                    rentPriceChip.setText(PRICE_HIGH_TO_LOW);
-//                } else if (!rentPriceChip.isChecked()) {
-//                    rentPriceChip.setChecked(true);
-//                    rentPriceChip.setText(PRICE_LOW_TO_HIGH);
-//                }
-//            }
-//        });
-
-
         //TODO: GET DATA FROM DB
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
+        MyLocation testLocation = null;
+        try {
+            testLocation = new MyLocation(35.40273, -120.95154, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fetchDataFromDB(this.rentCarType);
+        if (vehicleList.size() == 0) {
+            // NO-1
+            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
+                    "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
+            vehicle1.setReviewResult("4.2");
+            vehicle1.setReviewTotalNumber(100);
+            vehicleList.add(vehicle1);
+            // NO-2
+            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
+                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+            vehicle2.setReviewResult("4.2");
+            vehicle2.setReviewTotalNumber(56);
+            vehicleList.add(vehicle2);
+            // NO-3
+            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
+                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+            vehicle3.setReviewResult("4.2");
+            vehicle3.setReviewTotalNumber(90);
+            vehicleList.add(vehicle3);
+            // NO-4
+            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
+                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+            vehicle4.setReviewResult("4.2");
+            vehicle4.setReviewTotalNumber(130);
+            vehicleList.add(vehicle4);
+        }
 
-        fetchDataFromDB();
-//        if (vehicleList.size() == 0) {
-//            for (int i = 0; i < 5; i++) {
-//                Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-//                        Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, 87,
-//                        "2023 Brand New Accord", dbString);
-//                vehicle.setReviewResult("4.1");
-//                vehicle.setReviewTotalNumber(56);
-//                vehicleList.add(vehicle);
-//
-//            }
-//        }
-
-
+        syncBackupList();
     }
 
-    private void fetchDataFromDB() {
+    private void syncBackupList() {
+        if (backupVehicleList.size() == 0) {
+            backupVehicleList.addAll(vehicleList);
+        }
+    }
+
+
+    private void fetchDataFromDB(VehicleBodyStyle rentCarType) {
         vehicleDB.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                vehicleList.clear();
+                vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    vehicleList.add(currVehicle);
+                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType)
+                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+                    ) {
+                        vehicleList.add(currVehicle);
+                    }
+                    syncBackupList();
                 }
                 carListAdapter.notifyDataSetChanged();
             }
@@ -139,14 +268,11 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     private void initRecyclerView() {
-        RecyclerView carRecView = findViewById(R.id.car_list_recView);
+        carRecView = findViewById(R.id.car_list_recView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         carRecView.setLayoutManager(layoutManager);
-        carListAdapter = new CarListAdapter(CarListActivity.this, vehicleList, this);
+        carListAdapter = new CarListAdapter(CarListActivity.this, vehicleList, this, destinationLocation);
         carRecView.setAdapter(carListAdapter);
-
-
-
     }
 
     public void backToFilterPage(View view) {
@@ -163,6 +289,90 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         startActivity(intent);
        // TODO: PUT OBJECT  INTO INTENT
         // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
-        // 1. OBJECT implements Serializable and
+    }
+
+    static class SortByRentPrice implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v1.getRentPrice() - v2.getRentPrice();
+        }
+    }
+    static class SortByReview implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v2.getReviewTotalNumber() - v1.getReviewTotalNumber();
+        }
+    }
+    static class SortByMileage implements Comparator<Vehicle> {
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v1.getMileage().compareTo(v2.getMileage());
+        }
+    }
+    static class SortByDistance implements Comparator<Vehicle> {
+        private MyLocation destination;
+
+        public SortByDistance(MyLocation destination) {
+            this.destination = destination;
+        }
+
+        @Override
+        public int compare(Vehicle v1, Vehicle v2) {
+            return (int) v2.getPlace().distanceToInMiles(destination) - (int) v1.getPlace().distanceToInMiles(destination);
+        }
+    }
+
+    public void onSortPrice(View view) {
+        if (selectedFilter.equals(PRICE)) {
+            selectedFilter = "";
+            lookUnselected(priceSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(priceSort);
+            selectedFilter = PRICE;
+        }
+        updateFilter();
+    }
+    public void onSortMileage(View view) {
+        if (selectedFilter.equals(MILEAGE)) {
+            selectedFilter = "";
+            lookUnselected(mileageSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(mileageSort);
+            selectedFilter = MILEAGE;
+        }
+        updateFilter();
+    }
+    public void onSortDistance(View view) {
+        if (selectedFilter.equals(DISTANCE)) {
+            selectedFilter = "";
+            lookUnselected(distanceSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(distanceSort);
+            selectedFilter = DISTANCE;
+        }
+        updateFilter();
+
+    }
+    public void onSortReviewCount(View view) {
+        if (selectedFilter.equals(REVIEW_COUNT)) {
+            selectedFilter = "";
+            lookUnselected(reviewSort);
+        }
+        else {
+            unselectOtherSort(selectedFilter);
+            lookSelected(reviewSort);
+            selectedFilter = REVIEW_COUNT;
+        }
+        updateFilter();
+
     }
 }

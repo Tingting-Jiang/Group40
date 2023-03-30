@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageReference;;
 
 
 import java.io.File;
@@ -70,7 +69,7 @@ public class AddVehicleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference("vehicles");
         inputPlace = null;
         imageUploaded = false;
         setContentView(R.layout.activity_project_add_vehicle);
@@ -224,10 +223,15 @@ public class AddVehicleActivity extends AppCompatActivity {
                     && selectedModel != null && selectedFuel != null && selectedMileage != null
                     && capacity != null && inputPlace != null) {
                 getImageURL();
+
+                String vehicleKey = mDatabase.push().getKey();
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
                         selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
-                        price, title, imageUrlInDB, startDate, endDate);
-                addVehicleToDB(vehicle);
+                        price, title, imageUrlInDB, startDate, endDate, user.getUid(), vehicleKey);
+//                Log.d(TAG, vehicle.toString());
+                assert vehicleKey != null;
+                mDatabase.child(vehicleKey).setValue(vehicle);
+
                 Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
@@ -295,10 +299,6 @@ public class AddVehicleActivity extends AppCompatActivity {
 
     }
 
-    public void addVehicleToDB(Vehicle vehicle){
-        // not sure
-        mDatabase.child("users").child(user.getUid()).setValue(vehicle);
-    }
 
 
 

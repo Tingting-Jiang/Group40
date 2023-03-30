@@ -10,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
-import edu.northeastern.group40.Project.Models.Car;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 

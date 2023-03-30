@@ -1,12 +1,7 @@
 package edu.northeastern.group40.Project.RecyclerView;
 
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +13,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
-import edu.northeastern.group40.Project.Models.Car;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
@@ -36,11 +28,13 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
     private final Context mContext;
     private SelectListener listener;
     private String TAG = "CarListAdapter";
+    private MyLocation destinationLocation;
 
-    public CarListAdapter(Context mContext, List<Vehicle> vehicleList, SelectListener listener) {
+    public CarListAdapter(Context mContext, List<Vehicle> vehicleList, SelectListener listener, MyLocation destinationLocation) {
         this.vehicleList = vehicleList;
         this.mContext = mContext;
         this.listener = listener;
+        this.destinationLocation = destinationLocation;
     }
 
     @NonNull
@@ -50,14 +44,14 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         return new CarListViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull CarListViewHolder holder, int position) {
         Vehicle currVehicle = vehicleList.get(position);
         holder.carTitle.setText(currVehicle.getTitle());
         holder.totalMiles.setText(currVehicle.getMileage() + " miles");
-        holder.distance.setText( "3 miles");
-        holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber());
+        holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles");
+        holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber() + " users");
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
         Picasso.get()
                 .load(currVehicle.getImage())

@@ -62,4 +62,10 @@
     <string name="input_price_in_usd_per_day">Input price</string>
     <string name="per_day">$ per day</string>
     <string name="upload_car_image">upload car image</string>
+    <string name="place_order">Place Order</string>
+    <string name="price_low_to_high">$ - $$$</string>
+    <string name="less_mileage">less mileage</string>
+    <string name="highly_reviewed">highly reviewed</string>
+    <string name="near">near</string>
+    <string name="est_total_includes_taxes_and_fees">Est Total (includes taxes and fees):</string>
 </resources>
