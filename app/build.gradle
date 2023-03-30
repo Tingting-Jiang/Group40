@@ -3,6 +3,7 @@ plugins {
 
     // Add the Google services Gradle plugin
     id 'com.google.gms.google-services'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -73,5 +74,10 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 
     implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+
+//google-map-api
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+
 
 }

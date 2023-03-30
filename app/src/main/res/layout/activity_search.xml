@@ -6,10 +6,12 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Project.SearchActivity">
+
 
         <TextView
             android:id="@+id/search_title"
@@ -39,16 +41,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.169" />
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/brandInput"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="310dp"
             android:layout_height="64dp"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginEnd="23dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.531"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/modelInput"
             app:layout_constraintTop_toBottomOf="@+id/Brand"
             app:layout_constraintVertical_bias="0.0">
 
@@ -61,7 +65,6 @@
                 android:textColor="#757575" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <TextView
             android:id="@+id/Model"
@@ -84,10 +87,11 @@
             android:layout_height="64dp"
             android:layout_marginHorizontal="20dp"
 
+            android:layout_marginEnd="23dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.531"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/selected_start_date_text_view"
             app:layout_constraintTop_toBottomOf="@+id/Model"
             app:layout_constraintVertical_bias="0.0">
 
@@ -123,19 +127,21 @@
             android:text="@string/select"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.89"
+            app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.608" />
+            app:layout_constraintVertical_bias="0.609" />
 
         <TextView
             android:id="@+id/selected_end_date_text_view"
             android:layout_width="210dp"
             android:layout_height="29dp"
+            android:layout_marginEnd="41dp"
             android:text="@string/end_date_none"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/selected_start_date_text_view"
+            app:layout_constraintEnd_toStartOf="@+id/show_end_date_picker_button"
+            app:layout_constraintStart_toStartOf="@+id/placeForSearch"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.701" />
 
@@ -143,13 +149,12 @@
             android:id="@+id/selected_start_date_text_view"
             android:layout_width="215dp"
             android:layout_height="31dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="41dp"
             android:text="@string/start_date_none"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/show_start_date_picker_button"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/selected_end_date_text_view"
             app:layout_constraintTop_toBottomOf="@+id/Availability"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -160,10 +165,10 @@
             android:text="@string/select"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.887"
+            app:layout_constraintHorizontal_bias="0.947"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.709" />
+            app:layout_constraintVertical_bias="0.708" />
 
         <TextView
             android:id="@+id/Location"
@@ -177,17 +182,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selected_end_date_text_view" />
+            app:layout_constraintTop_toBottomOf="@+id/selected_end_date_text_view"
+            app:layout_constraintVertical_bias="0.0" />
 
         <AutoCompleteTextView
             android:id="@+id/placeForSearch"
-            android:layout_width="326dp"
-            android:layout_height="51dp"
+            android:layout_width="258dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="3dp"
             android:hint="@string/input_the_city"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/btnSearch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintEnd_toStartOf="@+id/btnMap"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Location" />
 
@@ -195,12 +203,27 @@
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="159dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="159dp"
             android:text="@string/search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeForSearch" />
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/locate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.897" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
