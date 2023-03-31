@@ -1,13 +1,10 @@
 package edu.northeastern.group40.Project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.location.Address;
@@ -15,7 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -33,6 +29,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.lang.Class;
@@ -44,9 +41,8 @@ import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.R;
-import io.reactivex.rxjava3.annotations.NonNull;
 
-public class SearchActivity extends AppCompatActivity{
+public class SearchActivity extends AppCompatActivity {
 
     Button showStartDatePickerButton;
     TextView selectedStartDateTextView;
@@ -55,14 +51,13 @@ public class SearchActivity extends AppCompatActivity{
     Calendar startCalendar, endCalendar;
     AutoCompleteTextView placeInput;
     private Place inputPlace;
-    private static final String API_KEY="AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
-    private static final String MAPS_API_KEY="AIzaSyB0xVMOtkpPW_4UwVdhLx8HFzZmRxChcrs";
+    private static final String API_KEY = "AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
+//    private static final String MAPS_API_KEY = "AIzaSyB0xVMOtkpPW_4UwVdhLx8HFzZmRxChcrs";
 
-//    map
-    private static final int PERMISSIONS_REQUEST_LOCATION = 1;
-    private Button mapButton;
-    private Geocoder geocoder;
-    private Location currentLocation;
+    //    map
+    private LocationManager locationManager;
+    private String enableGPS = "Enable GPS to get your Location";
+    private static final int locationRequestCode = 1;
 
 
     @SuppressLint("MissingInflatedId")
@@ -96,30 +91,6 @@ public class SearchActivity extends AppCompatActivity{
             ArrayAdapter<Brand.Model> modelAdapter =
                     new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, brand.getModels());
             modelMenu.setAdapter(modelAdapter);
-        });
-
-
-//       ask for location permission and get the current location
-        // Initialize views
-        mapButton = findViewById(R.id.btnMap);
-        // Initialize geocoder
-        geocoder = new Geocoder(this, Locale.getDefault());
-        // Set onClickListener for mapButton
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Check location permission
-                if (ContextCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Request location permission
-                    ActivityCompat.requestPermissions(SearchActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            PERMISSIONS_REQUEST_LOCATION);
-                } else {
-                    // Permission already granted, get current location
-                    getCurrentLocation();
-                }
-            }
         });
 
 
@@ -246,82 +217,61 @@ public class SearchActivity extends AppCompatActivity{
         menu.setAdapter(adapter);
     }
 
-    //        request the permission to get the user location
-    private void getCurrentLocation() {
-        // Check if location is enabled on the device
-        if (!isLocationEnabled()) {
-            Toast.makeText(SearchActivity.this, "Please enable location services", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        // Get last known location
-        if (ContextCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            currentLocation = LocationUtils.getLastKnownLocation(SearchActivity.this);
+    //  click the locate button
+    public void getTheLocation(View view) {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, locationRequestCode);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean isProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isProviderEnabled) {
+            Snackbar.make(view, enableGPS, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        } else {
+            getUserLocation();
         }
+    }
 
-        // Display current address
-        if (currentLocation != null) {
+    //  request the permission to get the user location
+    private void getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(SearchActivity.this, R.string.location_access_denied, Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, locationRequestCode);
+        } else if (ActivityCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(SearchActivity.this, R.string.location_access_denied, Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, locationRequestCode);
+        } else {
+            Location currentGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location currentNetworkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location currentPassiveLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            if (currentGPS != null) {
+                locationToAdd(currentGPS);
+            }
+            if (currentNetworkLocation != null) {
+                locationToAdd(currentNetworkLocation);
+            }
+            if (currentPassiveLocation != null) {
+                locationToAdd(currentPassiveLocation);
+            } else {
+                Toast.makeText(SearchActivity.this, "Please input the address", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+//      Change the location to address
+    private void locationToAdd(Location location){
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        if(location != null){
             try {
-                List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(),
-                        currentLocation.getLongitude(), 1);
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 if (!addresses.isEmpty()) {
                     String address = addresses.get(0).getAddressLine(0);
                     String addressIncludeZip = address.substring(0,address.lastIndexOf(","));
-                    String state = addressIncludeZip.substring(0,addressIncludeZip.lastIndexOf(" "));
-                    placeInput.setText(state);
+                    String addressIncludeState = addressIncludeZip.substring(0,addressIncludeZip.lastIndexOf(" "));
+                    placeInput.setText(addressIncludeState);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            Toast.makeText(SearchActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Handle location permission request result
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, get current location
-                getCurrentLocation();
-            } else {
-                // Permission denied, show message
-                Toast.makeText(SearchActivity.this, "Location permission denied, you need to input the location", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Check if location services are enabled
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)|| locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    // Prompt user to enable location services
-    private void showLocationSettings() {
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
-    }
-
-    public static class LocationUtils {
-        // Get last known location
-        public static Location getLastKnownLocation(Context context) {
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            List<String> providers = locationManager.getProviders(true);
-            Location bestLocation = null;
-            for (String provider : providers) {
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    Location location = locationManager.getLastKnownLocation(provider);
-                    if (location != null && (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy())) {
-                        bestLocation = location;
-                    }
-                }
-            }
-            return bestLocation;
         }
     }
 }

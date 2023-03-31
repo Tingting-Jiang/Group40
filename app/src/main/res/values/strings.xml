@@ -59,4 +59,5 @@
     <string name="search_the_vehicle">Search the vehicle</string>
     <string name="google_maps_API_key">AIzaSyB0xVMOtkpPW_4UwVdhLx8HFzZmRxChcrs</string>
     <string name="locate">LOCATE</string>
+    <string name="location_access_denied">Location access denied</string>
 </resources>
