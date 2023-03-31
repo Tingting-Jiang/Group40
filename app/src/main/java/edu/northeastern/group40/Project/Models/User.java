@@ -25,19 +25,42 @@ public class User {
 
     List<Order> ordersAsCarUser;
 
-    public User(String username, String password, String email, String phone, boolean isCarRenter) {
-            this.username = username;
-            this.password = password;
-            this.email = email;
-            this.phone = phone;
-            this.isCarRenter = false;
-            if (isCarRenter) {
-                changeCarRenterStatus();
-            }
-            this.balance = INITIAL_BALANCE;
-            this.ordersAsCarUser = new ArrayList<>();
-        }
+    String userID;
 
+    public User(String username, String password, String email, String phone, boolean isCarRenter) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.isCarRenter = false;
+        if (isCarRenter) {
+            changeCarRenterStatus();
+        }
+        this.balance = INITIAL_BALANCE;
+        this.ordersAsCarUser = new ArrayList<>();
+    }
+
+    public User(String username, String password, String email, String phone, boolean isCarRenter, String userID) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.isCarRenter = false;
+        if (isCarRenter) {
+            changeCarRenterStatus();
+        }
+        this.balance = INITIAL_BALANCE;
+        this.ordersAsCarUser = new ArrayList<>();
+        this.userID = userID;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
     public boolean isCarRenter() {
         return isCarRenter;
     }
@@ -55,10 +78,7 @@ public class User {
         }
     }
 
-    public List<Vehicle> getVehicles() throws IllegalArgumentException{
-        if (!isCarRenter) {
-            throw new IllegalArgumentException("This user is not a car renter!");
-        }
+    public List<Vehicle> getVehicles() {
         return vehicles;
     }
 
