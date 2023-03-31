@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import edu.northeastern.group40.Project.Models.User;
 import edu.northeastern.group40.R;
 
 public class ProjectSignUpActivity extends AppCompatActivity {
@@ -20,10 +24,15 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private Button mSignUpButton;
     private TextView mSignInLink;
 
+    private CheckBox mIsCarOwnerCheckBox;
+
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_sign_up);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         View rootView = findViewById(R.id.sign_up_layout);
 
@@ -40,6 +49,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         mEmailEditText = findViewById(R.id.email_edit_text);
         mPhoneEditText = findViewById(R.id.phone_number_edit_text);
         mPasswordEditText = findViewById(R.id.password_edit_text);
+        mIsCarOwnerCheckBox = findViewById(R.id.is_car_owner_checkbox);
 
         mSignUpButton = findViewById(R.id.sign_up_button);
         mSignInLink = findViewById(R.id.sign_in_link);
@@ -47,7 +57,11 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         // Set click listener for sign up button
         mSignUpButton.setOnClickListener(v -> {
             if (checkValidInput()) {
-                // TODO: Write to database
+                writeNewUser(mUsernameEditText.getText().toString(),
+                        mEmailEditText.getText().toString(),
+                        mPhoneEditText.getText().toString(),
+                        mPasswordEditText.getText().toString(),
+                        mIsCarOwnerCheckBox.isChecked());
             }
         });
 
@@ -94,5 +108,9 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private void writeNewUser(String username, String email, String phone, String password, boolean isCarOwner) {
+        mDatabase.child("users").child(username).setValue(new User(username, email, phone, password, isCarOwner));
     }
 }
