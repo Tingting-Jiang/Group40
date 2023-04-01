@@ -200,7 +200,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-        fetchDataFromDB(this.rentCarType);
+//        fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
             // NO-1
             Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
