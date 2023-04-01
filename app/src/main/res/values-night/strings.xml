@@ -7,4 +7,8 @@
     <string name="sign_up_button">sign up</string>
     <string name="go_to_log_in">go to sign in</string>
     <string name="color">color</string>
+    <string name="input_vehicle_title">Input Vehicle Title</string>
+    <string name="input_price_in_usd_per_day">Input price in USD per day</string>
+    <string name="per_day">$ per day</string>
+    <string name="upload_car_image">upload car image</string>
 </resources>

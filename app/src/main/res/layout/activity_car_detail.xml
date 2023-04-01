@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Project.CarDetailActivity">
+
+    <ScrollView
+        android:id="@+id/detailed_scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/addToCartBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/car_photo"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:transitionName="photoToAnimate"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/cat" />
+
+            <ImageButton
+                android:id="@+id/back_to_carList"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_back"
+                android:onClick="onBackToCarList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/car_title_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/_2023_lexus"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_photo" />
+
+
+            <RatingBar
+                android:id="@+id/car_rating"
+                style="@android:style/Widget.Holo.Light.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:indeterminate="false"
+                android:numStars="5"
+                android:progressTint="@color/light_yellow"
+                android:rating="1.0"
+                android:secondaryProgressTint="#00000000"
+                android:stepSize="0.1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_title_txt" />
+
+            <TextView
+                android:id="@+id/rating_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/car_rating"
+                app:layout_constraintLeft_toRightOf="@id/car_rating"
+                tools:text="by 59 users" />
+
+
+            <TextView
+                android:id="@+id/car_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textSize="20sp"
+                android:textColor="@color/watermelon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/car_rating"
+                tools:text="$1.23" />
+
+            <TextView
+                android:id="@+id/detailed_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/description_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_ndescription_here_n"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_price" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/ocean_blue"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/addToCartBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailed_scroll_view"
+        tools:text="Total: $ 350">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/addToCartBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/sky_blue"
+        android:text="@string/place_order"
+        android:textColor="#FFF"
+        app:layout_constraintTop_toBottomOf="@id/detailed_scroll_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/total_price" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

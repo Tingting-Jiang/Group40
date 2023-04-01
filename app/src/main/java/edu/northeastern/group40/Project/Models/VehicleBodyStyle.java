@@ -5,4 +5,12 @@ public enum VehicleBodyStyle {
     CROSSOVER,
     COUPE,
     CABRIOLET,
+    PICKUP_TRUCK,
+    MINIVAN,
+    CONVERTIBLE,
+    HATCHBACK,
+    STATION_WAGON,
+    SPORTS_CAR,
+    SEDAN
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 public class User {
 
+    static final int INITIAL_BALANCE = 1000;
+
     String username;
 
     String password;
@@ -13,24 +15,52 @@ public class User {
 
     String phone;
 
-    double balance;
+    int balance;
 
     boolean isCarRenter;
 
-    List<Car> cars;
+    List<Vehicle> vehicles;
 
-public User(String username, String password, String email, String phone, double balance, boolean isCarRenter) {
+    List<Order> ordersAsCarOwner;
+
+    List<Order> ordersAsCarUser;
+
+    String userID;
+
+    public User(String username, String password, String email, String phone, boolean isCarRenter) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.balance = balance;
         this.isCarRenter = false;
         if (isCarRenter) {
             changeCarRenterStatus();
         }
+        this.balance = INITIAL_BALANCE;
+        this.ordersAsCarUser = new ArrayList<>();
     }
 
+    public User(String username, String password, String email, String phone, boolean isCarRenter, String userID) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.isCarRenter = false;
+        if (isCarRenter) {
+            changeCarRenterStatus();
+        }
+        this.balance = INITIAL_BALANCE;
+        this.ordersAsCarUser = new ArrayList<>();
+        this.userID = userID;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
     public boolean isCarRenter() {
         return isCarRenter;
     }
@@ -38,18 +68,18 @@ public User(String username, String password, String email, String phone, double
     public void changeCarRenterStatus() {
         if (isCarRenter) {
             isCarRenter = false;
-            cars = null;
+            vehicles = null;
         } else {
             isCarRenter = true;
-            cars = new ArrayList<>();
+            if (ordersAsCarOwner == null) {
+                ordersAsCarOwner = new ArrayList<>();
+            }
+            vehicles = new ArrayList<>();
         }
     }
 
-    public List<Car> getCars() throws IllegalArgumentException{
-        if (!isCarRenter) {
-            throw new IllegalArgumentException("This user is not a car renter!");
-        }
-        return cars;
+    public List<Vehicle> getVehicles() {
+        return vehicles;
     }
 
     public void setCarRenter(boolean carRenter) {
@@ -92,7 +122,4 @@ public User(String username, String password, String email, String phone, double
         return balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
 }
