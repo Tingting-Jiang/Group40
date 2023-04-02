@@ -49,6 +49,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private static final String MILEAGE = "MILEAGE";
     private static final String DISTANCE = "DISTANCE";
     private static final String REVIEW_COUNT = "REVIEW_COUNT";
+    private static final String DEFAULT = "";
     private final List<Vehicle> backupVehicleList = new ArrayList<>();
     private List<Vehicle> vehicleList = new ArrayList<>();
     private VehicleBodyStyle rentCarType = null;
@@ -138,16 +139,16 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private void updateFilter() {
         switch (selectedFilter){
             case PRICE:
-                Collections.sort(vehicleList, new SortByRentPrice());
+                vehicleList.sort(new SortByRentPrice());
                 break;
             case DISTANCE:
-                Collections.sort(vehicleList, new SortByDistance(destinationLocation));
+                vehicleList.sort(new SortByDistance(destinationLocation));
                 break;
             case REVIEW_COUNT:
-                Collections.sort(vehicleList, new SortByReview());
+                vehicleList.sort(new SortByReview());
                 break;
             case MILEAGE:
-                Collections.sort(vehicleList, new SortByMileage());
+                vehicleList.sort(new SortByMileage());
                 break;
             default:
                 Collections.shuffle(vehicleList);
@@ -199,7 +200,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-        fetchDataFromDB(this.rentCarType);
+//        fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
             // NO-1
             Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
@@ -219,14 +220,14 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
                     Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
                     "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle3.setReviewResult("4.2");
+            vehicle3.setReviewResult("2.9");
             vehicle3.setReviewTotalNumber(90);
             vehicleList.add(vehicle3);
             // NO-4
             Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
                     Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
                     "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle4.setReviewResult("4.2");
+            vehicle4.setReviewResult("4.3");
             vehicle4.setReviewTotalNumber(130);
             vehicleList.add(vehicle4);
         }
@@ -276,8 +277,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     public void backToFilterPage(View view) {
-        Intent intent = new Intent(CarListActivity.this, ProjectActivity.class);
-        startActivity(intent);
+        onBackPressed();
     }
 
 
@@ -326,51 +326,28 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     public void onSortPrice(View view) {
-        if (selectedFilter.equals(PRICE)) {
-            selectedFilter = "";
-            lookUnselected(priceSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(priceSort);
-            selectedFilter = PRICE;
-        }
-        updateFilter();
+        updateSort(PRICE, priceSort);
     }
     public void onSortMileage(View view) {
-        if (selectedFilter.equals(MILEAGE)) {
-            selectedFilter = "";
-            lookUnselected(mileageSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(mileageSort);
-            selectedFilter = MILEAGE;
-        }
-        updateFilter();
+        updateSort(MILEAGE, mileageSort);
     }
     public void onSortDistance(View view) {
-        if (selectedFilter.equals(DISTANCE)) {
-            selectedFilter = "";
-            lookUnselected(distanceSort);
-        }
-        else {
-            unselectOtherSort(selectedFilter);
-            lookSelected(distanceSort);
-            selectedFilter = DISTANCE;
-        }
-        updateFilter();
+        updateSort(DISTANCE, distanceSort);
 
     }
     public void onSortReviewCount(View view) {
-        if (selectedFilter.equals(REVIEW_COUNT)) {
-            selectedFilter = "";
-            lookUnselected(reviewSort);
+       updateSort(REVIEW_COUNT, reviewSort);
+    }
+
+    private void updateSort(String status, Button button) {
+        if (selectedFilter.equals(status)) {
+            selectedFilter = DEFAULT;
+            lookUnselected(button);
         }
         else {
             unselectOtherSort(selectedFilter);
-            lookSelected(reviewSort);
-            selectedFilter = REVIEW_COUNT;
+            lookSelected(button);
+            selectedFilter = status;
         }
         updateFilter();
 

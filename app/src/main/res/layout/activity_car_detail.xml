@@ -62,13 +62,13 @@
                 style="@android:style/Widget.Holo.Light.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:indeterminate="false"
                 android:numStars="5"
                 android:progressTint="@color/light_yellow"
                 android:rating="1.0"
-                android:stepSize="0.2"
-                android:text="@string/availability"
+                android:secondaryProgressTint="#00000000"
+                android:stepSize="0.1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/car_title_txt" />
 
