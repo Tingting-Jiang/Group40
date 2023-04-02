@@ -1,6 +1,5 @@
 package edu.northeastern.group40.Project;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,14 +8,11 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import edu.northeastern.group40.Project.Models.User;
@@ -57,7 +53,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         setContentView(scrollView);
 
         // Bind UI elements to Java variables
-        mUsernameEditText = findViewById(R.id.username_edit_text);
+        mUsernameEditText = findViewById(R.id.email_sign_in_edit_text);
         mEmailEditText = findViewById(R.id.email_edit_text);
         mPhoneEditText = findViewById(R.id.phone_number_edit_text);
         mPasswordEditText = findViewById(R.id.password_edit_text);

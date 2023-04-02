@@ -29,8 +29,8 @@
             android:exported="false" />
         <activity
             android:name=".Project.ProjectSignUpActivity"
-            android:layout="@layout/activity_project_sign_up"
-            android:exported="false">
+            android:exported="false"
+            android:layout="@layout/activity_project_sign_up">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
