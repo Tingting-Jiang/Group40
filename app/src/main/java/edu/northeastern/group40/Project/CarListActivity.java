@@ -35,8 +35,8 @@ import edu.northeastern.group40.Project.Models.Color;
 import edu.northeastern.group40.Project.Models.Fuel;
 import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.MyLocation;
-import edu.northeastern.group40.Project.Models.PriceOrder;
 import edu.northeastern.group40.Project.Models.SelectListener;
+import edu.northeastern.group40.Project.Models.User;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;
@@ -187,8 +187,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     private void setupUI() {
-        usersDB = mDatabase.child("Users");
-        vehicleDB = mDatabase.child("Vehicles");
+        usersDB = mDatabase.child("users");
         FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
 
@@ -200,7 +199,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        fetchDataFromDB(this.rentCarType);
+        fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
             // NO-1
             Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
@@ -243,19 +242,24 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
     private void fetchDataFromDB(VehicleBodyStyle rentCarType) {
-        vehicleDB.addValueEventListener(new ValueEventListener() {
+        usersDB.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
-                    assert currVehicle != null;
+                    User currUser = dataSnapshot.getValue(User.class);
+                    assert currUser != null;
                     // todo: filter cars that meet requirement
-                    if (currVehicle.getVehicleBodyStyle().equals(rentCarType)
-                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
-                    ) {
-                        vehicleList.add(currVehicle);
+                    if (currUser.getVehicles() != null) {
+                        List<Vehicle> vehicles = currUser.getVehicles();
+                        for (Vehicle vehicleItem : vehicles) {
+                            if (vehicleItem.getVehicleBodyStyle().equals(rentCarType)
+                                    && vehicleItem.getAvailableDate().isAvailable(targetAvailableDate)
+                            ) {
+                                vehicleList.add(vehicleItem);
+                            }
+                        }
                     }
                     syncBackupList();
                 }

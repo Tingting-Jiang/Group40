@@ -78,6 +78,10 @@ public class User {
         }
     }
 
+    public User() {
+
+    }
+
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
@@ -121,5 +125,10 @@ public class User {
     public double getBalance() {
         return balance;
     }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
 
 }

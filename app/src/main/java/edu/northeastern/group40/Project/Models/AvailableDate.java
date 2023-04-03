@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class AvailableDate implements Serializable {
     private static final String FORMAT = "MM/dd/yyyy";
-    private String startDate;
-    private String endDate;
+    public String startDate;
+    public String endDate;
 
     public AvailableDate(String startDate, String endDate) {
         this.startDate = startDate;

@@ -16,10 +16,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
+import edu.northeastern.group40.Project.Models.Brand;
+import edu.northeastern.group40.Project.Models.Color;
+import edu.northeastern.group40.Project.Models.Fuel;
+import edu.northeastern.group40.Project.Models.Mileage;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.User;
+import edu.northeastern.group40.Project.Models.Vehicle;
+import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.R;
 
 public class ProjectSignUpActivity extends AppCompatActivity {
@@ -133,6 +143,21 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
     private void saveUserToDatabase(User user) {
         DatabaseReference reference = mDatabase.child("users").child(user.getUserID());
+        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
+        MyLocation testLocation = null;
+        try {
+            testLocation = new MyLocation(35.40273, -120.95154, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+                Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
+                "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
+        vehicle1.setReviewResult("4.2");
+        vehicle1.setReviewTotalNumber(100);
+        List<Vehicle> sampleList = new ArrayList<>();
+        sampleList.add(vehicle1);
+        user.setVehicles(sampleList);
         reference.setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
