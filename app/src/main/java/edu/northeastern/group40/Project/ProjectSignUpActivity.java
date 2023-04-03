@@ -143,21 +143,9 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
     private void saveUserToDatabase(User user) {
         DatabaseReference reference = mDatabase.child("users").child(user.getUserID());
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = null;
-        try {
-            testLocation = new MyLocation(35.40273, -120.95154, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-                "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
-        vehicle1.setReviewResult("4.2");
-        vehicle1.setReviewTotalNumber(100);
-        List<Vehicle> sampleList = new ArrayList<>();
-        sampleList.add(vehicle1);
-        user.setVehicles(sampleList);
+        //TODO: here add fake data to db
+        saveVehicles(user);
+
         reference.setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
@@ -168,5 +156,30 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void saveVehicles(User user) {
+        DatabaseReference vehicleDB = FirebaseDatabase.getInstance().getReference("vehicles");
+        String vehicleKey = vehicleDB.push().getKey();
+
+        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
+        MyLocation testLocation = null;
+        try {
+            testLocation = new MyLocation(35.40273, -120.95154, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+                Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
+                "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", user.getUserID(), vehicleKey);
+        vehicle.setReviewResult("4.2");
+        vehicle.setReviewTotalNumber(100);
+
+        assert vehicleKey != null;
+        vehicleDB.child(vehicleKey).setValue(vehicle);
+
+        List<String> sampleList = new ArrayList<>();
+        sampleList.add(vehicleKey);
+        user.setVehicles(sampleList);
     }
 }

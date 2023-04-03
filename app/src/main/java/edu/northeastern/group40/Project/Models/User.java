@@ -19,7 +19,7 @@ public class User {
 
     boolean isCarRenter;
 
-    List<Vehicle> vehicles;
+    List<String> vehicles;
 
     List<Order> ordersAsCarOwner;
 
@@ -82,7 +82,7 @@ public class User {
 
     }
 
-    public List<Vehicle> getVehicles() {
+    public List<String> getVehicles() {
         return vehicles;
     }
 
@@ -126,7 +126,7 @@ public class User {
         return balance;
     }
 
-    public void setVehicles(List<Vehicle> vehicles) {
+    public void setVehicles(List<String> vehicles) {
         this.vehicles = vehicles;
     }
 

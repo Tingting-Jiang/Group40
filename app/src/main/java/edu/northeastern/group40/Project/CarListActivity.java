@@ -58,6 +58,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference vehicleDB;
+    private FirebaseUser currUser = null;
     private MyLocation destinationLocation = null;
     private SearchView searchView;
     private RecyclerView carRecView;
@@ -188,7 +189,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
     private void setupUI() {
         usersDB = mDatabase.child("users");
-        FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+        vehicleDB = mDatabase.child("vehicles");
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
 
         //TODO: GET DATA FROM DB
@@ -199,7 +201,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-        fetchDataFromDB(this.rentCarType);
+//        fetchDataFromDB(this.rentCarType);
         if (vehicleList.size() == 0) {
             // NO-1
             Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
@@ -242,27 +244,23 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
     private void fetchDataFromDB(VehicleBodyStyle rentCarType) {
-        usersDB.addValueEventListener(new ValueEventListener() {
+        vehicleDB.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    User currUser = dataSnapshot.getValue(User.class);
-                    assert currUser != null;
+                    Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
+                    assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    if (currUser.getVehicles() != null) {
-                        List<Vehicle> vehicles = currUser.getVehicles();
-                        for (Vehicle vehicleItem : vehicles) {
-                            if (vehicleItem.getVehicleBodyStyle().equals(rentCarType)
-                                    && vehicleItem.getAvailableDate().isAvailable(targetAvailableDate)
-                            ) {
-                                vehicleList.add(vehicleItem);
-                            }
-                        }
+                    if (currVehicle.getOwnerID() != currUser.getUid()
+                            && currVehicle.getVehicleBodyStyle().equals(rentCarType)
+                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+                        ) {
+                            vehicleList.add(currVehicle);
                     }
-                    syncBackupList();
                 }
+                syncBackupList();
                 carListAdapter.notifyDataSetChanged();
             }
 
