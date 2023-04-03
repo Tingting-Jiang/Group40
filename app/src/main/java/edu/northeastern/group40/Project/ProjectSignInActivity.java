@@ -12,11 +12,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import edu.northeastern.group40.R;
 
 public class ProjectSignInActivity extends AppCompatActivity {
 
-    private EditText mUsernameEditText;
+    private EditText mEmailEditText;
 
     private EditText mPasswordEditText;
 
@@ -24,10 +27,24 @@ public class ProjectSignInActivity extends AppCompatActivity {
 
     private TextView mSignUpTextView;
 
+    private FirebaseAuth mAuth;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Toast.makeText(this, "You are already signed in \n" + "Email: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_sign_in);
+
+        mAuth = FirebaseAuth.getInstance();
 
         View rootView = findViewById(R.id.sign_in_layout);
 
@@ -39,7 +56,7 @@ public class ProjectSignInActivity extends AppCompatActivity {
         scrollView.addView(rootView);
         setContentView(scrollView);
 
-        mUsernameEditText = findViewById(R.id.username_edit_text);
+        mEmailEditText = findViewById(R.id.email_sign_in_edit_text);
         mPasswordEditText = findViewById(R.id.password_edit_text);
 
         mSignInButton = findViewById(R.id.sign_in_button_in_sign_in_activity);
@@ -47,7 +64,17 @@ public class ProjectSignInActivity extends AppCompatActivity {
 
         mSignInButton.setOnClickListener(v -> {
             //TODO: Check if the username and password are correct
-            Toast.makeText(this, "Sign in successfully", Toast.LENGTH_SHORT).show();
+            String email = mEmailEditText.getText().toString();
+            String password = mPasswordEditText.getText().toString();
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Please input email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (password.isEmpty()) {
+                Toast.makeText(this, "Please input password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            signInWithEmail(email, password);
         });
 
         mSignUpTextView.setOnClickListener(v -> {
@@ -55,4 +82,23 @@ public class ProjectSignInActivity extends AppCompatActivity {
            startActivity(intent);
         });
     }
+
+    private void signInWithEmail(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(this, "Sign in successfully \n" + "Email: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ProjectSignInActivity.this, ProjectActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
 }
