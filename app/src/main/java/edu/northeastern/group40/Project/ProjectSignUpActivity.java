@@ -2,7 +2,13 @@ package edu.northeastern.group40.Project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
@@ -121,8 +127,13 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("", "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show();
+                        Exception error = task.getException();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("Sign up failed")
+                                .setMessage(error.getMessage())
+                                .setPositiveButton("OK", null)
+                                .create()
+                                .show();
                     }
                 });
     }
