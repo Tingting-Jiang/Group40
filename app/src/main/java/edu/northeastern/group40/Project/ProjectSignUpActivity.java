@@ -1,16 +1,19 @@
 package edu.northeastern.group40.Project;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -67,7 +70,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         setContentView(scrollView);
 
         // Bind UI elements to Java variables
-        mUsernameEditText = findViewById(R.id.username_edit_text);
+        mUsernameEditText = findViewById(R.id.email_sign_in_edit_text);
         mEmailEditText = findViewById(R.id.email_edit_text);
         mPhoneEditText = findViewById(R.id.phone_number_edit_text);
         mPasswordEditText = findViewById(R.id.password_edit_text);
@@ -135,8 +138,13 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("", "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show();
+                        Exception error = task.getException();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("Sign up failed")
+                                .setMessage(error.getMessage())
+                                .setPositiveButton("OK", null)
+                                .create()
+                                .show();
                     }
                 });
     }
