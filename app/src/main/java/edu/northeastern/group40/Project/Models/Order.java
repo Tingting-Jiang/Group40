@@ -1,6 +1,8 @@
 package edu.northeastern.group40.Project.Models;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable {
     String orderId;
 
     Vehicle orderedVehicle;
@@ -9,14 +11,20 @@ public class Order {
 
     int orderPriceTotal;
 
+    private String ownerId;
+
     Review review;
 
-    public Order(String orderId, Vehicle orderedVehicle, AvailableDate orderDate, int orderPriceTotal) {
+
+    public Order(String orderId, Vehicle orderedVehicle, AvailableDate orderDate, int orderPriceTotal, String ownerId) {
         this.orderId = orderId;
         this.orderedVehicle = orderedVehicle;
         this.orderDate = orderDate;
         this.orderPriceTotal = orderPriceTotal;
+        this.ownerId = ownerId;
     }
+
+    public Order() {}
 
     public String getOrderId() {
         return orderId;
@@ -48,5 +56,13 @@ public class Order {
 
     public void setOrderPriceTotal(int orderPriceTotal) {
         this.orderPriceTotal = orderPriceTotal;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

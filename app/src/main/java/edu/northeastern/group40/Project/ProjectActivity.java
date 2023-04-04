@@ -44,4 +44,8 @@ public class ProjectActivity extends AppCompatActivity {
     public void openSearchActivity(View view) {
         openNewActivity(SearchActivity.class);
     }
+
+    public void onMyOrdersActivity(View view) {
+        openNewActivity(MyOrdersActivity.class);
+    }
 }

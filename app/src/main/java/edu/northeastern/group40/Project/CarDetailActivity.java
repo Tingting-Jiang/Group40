@@ -3,7 +3,6 @@ package edu.northeastern.group40.Project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,8 +36,8 @@ public class CarDetailActivity extends AppCompatActivity {
     private void initUI() {
         carPhoto = findViewById(R.id.car_photo);
         carTitle = findViewById(R.id.car_title_txt);
-        ratingBar = findViewById(R.id.car_rating);
-        carReviewNumber = findViewById(R.id.rating_number);
+        ratingBar = findViewById(R.id.order_rating);
+        carReviewNumber = findViewById(R.id.order_number);
         carPrice = findViewById(R.id.car_price);
         carDescription = findViewById(R.id.detailed_description);
         totalPrice = findViewById(R.id.total_price);

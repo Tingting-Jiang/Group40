@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/order_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="15dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="3dp"
+    card_view:contentPadding="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/card_relative"
+            android:layout_width="291dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
+
+
+            <TextView
+                android:id="@+id/order_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="2023 Lexus 350" />
+
+            <TextView
+                android:id="@+id/order_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                tools:text="Total: $ 140" />
+
+
+            <TextView
+                android:id="@+id/order_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                tools:text="04/3/2023" />
+
+            <Button
+                android:id="@+id/order_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:clickable="true"
+                android:paddingStart="0dp"
+                android:minHeight="48dp"
+                android:textColor="@color/ocean_blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="@string/rate_this_order"
+                style="?android:attr/borderlessButtonStyle"
+                tools:ignore="RtlSymmetry" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/check_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/sky_blue"
+            android:text="@string/detail"
+            android:clickable="true"
+            android:textSize="12sp"
+            android:textColor="#6D4C41"
+            card_view:cornerRadius="10dp" />
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

@@ -58,7 +58,7 @@
 
 
             <RatingBar
-                android:id="@+id/car_rating"
+                android:id="@+id/order_rating"
                 style="@android:style/Widget.Holo.Light.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -73,13 +73,13 @@
                 app:layout_constraintTop_toBottomOf="@id/car_title_txt" />
 
             <TextView
-                android:id="@+id/rating_number"
+                android:id="@+id/order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/car_rating"
-                app:layout_constraintLeft_toRightOf="@id/car_rating"
+                app:layout_constraintBottom_toBottomOf="@+id/order_rating"
+                app:layout_constraintLeft_toRightOf="@id/order_rating"
                 tools:text="by 59 users" />
 
 
@@ -92,7 +92,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/watermelon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/car_rating"
+                app:layout_constraintTop_toBottomOf="@+id/order_rating"
                 tools:text="$1.23" />
 
             <TextView

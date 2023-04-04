@@ -93,4 +93,11 @@
     <string name="brand">Brand:</string>
     <string name="order_details">Order Details</string>
     <string name="_5000">5000$</string>
+    <string name="my_Orders">My Orders</string>
+    <string name="rate">Rate</string>
+    <string name="submit_rating">Submit Rating</string>
+    <string name="rate_this_order">Rate this order</string>
+    <string name="detail">Detail</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

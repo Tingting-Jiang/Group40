@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +35,6 @@ import edu.northeastern.group40.Project.Models.Fuel;
 import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
-import edu.northeastern.group40.Project.Models.User;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;

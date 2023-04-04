@@ -7,6 +7,29 @@
     tools:context=".Project.ProjectActivity">
 
     <Button
+        android:id="@+id/car_list_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onCarListActivity"
+        android:text="car List"
+        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/add_vehicle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onAddVehicleActivity"
+        android:text="Add vehicle"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button_in_project_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/car_list_btn" />
+
+    <Button
         android:id="@+id/sign_in_button_in_project_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,31 +47,21 @@
         android:backgroundTint="#F76C6C"
         android:onClick="openSearchActivity"
         android:text="@string/search_activity"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/my_orders_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button_in_project_activity" />
 
     <Button
-        android:id="@+id/car_list_btn"
+        android:id="@+id/my_orders_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onCarListActivity"
-        android:text="car List"
-        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_button"
+        android:onClick="onMyOrdersActivity"
+        android:text="My Orders"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/add_vehicle_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onAddVehicleActivity"
-        android:text="Add vehicle"
-        app:layout_constraintBottom_toTopOf="@+id/sign_in_button_in_project_activity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/car_list_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
