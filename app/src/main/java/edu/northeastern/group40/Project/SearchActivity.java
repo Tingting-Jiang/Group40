@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.location.Address;
@@ -46,6 +47,7 @@ import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
+import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.R;
 
 public class SearchActivity extends AppCompatActivity {
@@ -70,7 +72,8 @@ public class SearchActivity extends AppCompatActivity {
     private Brand targetBrand;
     private Brand.Model targetModel;
     // the location contains the latitude and longitude
-    private Location targetLocation;  
+    private MyLocation targetLocation;
+    private Button submit;
 
 
 
@@ -89,6 +92,7 @@ public class SearchActivity extends AppCompatActivity {
         selectedEndDateTextView = findViewById(R.id.selected_end_date_text_view);
         endCalendar = Calendar.getInstance();
         placeInput = findViewById(R.id.placeForSearch);
+        submit = findViewById(R.id.btnSearch);
 
 
         AutoCompleteTextView brandMenu = findViewById(R.id.brandMenu);
@@ -125,6 +129,7 @@ public class SearchActivity extends AppCompatActivity {
                     .build();
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 inputPlace = response.getPlace();
+                targetLocation = new MyLocation(inputPlace);
             }).addOnFailureListener((exception) -> {
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
@@ -213,6 +218,18 @@ public class SearchActivity extends AppCompatActivity {
                 });
             }
         });
+
+        submit.setOnClickListener(v -> {
+            targetBrand = getResult(brandMenu, Brand.class);
+            targetModel = getResult(modelMenu, Brand.Model.class);
+            Intent intent = new Intent(SearchActivity.this, CarListActivity.class);
+            intent.putExtra("VehicleModel", targetModel.toString());
+            intent.putExtra("VehicleBrand", targetBrand.toString());
+            intent.putExtra("AvailableDate", targetDate);
+            intent.putExtra("destinationLocation", targetLocation);
+            startActivity(intent);
+        });
+
     }
 
     private void showDatePickerDialog(Calendar calendar, DatePickerDialog.OnDateSetListener listener) {
@@ -225,6 +242,15 @@ public class SearchActivity extends AppCompatActivity {
         T[] items = enumType.getEnumConstants();
         ArrayAdapter<T> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         menu.setAdapter(adapter);
+    }
+
+    public <T extends Enum<T>> T getResult(AutoCompleteTextView input, Class<T> enumType){
+        try {
+            return Enum.valueOf(enumType, input.getText().toString());
+        } catch (IllegalArgumentException e) {
+            input.setError("Invalid value");
+            return null;
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -261,12 +287,27 @@ public class SearchActivity extends AppCompatActivity {
             Location currentPassiveLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             if (currentGPS != null) {
                 locationToAdd(currentGPS);
+                try {
+                    targetLocation = new MyLocation(currentGPS.getLatitude(), currentGPS.getLongitude(),this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if (currentNetworkLocation != null) {
                 locationToAdd(currentNetworkLocation);
+                try {
+                    targetLocation = new MyLocation(currentNetworkLocation.getLatitude(), currentNetworkLocation.getLongitude(),this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if (currentPassiveLocation != null) {
                 locationToAdd(currentPassiveLocation);
+                try {
+                    targetLocation = new MyLocation(currentPassiveLocation.getLatitude(), currentPassiveLocation.getLongitude(),this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Toast.makeText(SearchActivity.this, "Please input the address", Toast.LENGTH_SHORT).show();
             }
