@@ -42,12 +42,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.lang.Class;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
+import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.R;
 
@@ -63,10 +60,18 @@ public class SearchActivity extends AppCompatActivity {
     private static final String API_KEY = "AIzaSyAAhr6pbohtGh_mPid3btYA2XQZ9KlJ9Bs";
 //    private static final String MAPS_API_KEY = "AIzaSyB0xVMOtkpPW_4UwVdhLx8HFzZmRxChcrs";
 
-    //    map
     private LocationManager locationManager;
-    private String enableGPS = "Enable GPS to get your Location";
+    private static final String enableGPS = "Enable GPS to get your Location";
     private static final int locationRequestCode = 1;
+    private final AvailableDate targetDate = new AvailableDate();
+    private static final String TAG = "SearchActivity";
+
+    // TODO: save the brand and model, and location to these variables
+    private Brand targetBrand;
+    private Brand.Model targetModel;
+    // the location contains the latitude and longitude
+    private Location targetLocation;  
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -157,6 +162,7 @@ public class SearchActivity extends AppCompatActivity {
                 }).addOnFailureListener((exception) -> {
                     if (exception instanceof ApiException) {
                         ApiException apiException = (ApiException) exception;
+                        Log.e(TAG,"Exception: " + apiException );
                     }
                 });
             }
@@ -167,12 +173,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(startCalendar, new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         startCalendar.set(Calendar.YEAR, year);
                         startCalendar.set(Calendar.MONTH, monthOfYear);
                         startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        updateSelectedStartDate();
+                        String startDate = extractDateFromCalendar(startCalendar);
+                        targetDate.setStartDate(startDate);
+                        selectedStartDateTextView.setText("Start date: " + startDate);
                     }
                 });
             }
@@ -182,6 +191,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(endCalendar, new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         endCalendar.set(Calendar.YEAR, year);
@@ -190,9 +200,14 @@ public class SearchActivity extends AppCompatActivity {
                         if (endCalendar.before(startCalendar)) {
                             Toast.makeText(SearchActivity.this, "End date cannot be earlier than start date", Toast.LENGTH_SHORT).show();
                             endCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
-                            updateSelectedEndDate();
+                            String endDate = extractDateFromCalendar(endCalendar);
+                            targetDate.setEndDate(endDate);
+                            selectedEndDateTextView.setText("End date: " + endDate);
+
                         } else {
-                            updateSelectedEndDate();
+                            String endDate = extractDateFromCalendar(endCalendar);
+                            targetDate.setEndDate(endDate);
+                            selectedEndDateTextView.setText("End date: " + endDate);
                         }
                     }
                 });
@@ -206,24 +221,17 @@ public class SearchActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    private void updateSelectedStartDate() {
-        selectedStartDateTextView.setText("Start date: " + String.format("%02d/%02d/%d",
-                startCalendar.get(Calendar.MONTH) + 1, startCalendar.get(Calendar.DAY_OF_MONTH),
-                startCalendar.get(Calendar.YEAR)));
-    }
-
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    private void updateSelectedEndDate() {
-        selectedEndDateTextView.setText("End date: " + String.format("%02d/%02d/%d",
-                endCalendar.get(Calendar.MONTH) + 1, endCalendar.get(Calendar.DAY_OF_MONTH),
-                endCalendar.get(Calendar.YEAR)));
-    }
-
     public <T extends Enum<T>> void initDropDownMenu(AutoCompleteTextView menu, Class<T> enumType){
         T[] items = enumType.getEnumConstants();
         ArrayAdapter<T> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         menu.setAdapter(adapter);
+    }
+
+    @SuppressLint("DefaultLocale")
+    private String extractDateFromCalendar(Calendar calendar) {
+        return String.format("%02d/%02d/%d",
+                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.YEAR));
     }
 
 

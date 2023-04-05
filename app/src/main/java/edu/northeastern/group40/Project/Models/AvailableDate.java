@@ -19,6 +19,8 @@ public class AvailableDate implements Serializable {
         this.endDate = endDate;
     }
 
+    public AvailableDate() {}
+
     @SuppressLint("SimpleDateFormat")
     public boolean isAvailable(AvailableDate anotherDate) {
         Date startThis, endThis, startThat, endThat;
@@ -32,6 +34,14 @@ public class AvailableDate implements Serializable {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     private boolean isAfter(Date endThis, Date endThat) {
