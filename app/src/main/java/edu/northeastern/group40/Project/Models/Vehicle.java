@@ -42,6 +42,7 @@ public class Vehicle implements Serializable {
         this.reviewTotalNumber = 0;
         this.availableDate = new AvailableDate(startDate, endDate);
         this.ownerID = ownerID;
+        this.vehicleID = vehicleID;
     }
 
 

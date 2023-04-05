@@ -16,8 +16,8 @@ import java.util.Locale;
 public class MyLocation implements Serializable {
 
     public final String address;
-    final double latitude;
-    final double longitude;
+    public final double latitude;
+    public final double longitude;
 
     public MyLocation(double latitude, double longitude, Context context) throws IOException {
         this.latitude = latitude;
