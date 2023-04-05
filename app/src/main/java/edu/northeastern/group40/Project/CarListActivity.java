@@ -1,5 +1,11 @@
 package edu.northeastern.group40.Project;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -7,13 +13,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -190,8 +189,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private void setupUI() {
         usersDB = mDatabase.child("users");
         vehicleDB = mDatabase.child("vehicles");
-        currUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currUser != null;
+//        currUser = FirebaseAuth.getInstance().getCurrentUser();
+//        assert currUser != null;
 
         //TODO: GET DATA FROM DB
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";

@@ -1,38 +1,26 @@
 package edu.northeastern.group40.Project.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.Calendar;
 import java.util.List;
 
-import edu.northeastern.group40.Project.CarDetailActivity;
-import edu.northeastern.group40.Project.CarListActivity;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.SelectListener;
-import edu.northeastern.group40.Project.Models.Vehicle;
-import edu.northeastern.group40.Project.SearchActivity;
 import edu.northeastern.group40.R;
 
 public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrdersViewHolder>{
