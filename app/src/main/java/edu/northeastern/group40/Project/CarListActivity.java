@@ -50,7 +50,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private static final String DEFAULT = "";
     private final List<Vehicle> backupVehicleList = new ArrayList<>();
     private List<Vehicle> vehicleList = new ArrayList<>();
-    private VehicleBodyStyle rentCarType = null;
+    private Brand.Model rentModel = null;
+    private Brand rentBrand = null;
     private AvailableDate targetAvailableDate;
     private Button priceSort, reviewSort, distanceSort, mileageSort;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -111,7 +112,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         });
 
 
-        this.rentCarType = VehicleBodyStyle.valueOf(getIntent().getStringExtra("VehicleBodyStyle"));
+        this.rentBrand = Brand.valueOf(getIntent().getStringExtra("VehicleBrand"));
+        this.rentModel = Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
         this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
         if (destinationLocation == null) {
@@ -199,7 +201,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        fetchDataFromDB(this.rentCarType);
+//        fetchDataFromDB();
         if (vehicleList.size() == 0) {
             // NO-1
             Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
@@ -241,7 +243,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
 
-    private void fetchDataFromDB(VehicleBodyStyle rentCarType) {
+    private void fetchDataFromDB() {
         vehicleDB.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -252,7 +254,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
                     if (currVehicle.getOwnerID() != currUser.getUid()
-                            && currVehicle.getVehicleBodyStyle().equals(rentCarType)
+                            && currVehicle.getBrand().equals(rentBrand)
+                            && currVehicle.getModel().equals(rentModel)
                             && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
                         ) {
                             vehicleList.add(currVehicle);
