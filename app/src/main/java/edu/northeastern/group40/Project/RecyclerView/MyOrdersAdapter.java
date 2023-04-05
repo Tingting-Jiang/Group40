@@ -1,6 +1,7 @@
 package edu.northeastern.group40.Project.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.Calendar;
 import java.util.List;
 
 import edu.northeastern.group40.Project.CarDetailActivity;
@@ -29,6 +32,7 @@ import edu.northeastern.group40.Project.CarListActivity;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
+import edu.northeastern.group40.Project.SearchActivity;
 import edu.northeastern.group40.R;
 
 public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrdersViewHolder>{
@@ -71,9 +75,9 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
     public class MyOrdersViewHolder extends RecyclerView.ViewHolder {
         TextView  orderSum, orderTime;
         CardView cardView;
-        Button orderTitle, orderRate;
+        Button orderTitle, orderRate, orderDetailBtn;
         Integer newRate;
-        MaterialButton orderDetailBtn;
+//        MaterialButton orderAgainBtn;
         public MyOrdersViewHolder(@NonNull View itemView) {
             super(itemView);
             this.orderSum = itemView.findViewById(R.id.order_sum);
@@ -82,9 +86,11 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
             this.cardView = itemView.findViewById(R.id.order_card);
             this.orderRate = itemView.findViewById(R.id.order_rate);
             this.orderDetailBtn = itemView.findViewById(R.id.check_detail);
+//            this.orderAgainBtn = itemView.findViewById(R.id.reorder);
 
             this.orderRate.setOnClickListener(v -> openReviewDialog());
             this.orderDetailBtn.setOnClickListener(v -> openDetailDialog(getLayoutPosition()));
+//            this.orderAgainBtn.setOnClickListener((View.OnClickListener) v -> openDateSelector(getLayoutPosition()));
         }
 
 

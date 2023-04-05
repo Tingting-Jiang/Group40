@@ -3,8 +3,10 @@ package edu.northeastern.group40.Project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ public class CarDetailActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private ImageView carPhoto;
     private int rentLength;
+    private Button addToCartButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +31,24 @@ public class CarDetailActivity extends AppCompatActivity {
         initUI();
         chosenVehicle = (Vehicle) getIntent().getSerializableExtra("carDetail");
         rentLength = getIntent().getIntExtra("rentLength", 0);
+        updateButtonVisibility();
         setupUI();
     }
 
+    private void updateButtonVisibility() {
+        if (rentLength == 0) {
+            addToCartButton.setVisibility(View.INVISIBLE);
+        } else {
+            addToCartButton.setOnClickListener(v -> openPaymentActivity());
+        }
+    }
+
+    private void openPaymentActivity() {
+        Intent intent = new Intent(CarDetailActivity.this, PaymentActivity.class);
+        intent.putExtra("carDetail", chosenVehicle);
+        intent.putExtra("rentLength", rentLength);
+        startActivity(intent);
+    }
 
 
     private void initUI() {
@@ -41,6 +59,7 @@ public class CarDetailActivity extends AppCompatActivity {
         carPrice = findViewById(R.id.car_price);
         carDescription = findViewById(R.id.detailed_description);
         totalPrice = findViewById(R.id.total_price);
+        addToCartButton = findViewById(R.id.addToCartBtn);
     }
 
     @SuppressLint("SetTextI18n")

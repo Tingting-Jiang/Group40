@@ -146,7 +146,7 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
         Vehicle vehicle = orderList.get(position).getOrderedVehicle();
         Intent intent = new Intent(MyOrdersActivity.this, CarDetailActivity.class);
         intent.putExtra("carDetail", vehicle);
-        intent.putExtra("rentLength", 5);
+        intent.putExtra("rentLength", 0);
         startActivity(intent);
     }
 }

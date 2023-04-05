@@ -74,34 +74,48 @@
             android:textColor="@color/ocean_blue"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textAllCaps="false"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@id/order_sum"
             tools:ignore="RtlSymmetry" />
 
-
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/check_detail"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/order_time"
             android:layout_marginStart="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/order_time"
             android:backgroundTint="@color/sky_blue"
             android:clickable="true"
             android:text="@string/detail"
+            android:textColor="@color/ocean_blue"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            card_view:cornerRadius="10dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/order_rate"
+            card_view:layout_constraintTop_toBottomOf="@id/order_sum" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/order_time"
+            android:layout_marginBottom="24dp"
+            android:layout_toEndOf="@id/order_time"
+            android:backgroundTint="@color/sky_blue"
+            android:clickable="true"
+            android:text="@string/rent_again"
             android:textColor="#6D4C41"
             android:textSize="12sp"
             card_view:cornerRadius="10dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintBottom_toTopOf="@id/check_detail"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@id/order_time"
-            card_view:layout_constraintTop_toBottomOf="@id/order_sum" />
-
-
-
+            card_view:layout_constraintTop_toBottomOf="@id/order_time" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
