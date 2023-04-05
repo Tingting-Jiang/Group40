@@ -125,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
             String locationText = String.valueOf(prediction.getFullText(null));
             locationText = locationText.substring(0, locationText.lastIndexOf(","));
             placeInput.setText(locationText);
-            FetchPlaceRequest request = FetchPlaceRequest.builder(prediction.getPlaceId(), Arrays.asList(Place.Field.ADDRESS, Place.Field.ID))
+            FetchPlaceRequest request = FetchPlaceRequest.builder(prediction.getPlaceId(), Arrays.asList(Place.Field.ADDRESS, Place.Field.ID, Place.Field.LAT_LNG))
                     .build();
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 inputPlace = response.getPlace();
@@ -222,6 +222,18 @@ public class SearchActivity extends AppCompatActivity {
         submit.setOnClickListener(v -> {
             targetBrand = getResult(brandMenu, Brand.class);
             targetModel = getResult(modelMenu, Brand.Model.class);
+            if(targetBrand == null || targetModel == null){
+                Toast.makeText(SearchActivity.this, "Please choose right brand and model", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(targetDate == null) {
+                Toast.makeText(SearchActivity.this, "Please choose availability", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(targetLocation == null) {
+                Toast.makeText(SearchActivity.this, "Please choose target location", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(SearchActivity.this, CarListActivity.class);
             intent.putExtra("VehicleModel", targetModel.toString());
             intent.putExtra("VehicleBrand", targetBrand.toString());
