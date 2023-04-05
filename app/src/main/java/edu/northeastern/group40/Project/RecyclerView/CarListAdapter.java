@@ -59,7 +59,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
                 .fit()
                 .into(holder.carImage);
 
-        holder.cardView.setOnClickListener(v -> listener.onCarSelect(currVehicle));
+        holder.cardView.setOnClickListener(v -> listener.onCarSelect(position));
 
     }
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.MyOrdersAdapter;
 import edu.northeastern.group40.R;
 
-public class MyOrdersActivity extends AppCompatActivity {
+public class MyOrdersActivity extends AppCompatActivity implements SelectListener {
     private static final String TAG = "MyOrdersActivity";
     private final List<Order> orderList = new ArrayList<>();
     private MyOrdersAdapter myOrdersAdapter;
@@ -69,7 +70,7 @@ public class MyOrdersActivity extends AppCompatActivity {
         RecyclerView historyRec = findViewById(R.id.history_rec);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         historyRec.setLayoutManager(layoutManager);
-        myOrdersAdapter = new MyOrdersAdapter(MyOrdersActivity.this, orderList) ;
+        myOrdersAdapter = new MyOrdersAdapter(MyOrdersActivity.this, orderList, this) ;
         historyRec.setAdapter(myOrdersAdapter);
     }
 
@@ -140,5 +141,12 @@ public class MyOrdersActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onCarSelect(Integer position) {
+        Vehicle vehicle = orderList.get(position).getOrderedVehicle();
+        Intent intent = new Intent(MyOrdersActivity.this, CarDetailActivity.class);
+        intent.putExtra("carDetail", vehicle);
+        intent.putExtra("rentLength", 5);
+        startActivity(intent);
+    }
 }

@@ -2,6 +2,7 @@ package edu.northeastern.group40.Project.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,18 +24,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
+import edu.northeastern.group40.Project.CarDetailActivity;
+import edu.northeastern.group40.Project.CarListActivity;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.SelectListener;
+import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 
 public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrdersViewHolder>{
     private List<Order> orderList;
     private final Context mContext;
+    private SelectListener listener;
 
 
-    public MyOrdersAdapter(Context mContext, List<Order> orderList) {
+    public MyOrdersAdapter(Context mContext, List<Order> orderList, SelectListener listener) {
         this.orderList = orderList;
         this.mContext = mContext;
+        this.listener = listener;
 
     }
 
@@ -53,6 +59,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
         holder.orderTime.setText("Rent date: " + currOrder.getOrderDate().toString());
         holder.orderSum.setText("Total: $ " + currOrder.getOrderPriceTotal());
         holder.orderTitle.setText(currOrder.getOrderedVehicle().getTitle());
+        holder.orderTitle.setOnClickListener(v -> listener.onCarSelect(position));
 
     }
 
@@ -62,9 +69,9 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
     }
 
     public class MyOrdersViewHolder extends RecyclerView.ViewHolder {
-        TextView orderTitle, orderSum, orderTime;
+        TextView  orderSum, orderTime;
         CardView cardView;
-        Button orderRate;
+        Button orderTitle, orderRate;
         Integer newRate;
         MaterialButton orderDetailBtn;
         public MyOrdersViewHolder(@NonNull View itemView) {
@@ -112,13 +119,13 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                     .setTitle("Rate your overall experience")
                     .setView(dialogView)
                     .setPositiveButton(R.string.submit_rating, (dialog, which) -> {
-
+                            this.orderRate.setText("Your rating: " + newRate);
                             dialog.dismiss();
                     })
                     .setCancelable(false)
                     .create();
             reviewDialog.show();
-            this.orderRate.setText("Your rating: " + newRate);
+
         }
 
         @SuppressLint("SetTextI18n")
@@ -131,8 +138,8 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
             final TextView orderDescription = detailsView.findViewById(R.id.order_detailed_description);
             final TextView orderSum = detailsView.findViewById(R.id.order_total_price);
 
-            orderDescription.setText("currOrder.getOrderedVehicle().toString()");
-            orderId.setText("123");
+            orderDescription.setText(currOrder.getOrderedVehicle().toString());
+            orderId.setText("Order ID: " + currOrder.getOrderId());
             orderSum.setText("Total: $ "+ currOrder.getOrderPriceTotal() );
 
             AlertDialog reviewDialog = new MaterialAlertDialogBuilder(mContext)
@@ -144,5 +151,6 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
 
 
         }
+
     }
 }

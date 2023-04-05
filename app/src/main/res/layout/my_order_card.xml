@@ -11,80 +11,95 @@
     card_view:cardElevation="3dp"
     card_view:contentPadding="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/card_relative"
-            android:layout_width="291dp"
-            android:orientation="vertical"
+        <Button
+            android:id="@+id/order_title"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp">
+            android:layout_marginStart="16dp"
+            android:clickable="true"
+            android:gravity="start"
+            android:paddingStart="0dp"
+            android:textColor="@color/ocean_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry"
+            tools:text="2023 Lexus 350" />
 
 
-            <TextView
-                android:id="@+id/order_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="2023 Lexus 350" />
-
-            <TextView
-                android:id="@+id/order_sum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
-                tools:text="Total: $ 140" />
+        <TextView
+            android:id="@+id/order_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/order_title"
+            tools:text="Total: $ 140" />
 
 
-            <TextView
-                android:id="@+id/order_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
-                tools:text="04/3/2023" />
+        <TextView
+            android:id="@+id/order_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_sum"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/order_sum"
+            tools:text="04/3/2023" />
 
-            <Button
-                android:id="@+id/order_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:clickable="true"
-                android:paddingStart="0dp"
-                android:minHeight="48dp"
-                android:textColor="@color/ocean_blue"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="@string/rate_this_order"
-                style="?android:attr/borderlessButtonStyle"
-                tools:ignore="RtlSymmetry" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/order_rate"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_time"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:clickable="true"
+            android:minHeight="48dp"
+            android:paddingStart="0dp"
+            android:text="@string/rate_this_order"
+            android:textColor="@color/ocean_blue"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/order_time"
+            tools:ignore="RtlSymmetry" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/check_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/order_time"
+            android:layout_marginStart="32dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            android:layout_toEndOf="@id/order_time"
             android:backgroundTint="@color/sky_blue"
-            android:text="@string/detail"
             android:clickable="true"
-            android:textSize="12sp"
+            android:text="@string/detail"
             android:textColor="#6D4C41"
-            card_view:cornerRadius="10dp" />
+            android:textSize="12sp"
+            card_view:cornerRadius="10dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@id/order_time"
+            card_view:layout_constraintTop_toBottomOf="@id/order_sum" />
 
-    </LinearLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

@@ -282,8 +282,9 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
 
     @Override
-    public void onCarSelect(Vehicle car) {
+    public void onCarSelect(Integer position) {
         Intent intent = new Intent(CarListActivity.this, CarDetailActivity.class);
+        Vehicle car = vehicleList.get(position);
         intent.putExtra("carDetail", car);
         intent.putExtra("rentLength", 5);
         startActivity(intent);
