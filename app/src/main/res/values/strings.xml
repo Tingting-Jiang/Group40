@@ -93,4 +93,8 @@
     <string name="brand">Brand:</string>
     <string name="order_details">Order Details</string>
     <string name="_5000">5000$</string>
+    <string name="rent_a_car">Rent a car</string>
+    <string name="orders">orders</string>
+    <string name="add_vehicle">Add vehicle</string>
+    <string name="profile">Profile</string>
 </resources>

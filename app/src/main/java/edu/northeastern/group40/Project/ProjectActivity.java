@@ -21,27 +21,21 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
     }
 
-    public void onCarListActivity(View view) {
-        Intent intent = new Intent(ProjectActivity.this, CarListActivity.class);
-        intent.putExtra("VehicleBodyStyle", VehicleBodyStyle.SUV.toString());
-        intent.putExtra("AvailableDate", new AvailableDate("04/14/2023", "04/21/2023"));
-        startActivity(intent);
-    }
-    public void onAddVehicleActivity(View view) {
-        openNewActivity(AddVehicleActivity.class);
-    }
-
 
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (ProjectActivity.this, targetActivityClass);
         startActivity(intent);
     }
-
-    public void onSignInActivity(View view) {
-        openNewActivity(ProjectSignInActivity.class);
+    public void onAddVehicleActivity(View view) {
+        openNewActivity(AddVehicleActivity.class);
     }
-
+    public void onMyOrdersActivity(View view) {
+        openNewActivity(MyOdersActivity.class);
+    }
     public void openSearchActivity(View view) {
         openNewActivity(SearchActivity.class);
+    }
+    public void onProfileActivity(View view) {
+        openNewActivity(MyProfile.class);
     }
 }
