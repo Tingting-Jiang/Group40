@@ -3,8 +3,10 @@ package edu.northeastern.group40.Project;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,13 +32,9 @@ import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Color;
-import edu.northeastern.group40.Project.Models.Fuel;
-import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
-import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;
 import edu.northeastern.group40.R;
 
@@ -115,6 +114,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.rentModel = Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
         this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
+        Log.i(TAG, "Got: " + rentModel + "-" + rentBrand + "-" + targetAvailableDate.toString() + "-" + destinationLocation.toString());
         if (destinationLocation == null) {
             try {
                 destinationLocation = new MyLocation(37.40273, -121.95154, this);
@@ -189,8 +189,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private void setupUI() {
         usersDB = mDatabase.child("users");
         vehicleDB = mDatabase.child("vehicles");
-//        currUser = FirebaseAuth.getInstance().getCurrentUser();
-//        assert currUser != null;
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currUser != null;
 
         //TODO: GET DATA FROM DB
         String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
@@ -200,39 +200,39 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        fetchDataFromDB();
-        if (vehicleList.size() == 0) {
-            // NO-1
-            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-                    "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
-            vehicle1.setReviewResult("4.2");
-            vehicle1.setReviewTotalNumber(100);
-            vehicleList.add(vehicle1);
-            // NO-2
-            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
-                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle2.setReviewResult("4.2");
-            vehicle2.setReviewTotalNumber(56);
-            vehicleList.add(vehicle2);
-            // NO-3
-            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
-                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle3.setReviewResult("2.9");
-            vehicle3.setReviewTotalNumber(90);
-            vehicleList.add(vehicle3);
-            // NO-4
-            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
-                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle4.setReviewResult("4.3");
-            vehicle4.setReviewTotalNumber(130);
-            vehicleList.add(vehicle4);
-        }
+        fetchDataFromDB();
+//        if (vehicleList.size() == 0) {
+//            // NO-1
+//            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
+//                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
+//                    "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
+//            vehicle1.setReviewResult("4.2");
+//            vehicle1.setReviewTotalNumber(100);
+//            vehicleList.add(vehicle1);
+//            // NO-2
+//            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+//                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
+//                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+//            vehicle2.setReviewResult("4.2");
+//            vehicle2.setReviewTotalNumber(56);
+//            vehicleList.add(vehicle2);
+//            // NO-3
+//            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+//                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
+//                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+//            vehicle3.setReviewResult("2.9");
+//            vehicle3.setReviewTotalNumber(90);
+//            vehicleList.add(vehicle3);
+//            // NO-4
+//            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
+//                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
+//                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
+//            vehicle4.setReviewResult("4.3");
+//            vehicle4.setReviewTotalNumber(130);
+//            vehicleList.add(vehicle4);
+//        }
 
-        syncBackupList();
+//        syncBackupList();
     }
 
     private void syncBackupList() {
@@ -252,14 +252,23 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    if (currVehicle.getOwnerID() != currUser.getUid()
-                            && currVehicle.getBrand().equals(rentBrand)
-                            && currVehicle.getModel().equals(rentModel)
-                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
-                        ) {
-                            vehicleList.add(currVehicle);
+//                    if (!currVehicle.getOwnerID().equals(currUser.getUid())
+//                            && currVehicle.getBrand().equals(rentBrand)
+//                            && currVehicle.getModel().equals(rentModel)
+//                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+//                        ) {
+//                            vehicleList.add(currVehicle);
+//                    }
+                    Log.d(TAG, currVehicle.toString());
+                    if (currVehicle.getImage() == null) {
+                        currVehicle.setCarImage("https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000350-Thu%20Apr%2006%2011%3A29%3A49%20PDT%202023?alt=media&token=7eb807c1-ef3b-4221-91a2-17f4b5a00b8e");
                     }
+                    vehicleList.add(currVehicle);
+
+
+
                 }
+                Toast.makeText(CarListActivity.this, "GET DATA LEN： " + vehicleList.size(), Toast.LENGTH_LONG).show();
                 syncBackupList();
                 carListAdapter.notifyDataSetChanged();
             }
