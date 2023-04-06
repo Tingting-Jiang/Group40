@@ -1,7 +1,5 @@
 package edu.northeastern.group40.Project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.squareup.picasso.Picasso;
 
+import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 
@@ -24,13 +25,15 @@ public class CarDetailActivity extends AppCompatActivity {
     private ImageView carPhoto;
     private int rentLength;
     private Button addToCartButton;
+    private AvailableDate targetDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_detail);
         initUI();
         chosenVehicle = (Vehicle) getIntent().getSerializableExtra("carDetail");
-        rentLength = getIntent().getIntExtra("rentLength", 0);
+        targetDate = (AvailableDate) getIntent().getSerializableExtra("targetDate");
+        rentLength = targetDate.calculateDuration();
         updateButtonVisibility();
         setupUI();
     }
@@ -47,6 +50,7 @@ public class CarDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(CarDetailActivity.this, PaymentActivity.class);
         intent.putExtra("carDetail", chosenVehicle);
         intent.putExtra("rentLength", rentLength);
+        intent.putExtra("targetDate", targetDate);
         startActivity(intent);
     }
 

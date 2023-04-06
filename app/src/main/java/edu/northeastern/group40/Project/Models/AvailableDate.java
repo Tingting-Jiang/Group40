@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class AvailableDate implements Serializable {
     private static final String FORMAT = "MM/dd/yyyy";
@@ -50,6 +51,20 @@ public class AvailableDate implements Serializable {
 
     private boolean isBefore(Date startThis, Date startThat) {
         return startThis.before(startThat);
+    }
+
+    public int calculateDuration() {
+        Date startThis, endThis;
+        try {
+            startThis = new SimpleDateFormat(FORMAT).parse(startDate);
+            endThis = new SimpleDateFormat(FORMAT).parse(endDate);
+            long diffInMillis = Math.abs(endThis.getTime() - startThis.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+            return (int) diff;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @NonNull

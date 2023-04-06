@@ -288,7 +288,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         Intent intent = new Intent(CarListActivity.this, CarDetailActivity.class);
         Vehicle car = vehicleList.get(position);
         intent.putExtra("carDetail", car);
-        intent.putExtra("rentLength", 5);
+        intent.putExtra("targetDate", targetAvailableDate);
         startActivity(intent);
        // TODO: PUT OBJECT  INTO INTENT
         // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
