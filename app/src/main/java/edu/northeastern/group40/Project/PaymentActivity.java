@@ -115,7 +115,6 @@ public class PaymentActivity extends AppCompatActivity {
     private void orderToDb(){
         String orderId = mDatabase.push().getKey();
         order = new Order(orderId, orderVehicle, availableDate, orderPriceTotal, currUserId);
-        System.out.println(orderId);
         assert orderId != null;
         ordersDB.child(orderId).setValue(order);
     }
