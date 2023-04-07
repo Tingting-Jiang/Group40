@@ -260,7 +260,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 //                            vehicleList.add(currVehicle);
 //                    }
                     Log.d(TAG, currVehicle.toString());
-                    if (currVehicle.getImage() == null) {
+                    if (currVehicle.getCarImage() == null) {
                         currVehicle.setCarImage("https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000350-Thu%20Apr%2006%2011%3A29%3A49%20PDT%202023?alt=media&token=7eb807c1-ef3b-4221-91a2-17f4b5a00b8e");
                     }
                     vehicleList.add(currVehicle);

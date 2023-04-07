@@ -48,13 +48,13 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
     @Override
     public void onBindViewHolder(@NonNull CarListViewHolder holder, int position) {
         Vehicle currVehicle = vehicleList.get(position);
-        holder.carTitle.setText(currVehicle.getTitle());
+        holder.carTitle.setText(currVehicle.getVehicleTitle());
         holder.totalMiles.setText(currVehicle.getMileage() + " miles");
         holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles");
         holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber() + " users");
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
         Picasso.get()
-                .load(currVehicle.getImage())
+                .load(currVehicle.getCarImage())
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .fit()
                 .into(holder.carImage);

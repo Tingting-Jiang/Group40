@@ -214,7 +214,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private void addFakeData() {
         initBrandModels();
         initLocations();
-        int idx = 1;
+        int idx = 0;
         generateUser(idx);
 
     }

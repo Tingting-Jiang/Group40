@@ -84,7 +84,11 @@ public class Vehicle implements Serializable {
         return capacity;
     }
 
-    public String getImage() {
+    public String getVehicleTitle() {
+        return vehicleTitle;
+    }
+
+    public String getCarImage() {
         return carImage;
     }
 
@@ -92,9 +96,6 @@ public class Vehicle implements Serializable {
         return place;
     }
 
-    public String getTitle() {
-        return vehicleTitle;
-    }
 
     public int getReviewTotalNumber() {
         return reviewTotalNumber;
@@ -129,6 +130,6 @@ public class Vehicle implements Serializable {
     public String toString() {
         return " Brand: " + brand + "\n Model: " + model + "\n Color: " + color +
                 "\n Body Style: " + vehicleBodyStyle + "\n Fuel: " + fuel + "\n Mileage: " +
-                mileage + "\n Capacity: " + capacity + "\n " + "Available date: " + availableDate.toString() + "\n"+ carImage;
+                mileage + "\n Capacity: " + capacity + "\n " + "Available date: " + availableDate.toString();
     }
 }

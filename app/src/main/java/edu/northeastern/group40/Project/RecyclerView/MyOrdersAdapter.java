@@ -50,7 +50,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
         Order currOrder = orderList.get(position);
         holder.orderTime.setText("Rent date: " + currOrder.getOrderDate().toString());
         holder.orderSum.setText("Total: $ " + currOrder.getOrderPriceTotal());
-        holder.orderTitle.setText(currOrder.getOrderedVehicle().getTitle());
+        holder.orderTitle.setText(currOrder.getOrderedVehicle().getVehicleTitle());
         holder.orderTitle.setOnClickListener(v -> listener.onCarSelect(position));
 
     }
