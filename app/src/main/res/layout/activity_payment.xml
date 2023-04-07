@@ -1,167 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="fill_parent"
+    tools:context=".Project.PaymentActivity"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Project.PaymentActivity">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingStart="25dp"
-            android:paddingEnd="15dp">
+            android:paddingEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:gravity="center"
+                android:text="@string/order_details"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#85929E" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="503dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:gravity="center"
-                    android:text="@string/order_details"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
+                    android:id="@+id/tv_order_brand_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/brand"
+                    android:textSize="20sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="#85929E" />
+                <TextView
+                    android:id="@+id/tv_order_brand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/toyota"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
-                    <TextView
-                        android:id="@+id/tv_order_brand_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/brand"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/tv_order_model_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/model"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/tv_order_brand"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="@string/toyota"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_order_model"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/camry"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
-                    <TextView
-                        android:id="@+id/tv_order_model_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/model"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/start_date_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/start_date"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/tv_order_model"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="@string/camry"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/_10_01_2022"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
-                    <TextView
-                        android:id="@+id/start_date_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/start_date"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/end_date_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/end_date"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/start_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="@string/_10_01_2022"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/_10_6_2022"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
-                    <TextView
-                        android:id="@+id/end_date_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/end_date"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/Price_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/price_per_day"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/end_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="@string/_10_6_2022"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/Price_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/price_per_day"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="@string/_50"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/_50"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+                android:gravity="bottom|center"
                 android:orientation="vertical">
 
                 <TextView
@@ -241,7 +243,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/ttv_price_all"
+                        android:id="@+id/tv_price_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -276,10 +278,7 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>
-
-
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

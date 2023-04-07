@@ -72,4 +72,12 @@ public class AvailableDate implements Serializable {
     public String toString() {
         return startDate + " - " + endDate;
     }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
 }
