@@ -31,18 +31,14 @@ public class PaymentActivity extends AppCompatActivity {
     private int orderPriceTotal;
     private AvailableDate availableDate;
     private Order order;
+    private String orderId;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseUser currUser;
     private String currUserId;
     private int currentBalance;
-    private TextView tvBrand;
-    private TextView tvModel;
-    private TextView tvStartDate;
-    private TextView tvEndDate;
-    private TextView tvPrice;
-    private TextView tvCurrentBalance;
-    private TextView tvDays;
-    private TextView tvAllPrice;
+    private int ownerBalance;
+    private String ownerId;
+    private TextView tvBrand, tvModel, tvStartDate, tvEndDate, tvPrice, tvCurrentBalance, tvDays, tvAllPrice;
     private Button btnProcess;
     private Button btnExit;
     private DatabaseReference usersDB;
@@ -61,6 +57,7 @@ public class PaymentActivity extends AppCompatActivity {
             if(currentBalance >= orderPriceTotal){
                 orderToDb();
                 processCurBalance();
+                increaseBalance();
             } else{
                 processFailed();
             }
@@ -113,7 +110,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void orderToDb(){
-        String orderId = mDatabase.push().getKey();
+        orderId = mDatabase.push().getKey();
         order = new Order(orderId, orderVehicle, availableDate, orderPriceTotal, currUserId);
         assert orderId != null;
         ordersDB.child(orderId).setValue(order);
@@ -160,6 +157,29 @@ public class PaymentActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void increaseBalance(){
+        ordersDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ownerId = dataSnapshot.child(orderId).child("orderedVehicle").child("ownerID").getValue(String.class);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        usersDB.addValueEventListener(new ValueEventListener() {
+            @SuppressWarnings("ConstantConditions")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ownerBalance = dataSnapshot.child(ownerId).child("balance").getValue(Integer.class);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        ownerBalance += orderPriceTotal;
+        usersDB.child(ownerId).child("balance").setValue(ownerBalance);
+    }
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (PaymentActivity.this, targetActivityClass);
         startActivity(intent);
