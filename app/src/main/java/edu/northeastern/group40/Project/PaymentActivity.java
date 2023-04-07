@@ -58,8 +58,12 @@ public class PaymentActivity extends AppCompatActivity {
         initDatabases();
         initUI();
         btnProcess.setOnClickListener(v -> {
-            OrderToDb();
-            processCurBalance();
+            if(currentBalance >= orderPriceTotal){
+                orderToDb();
+                processCurBalance();
+            } else{
+                processFailed();
+            }
         });
         btnExit.setOnClickListener(v -> openNewActivity(ProjectActivity.class));
     }
@@ -108,9 +112,10 @@ public class PaymentActivity extends AppCompatActivity {
         currUserId = currUser.getUid();
     }
 
-    private void OrderToDb(){
+    private void orderToDb(){
         String orderId = mDatabase.push().getKey();
         order = new Order(orderId, orderVehicle, availableDate, orderPriceTotal, currUserId);
+        System.out.println(orderId);
         assert orderId != null;
         ordersDB.child(orderId).setValue(order);
     }
@@ -120,11 +125,7 @@ public class PaymentActivity extends AppCompatActivity {
         usersDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(currentBalance >= 0){
-                    processSuccess();
-                }else{
-                    processFailed();
-                }
+                processSuccess();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -149,7 +150,6 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void processFailed(){
-        currentBalance -= orderPriceTotal;
         AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
         builder.setMessage("Your account balance is insufficient.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
