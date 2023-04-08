@@ -61,7 +61,9 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
     private String currentSearchText = "";
+    private Button changeSettingsBtn;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
 
 
-        searchView = (SearchView) findViewById(R.id.searchVehicle);
+        searchView = findViewById(R.id.searchVehicle);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -212,18 +214,13 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
 //                    if (!currVehicle.getOwnerID().equals(currUser.getUid())
-//                            && currVehicle.getBrand().equals(rentBrand)
-//                            && currVehicle.getModel().equals(rentModel)
-//                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
-//                        ) {
-//                            vehicleList.add(currVehicle);
-//                    }
-                    Log.d(TAG, currVehicle.toString());
-                    if (currVehicle.getCarImage() == null) {
-                        currVehicle.setCarImage("https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000350-Thu%20Apr%2006%2011%3A29%3A49%20PDT%202023?alt=media&token=7eb807c1-ef3b-4221-91a2-17f4b5a00b8e");
+                    if(
+                            currVehicle.getBrand().equals(rentBrand)
+                            && currVehicle.getModel().equals(rentModel)
+                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+                        ) {
+                            vehicleList.add(currVehicle);
                     }
-                    vehicleList.add(currVehicle);
-
                 }
                 syncBackupList();
                 carListAdapter.notifyDataSetChanged();

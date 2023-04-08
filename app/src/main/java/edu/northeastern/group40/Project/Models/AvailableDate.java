@@ -46,11 +46,11 @@ public class AvailableDate implements Serializable {
     }
 
     private boolean isAfter(Date endThis, Date endThat) {
-        return endThis.after(endThat);
+        return endThis.after(endThat) || endThis.equals(endThat);
     }
 
     private boolean isBefore(Date startThis, Date startThat) {
-        return startThis.before(startThat);
+        return startThis.before(startThat) || startThis.equals(startThat) ;
     }
 
     public int calculateDuration() {
