@@ -35,7 +35,14 @@ public class ProjectSignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            Toast.makeText(this, "You are already signed in \n" + "Email: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+            updateUI(currentUser);
+        }
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            Intent intent = new Intent(this, UserProfileActivity.class);
+            startActivity(intent);
         }
     }
 
