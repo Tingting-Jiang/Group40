@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,8 +33,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     TextView mIsCarOwnerTextView;
 
-    TextView mUserIdTextView;
-
     Button mSignOutTextView;
 
     private FirebaseAuth mAuth;
@@ -48,7 +47,6 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserPhoneTextView = findViewById(R.id.user_profile_phone);
         mBalanceTextView = findViewById(R.id.user_profile_balance);
         mIsCarOwnerTextView = findViewById(R.id.user_profile_is_car_owner);
-        mUserIdTextView = findViewById(R.id.user_profile_id);
         mSignOutTextView = findViewById(R.id.user_profile_sign_out);
 
         mAuth = FirebaseAuth.getInstance();
@@ -62,12 +60,12 @@ public class UserProfileActivity extends AppCompatActivity {
         displayText(mUserNameTextView, databaseReference, "username");
         displayText(mUserEmailTextView, databaseReference, "email");
         displayText(mUserPhoneTextView, databaseReference, "phone");
+        displayText(mBalanceTextView, databaseReference, "balance");
         displayText(mIsCarOwnerTextView, databaseReference, "carRenter");
-        displayText(mUserIdTextView, databaseReference, "userID");
 
-        addInfoSetters(mUserNameTextView, databaseReference, "username", "username");
-        addInfoSetters(mUserEmailTextView, databaseReference, "email", "email");
-        addInfoSetters(mUserPhoneTextView, databaseReference, "phone", "phone");
+        changeInfo(mUserNameTextView, databaseReference, "username", "username");
+        changeInfo(mUserEmailTextView, databaseReference, "email", "email");
+        changeInfo(mUserPhoneTextView, databaseReference, "phone", "phone");
 
         changeCarOwnerStatus(mIsCarOwnerTextView, databaseReference);
 
@@ -82,8 +80,18 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    String value = snapshot.getValue(String.class);
-                    textView.setText(value);
+                    String value = String.valueOf(snapshot.getValue());
+                    if (childName.equals("carRenter")) {
+                        if (value.equals("true")) {
+                            textView.setText("Yes");
+                        } else {
+                            textView.setText("No");
+                        }
+                    } else if (childName.equals("balance")) {
+                        textView.setText(value + "$");
+                    } else {
+                            textView.setText(value);
+                    }
                 } else {
                     Toast.makeText(UserProfileActivity.this, childName + "not found", Toast.LENGTH_SHORT).show();
                 }
@@ -96,11 +104,11 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void addInfoSetters(TextView textView, DatabaseReference databaseReference, String childName, String filedName) {
-
-        EditText input = new EditText(this);
+    private void changeInfo(TextView textView, DatabaseReference databaseReference, String childName, String filedName) {
 
         textView.setOnClickListener(v -> {
+            EditText input = new EditText(this);
+
             AlertDialog alertDialog = new AlertDialog.Builder(UserProfileActivity.this)
                     .setTitle("Change " + filedName)
                     .setMessage("Enter new " + filedName)
@@ -108,12 +116,27 @@ public class UserProfileActivity extends AppCompatActivity {
                     .setPositiveButton("OK", (dialog, which) -> {
                         String value = input.getText().toString();
                         databaseReference.child(childName).setValue(value);
+                        displayText(textView, databaseReference, childName);
+                        if (childName.equals("email")) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            user.updateEmail(value);
+                        }
+                        input.setOnFocusChangeListener(null);
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
                         dialog.dismiss();
+                        input.setOnFocusChangeListener(null);
                     })
                     .create();
             alertDialog.show();
+
+            // Move the removeView() call to after the show() method
+            alertDialog.setOnShowListener(dialog -> {
+                ViewGroup parent = (ViewGroup) input.getParent();
+                if (parent != null) {
+                    parent.removeView(input);
+                }
+            });
         });
     }
 
@@ -128,6 +151,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             .setMessage("Are you sure that you want to change your car ownership status?")
                             .setPositiveButton("OK", (dialog, which) -> {
                                 databaseReference.child("carRenter").setValue(!isCarOwner);
+                                displayText(textView, databaseReference, "carRenter");
                             })
                             .setNegativeButton("Cancel", (dialog, which) -> {
                                 dialog.dismiss();

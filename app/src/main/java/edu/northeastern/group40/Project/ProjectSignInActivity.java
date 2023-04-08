@@ -89,7 +89,7 @@ public class ProjectSignInActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(this, "Sign in successfully \n" + "Email: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ProjectSignInActivity.this, ProjectActivity.class);
+                        Intent intent = new Intent(ProjectSignInActivity.this, UserProfileActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {

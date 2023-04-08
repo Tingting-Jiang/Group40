@@ -9,7 +9,11 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_buttons_layout">
+        android:layout_above="@+id/bottom_buttons_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -51,8 +55,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Email"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/user_profile_email"
@@ -90,8 +94,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Phone"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/user_profile_phone"
@@ -129,8 +133,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Balance"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/user_profile_balance"
@@ -160,8 +164,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Are you a car owner?"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/user_profile_is_car_owner"
@@ -187,52 +191,6 @@
                         android:layout_height="0.5dp"
                         android:background="#85929E" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:id="@+id/user_id_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="User ID"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/user_profile_id"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:text="123456789"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="#85929E" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
-
- />
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
