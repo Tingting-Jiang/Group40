@@ -67,10 +67,10 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private static final String PASSWORD = "-1234";
     private static final String EMAIL = "@123.com";
     private static final String PHONE = "09876543210";
-    private static final String BLUE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000351-Thu%20Apr%2006%2011%3A27%3A12%20PDT%202023?alt=media&token=2cf1e1be-9be3-4feb-904b-dc88d0bf95d3";
+    private static final String BLUE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000360-Sat%20Apr%2008%2011%3A11%3A54%20PDT%202023?alt=media&token=b41ebfd4-d8e1-4838-8dbe-d65f1746136f";
     private static final String BLACK_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000353-Thu%20Apr%2006%2011%3A28%3A48%20PDT%202023?alt=media&token=7d612dd9-c2d1-4fc6-afcb-ca3cbd90b248";
-    private static final String RED_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000350-Thu%20Apr%2006%2011%3A29%3A49%20PDT%202023?alt=media&token=7eb807c1-ef3b-4221-91a2-17f4b5a00b8e";
-    private static final String WHITE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000354-Thu%20Apr%2006%2011%3A29%3A23%20PDT%202023?alt=media&token=43823e7c-3e13-4989-bcad-85cb61165ec5";
+    private static final String RED_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000362-Sat%20Apr%2008%2011%3A12%3A25%20PDT%202023?alt=media&token=664dd4f4-c7db-4af5-bbc4-424987c87d16";
+    private static final String WHITE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000359-Sat%20Apr%2008%2011%3A12%3A50%20PDT%202023?alt=media&token=6ef12cc3-7c93-4f08-bbbc-314ce0d39005";
     RandomEnumGenerator color = new RandomEnumGenerator(Color.class);
     RandomEnumGenerator fuel = new RandomEnumGenerator(Fuel.class);
     RandomEnumGenerator bodyStyle = new RandomEnumGenerator(VehicleBodyStyle.class);

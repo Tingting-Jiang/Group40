@@ -242,8 +242,9 @@ public class AddVehicleActivity extends AppCompatActivity {
                 Log.d(TAG, vehicle.toString());
                 assert vehicleKey != null;
                 mDatabase.child(vehicleKey).setValue(vehicle);
+                imageUrlInDB = "";
 
-                Log.w(TAG, new MyLocation(inputPlace).address);
+//                Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
         });
