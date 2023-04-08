@@ -1,9 +1,22 @@
 package edu.northeastern.group40.Project;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.northeastern.group40.R;
 
@@ -11,12 +24,125 @@ public class UserProfileActivity extends AppCompatActivity {
 
     TextView mUserNameTextView;
 
+    TextView mUserEmailTextView;
+
+    TextView mUserPhoneTextView;
+
+    TextView mBalanceTextView;
+
+    TextView mIsCarOwnerTextView;
+
+    TextView mUserIdTextView;
+
+    Button mSignOutTextView;
+
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        mUserNameTextView = findViewById(R.id.user_profile_name);
+        mUserEmailTextView = findViewById(R.id.user_profile_email);
+        mUserPhoneTextView = findViewById(R.id.user_profile_phone);
+        mBalanceTextView = findViewById(R.id.user_profile_balance);
+        mIsCarOwnerTextView = findViewById(R.id.user_profile_is_car_owner);
+        mUserIdTextView = findViewById(R.id.user_profile_id);
+        mSignOutTextView = findViewById(R.id.user_profile_sign_out);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String uid = currentUser.getUid();
 
+//      FirebaseApp.initializeApp(this);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+
+        displayText(mUserNameTextView, databaseReference, "username");
+        displayText(mUserEmailTextView, databaseReference, "email");
+        displayText(mUserPhoneTextView, databaseReference, "phone");
+        displayText(mIsCarOwnerTextView, databaseReference, "carRenter");
+        displayText(mUserIdTextView, databaseReference, "userID");
+
+        addInfoSetters(mUserNameTextView, databaseReference, "username", "username");
+        addInfoSetters(mUserEmailTextView, databaseReference, "email", "email");
+        addInfoSetters(mUserPhoneTextView, databaseReference, "phone", "phone");
+
+        changeCarOwnerStatus(mIsCarOwnerTextView, databaseReference);
+
+        mSignOutTextView.setOnClickListener(v -> {
+            mAuth.signOut();
+            finish();
+        });
     }
+
+    private void displayText(TextView textView, DatabaseReference databaseReference, String childName) {
+        databaseReference.child(childName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String value = snapshot.getValue(String.class);
+                    textView.setText(value);
+                } else {
+                    Toast.makeText(UserProfileActivity.this, childName + "not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(UserProfileActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addInfoSetters(TextView textView, DatabaseReference databaseReference, String childName, String filedName) {
+
+        EditText input = new EditText(this);
+
+        textView.setOnClickListener(v -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(UserProfileActivity.this)
+                    .setTitle("Change " + filedName)
+                    .setMessage("Enter new " + filedName)
+                    .setView(input)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        String value = input.getText().toString();
+                        databaseReference.child(childName).setValue(value);
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .create();
+            alertDialog.show();
+        });
+    }
+
+    private void changeCarOwnerStatus(TextView textView, DatabaseReference databaseReference) {
+        textView.setOnClickListener(v -> {
+            databaseReference.child("carRenter").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Boolean isCarOwner = snapshot.getValue(Boolean.class);
+                    AlertDialog alertDialog = new AlertDialog.Builder(UserProfileActivity.this)
+                            .setTitle("Change car ownership status")
+                            .setMessage("Are you sure that you want to change your car ownership status?")
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                databaseReference.child("carRenter").setValue(!isCarOwner);
+                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> {
+                                dialog.dismiss();
+                            })
+                            .create();
+                    alertDialog.show();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(UserProfileActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
+
 }

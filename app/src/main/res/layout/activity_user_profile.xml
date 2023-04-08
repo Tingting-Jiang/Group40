@@ -30,6 +30,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/user_profile_name"
                         android:layout_width="match_parent"
                         android:layout_height="85dp"
                         android:gravity="center"
@@ -132,20 +133,12 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/start_date"
+                            android:id="@+id/user_profile_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
                             android:text="0$"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:gravity="end"
-                            android:text="  >  "
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -171,7 +164,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/is_car_renter"
+                            android:id="@+id/user_profile_is_car_owner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -211,20 +204,12 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/user_id"
+                            android:id="@+id/user_profile_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
                             android:text="123456789"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:gravity="end"
-                            android:text="  >  "
                             android:textSize="20sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -267,7 +252,7 @@
         android:padding="8dp">
 
         <Button
-            android:id="@+id/sign_out_button"
+            android:id="@+id/user_profile_sign_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign out"/>
