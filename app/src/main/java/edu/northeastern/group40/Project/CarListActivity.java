@@ -192,47 +192,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
 
-        //TODO: GET DATA FROM DB
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = null;
-        try {
-            testLocation = new MyLocation(35.40273, -120.95154, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         fetchDataFromDB();
-//        if (vehicleList.size() == 0) {
-//            // NO-1
-//            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-//                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-//                    "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
-//            vehicle1.setReviewResult("4.2");
-//            vehicle1.setReviewTotalNumber(100);
-//            vehicleList.add(vehicle1);
-//            // NO-2
-//            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-//                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
-//                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-//            vehicle2.setReviewResult("4.2");
-//            vehicle2.setReviewTotalNumber(56);
-//            vehicleList.add(vehicle2);
-//            // NO-3
-//            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-//                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
-//                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-//            vehicle3.setReviewResult("2.9");
-//            vehicle3.setReviewTotalNumber(90);
-//            vehicleList.add(vehicle3);
-//            // NO-4
-//            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-//                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
-//                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-//            vehicle4.setReviewResult("4.3");
-//            vehicle4.setReviewTotalNumber(130);
-//            vehicleList.add(vehicle4);
-//        }
-
-//        syncBackupList();
     }
 
     private void syncBackupList() {

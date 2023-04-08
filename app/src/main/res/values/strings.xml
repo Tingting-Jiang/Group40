@@ -102,4 +102,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="orderid_123">orderId: 123</string>
     <string name="rent_again">Rent Again</string>
+    <string name="seems_like_you_are_new_to_rent_a_car">Seems like you are new, to rent a car</string>
 </resources>
