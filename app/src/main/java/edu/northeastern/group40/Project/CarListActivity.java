@@ -212,12 +212,15 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
 //                    if (!currVehicle.getOwnerID().equals(currUser.getUid())
-                    if(
-                            currVehicle.getBrand().equals(rentBrand)
-                            && currVehicle.getModel().equals(rentModel)
-                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+                    if ( rentBrand != null && rentModel != null) {
+                        if (currVehicle.getBrand().equals(rentBrand)
+                                && currVehicle.getModel().equals(rentModel)
+                                && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
                         ) {
                             vehicleList.add(currVehicle);
+                        }
+                    } else if (rentBrand == null && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)) {
+                        vehicleList.add(currVehicle);
                     }
                 }
                 syncBackupList();
