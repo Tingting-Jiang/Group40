@@ -110,8 +110,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         });
 
 
-        this.rentBrand = Brand.valueOf(getIntent().getStringExtra("VehicleBrand"));
-        this.rentModel = Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
+        this.rentBrand = getIntent().getStringExtra("VehicleBrand") == null ? null: Brand.valueOf(getIntent().getStringExtra("VehicleBrand"));
+        this.rentModel = getIntent().getStringExtra("VehicleModel") == null ? null : Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
         this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
         if (destinationLocation == null) {

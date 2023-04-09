@@ -1,13 +1,10 @@
 package edu.northeastern.group40.Project;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,16 +12,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.libraries.places.api.Places;
@@ -33,16 +31,13 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import com.google.android.material.snackbar.Snackbar;
-
-
-import java.io.IOException;
-import java.lang.Class;
 import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
@@ -222,10 +217,10 @@ public class SearchActivity extends AppCompatActivity {
         submit.setOnClickListener(v -> {
             targetBrand = getResult(brandMenu, Brand.class);
             targetModel = getResult(modelMenu, Brand.Model.class);
-            if(targetBrand == null || targetModel == null){
-                Toast.makeText(SearchActivity.this, "Please choose right brand and model", Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if(targetBrand == null || targetModel == null){
+//                Toast.makeText(SearchActivity.this, "Please choose right brand and model", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             if(targetDate == null) {
                 Toast.makeText(SearchActivity.this, "Please choose availability", Toast.LENGTH_SHORT).show();
                 return;
