@@ -98,10 +98,14 @@
     <string name="submit_rating">Submit Rating</string>
     <string name="rate_this_order">Rate this order</string>
     <string name="detail">Detail</string>
-    <!-- TODO: Remove or change this placeholder text -->
+<!--     TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="orderid_123">orderId: 123</string>
     <string name="rent_again">Rent Again</string>
     <string name="seems_like_you_are_new_to_rent_a_car">Seems like you are new, to rent a car</string>
     <string name="no_cars_available_now_try_to_change_some_settings">No cars available now, try to change some settings</string>
+    <string name="rent_a_car">Rent a car</string>
+    <string name="orders">orders</string>
+    <string name="add_vehicle">Add vehicle</string>
+    <string name="profile">Profile</string>
 </resources>

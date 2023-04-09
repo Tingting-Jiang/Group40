@@ -6,62 +6,112 @@
     android:layout_height="match_parent"
     tools:context=".Project.ProjectActivity">
 
-    <Button
-        android:id="@+id/car_list_btn"
+
+    <ImageView
+        android:id="@+id/rent_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onCarListActivity"
-        android:text="car List"
-        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/rent_button"
+        app:layout_constraintEnd_toStartOf="@+id/orders_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/rent_car"
+        android:onClick="openSearchActivity"/>
 
+    <ImageView
+        android:id="@+id/add_vehicle_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_button"
+        app:layout_constraintEnd_toStartOf="@+id/profile_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rent_button"
+        app:srcCompat="@drawable/add_vehicle"
+        android:onClick="onAddVehicleActivity"/>
 
     <Button
         android:id="@+id/add_vehicle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onAddVehicleActivity"
-        android:text="Add vehicle"
-        app:layout_constraintBottom_toTopOf="@+id/sign_in_button_in_project_activity"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="14dp"
+        android:text="@string/add_vehicle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/profile_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/car_list_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/add_vehicle_image"
+        android:onClick="onAddVehicleActivity"/>
 
     <Button
-        android:id="@+id/sign_in_button_in_project_activity"
+        android:id="@+id/rent_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onSignInActivity"
-        android:text="Sign In"
-        app:layout_constraintBottom_toTopOf="@+id/btnSearch"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="28dp"
+        android:text="@string/rent_a_car"
+        app:layout_constraintBottom_toTopOf="@+id/add_vehicle_image"
+        app:layout_constraintEnd_toStartOf="@+id/orders_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_vehicle_button" />
+        app:layout_constraintTop_toBottomOf="@+id/rent_image"
+        android:onClick="openSearchActivity"/>
+
+    <ImageView
+        android:id="@+id/orders_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/orders_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rent_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/history_orders"
+        android:onClick="onMyOrdersActivity"/>
 
     <Button
-        android:id="@+id/btnSearch"
+        android:id="@+id/orders_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#F76C6C"
-        android:onClick="openSearchActivity"
-        android:text="@string/search_activity"
-        app:layout_constraintBottom_toTopOf="@id/my_orders_btn"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="28dp"
+        android:text="@string/orders"
+        app:layout_constraintBottom_toTopOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_button_in_project_activity" />
+        app:layout_constraintStart_toEndOf="@+id/rent_button"
+        app:layout_constraintTop_toBottomOf="@+id/orders_image"
+        android:onClick="onMyOrdersActivity"/>
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_vehicle_image"
+        app:layout_constraintTop_toBottomOf="@+id/orders_button"
+        app:srcCompat="@drawable/profile"
+        android:onClick="onProfileActivity"/>
 
     <Button
-        android:id="@+id/my_orders_btn"
+        android:id="@+id/profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onMyOrdersActivity"
-        android:text="My Orders"
+        android:layout_marginEnd="24dp"
+        android:text="@string/profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.522"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearch" />
+        app:layout_constraintStart_toEndOf="@+id/add_vehicle_button"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        android:onClick="onProfileActivity"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="-36dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

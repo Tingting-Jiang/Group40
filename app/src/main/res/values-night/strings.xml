@@ -11,4 +11,8 @@
     <string name="input_price_in_usd_per_day">Input price in USD per day</string>
     <string name="per_day">$ per day</string>
     <string name="upload_car_image">upload car image</string>
+    <string name="rent_a_car">Rent a car</string>
+    <string name="orders">orders</string>
+    <string name="add_vehicle">Add vehicle</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -32,18 +32,15 @@ public class ProjectActivity extends AppCompatActivity {
         }
         startActivity(intent);
     }
+
     public void onAddVehicleActivity(View view) {
         openNewActivity(AddVehicleActivity.class);
     }
 
 
     private void openNewActivity(Class targetActivityClass) {
-        Intent intent = new Intent (ProjectActivity.this, targetActivityClass);
+        Intent intent = new Intent(ProjectActivity.this, targetActivityClass);
         startActivity(intent);
-    }
-
-    public void onSignInActivity(View view) {
-        openNewActivity(ProjectSignInActivity.class);
     }
 
     public void openSearchActivity(View view) {
@@ -52,5 +49,9 @@ public class ProjectActivity extends AppCompatActivity {
 
     public void onMyOrdersActivity(View view) {
         openNewActivity(MyOrdersActivity.class);
+    }
+
+    public void onProfileActivity(View view){
+        openNewActivity(MyProfile.class);
     }
 }
