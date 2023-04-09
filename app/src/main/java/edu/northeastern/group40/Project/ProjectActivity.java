@@ -52,6 +52,6 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     public void onProfileActivity(View view){
-        openNewActivity(MyProfile.class);
+        openNewActivity(UserProfileActivity.class);
     }
 }
