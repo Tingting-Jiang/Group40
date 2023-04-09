@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import edu.northeastern.group40.Project.Models.Brand;
@@ -57,7 +59,7 @@ public class AddVehicleActivity extends AppCompatActivity {
     private Place inputPlace;
     private ActivityResultLauncher<String> imagePickerLauncher;
     private Uri imageUploadUri;
-    private String imageUrlInDB;
+    private String imageUrlInDB = "";
     private TextView selectedStartDateTextView;
     private TextView selectedEndDateTextView;
     private Calendar startCalendar, endCalendar;
@@ -224,15 +226,25 @@ public class AddVehicleActivity extends AppCompatActivity {
                     && capacity != null && inputPlace != null) {
                 getImageURL();
 
+                if (imageUrlInDB.equals("")) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            //delay 1s on purpose to get db
+                        }
+                    }, 1000);
+                }
+
                 String vehicleKey = mDatabase.push().getKey();
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
                         selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
                         price, title, imageUrlInDB, startDate, endDate, user.getUid(), vehicleKey);
-//                Log.d(TAG, vehicle.toString());
+                Log.d(TAG, vehicle.toString());
                 assert vehicleKey != null;
                 mDatabase.child(vehicleKey).setValue(vehicle);
+                imageUrlInDB = "";
 
-                Log.w(TAG, new MyLocation(inputPlace).address);
+//                Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
             }
         });

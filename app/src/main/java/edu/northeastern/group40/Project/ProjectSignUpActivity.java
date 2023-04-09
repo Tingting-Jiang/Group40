@@ -1,38 +1,27 @@
 package edu.northeastern.group40.Project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
-import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Color;
-import edu.northeastern.group40.Project.Models.Fuel;
-import edu.northeastern.group40.Project.Models.Mileage;
-import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.User;
-import edu.northeastern.group40.Project.Models.Vehicle;
-import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.R;
 
 public class ProjectSignUpActivity extends AppCompatActivity {
@@ -110,7 +99,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         }
 
         if (mPhoneEditText.getText().toString().isEmpty() || mPhoneEditText.getText().toString().length() != 10
-        || !mPhoneEditText.getText().toString().matches("^\\d+")){
+                || !mPhoneEditText.getText().toString().matches("^\\d+")){
             Toast.makeText(this, "Please input valid phone number", Toast.LENGTH_SHORT).show();
             valid = false;
         }
@@ -151,9 +140,6 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
     private void saveUserToDatabase(User user) {
         DatabaseReference reference = mDatabase.child("users").child(user.getUserID());
-        //TODO: here add fake data to db
-        saveVehicles(user);
-
         reference.setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
@@ -164,30 +150,5 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void saveVehicles(User user) {
-        DatabaseReference vehicleDB = FirebaseDatabase.getInstance().getReference("vehicles");
-        String vehicleKey = vehicleDB.push().getKey();
-
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = null;
-        try {
-            testLocation = new MyLocation(35.40273, -120.95154, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Vehicle vehicle = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-                "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", user.getUserID(), vehicleKey);
-        vehicle.setReviewResult("4.2");
-        vehicle.setReviewTotalNumber(100);
-
-        assert vehicleKey != null;
-        vehicleDB.child(vehicleKey).setValue(vehicle);
-
-        List<String> sampleList = new ArrayList<>();
-        sampleList.add(vehicleKey);
-        user.setVehicles(sampleList);
     }
 }

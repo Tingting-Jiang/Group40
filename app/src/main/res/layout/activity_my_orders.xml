@@ -23,6 +23,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_rec"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/no_orders_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/ocean_blue"
+        android:textAllCaps="false"
+        android:text="@string/seems_like_you_are_new_to_rent_a_car">
+
+    </Button>
 
 </LinearLayout>

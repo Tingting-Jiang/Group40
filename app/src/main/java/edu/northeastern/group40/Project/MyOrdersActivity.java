@@ -1,21 +1,16 @@
 package edu.northeastern.group40.Project;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.northeastern.group40.A8.Models.User;
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
 import edu.northeastern.group40.Project.Models.Color;
@@ -50,19 +44,36 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
     private DatabaseReference usersDB;
     private DatabaseReference orderDB;
     private FirebaseUser currUser;
+    private Button noOrdersBtn;
 
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
+        noOrdersBtn = findViewById(R.id.no_orders_btn);
+        initButton();
 
         createRecyclerView();
-        addFakeOrder();
-//        initDatabases();
-//        initOrderList();
+//        addFakeOrder();
+        initDatabases();
+        initOrderList();
     }
+
+
+    private void initButton() {
+        if (orderList.size() == 0) {
+            noOrdersBtn.setVisibility(View.VISIBLE);
+            noOrdersBtn.setOnClickListener(v -> {
+                startActivity(new Intent(MyOrdersActivity.this, SearchActivity.class));
+            });
+        } else {
+            noOrdersBtn.setVisibility(View.INVISIBLE);
+        }
+    }
+
 
 
 
@@ -92,9 +103,6 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
                     assert currOrder != null;
                     if (currOrder.getOwnerId().equals(currUser.getUid()))
                         orderList.add(currOrder);
-                }
-                if (orderList.size() == 0) {
-                    // TODO: SHOW NO ORDERS AVAILABLE
                 }
                 myOrdersAdapter.notifyDataSetChanged();
             }

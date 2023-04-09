@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,13 +30,9 @@ import java.util.Locale;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Color;
-import edu.northeastern.group40.Project.Models.Fuel;
-import edu.northeastern.group40.Project.Models.Mileage;
 import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
-import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.CarListAdapter;
 import edu.northeastern.group40.R;
 
@@ -63,7 +60,9 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
     private String currentSearchText = "";
+    private Button changeSettingsBtn;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +86,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
 
 
-        searchView = (SearchView) findViewById(R.id.searchVehicle);
+        searchView = findViewById(R.id.searchVehicle);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -111,8 +110,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         });
 
 
-        this.rentBrand = Brand.valueOf(getIntent().getStringExtra("VehicleBrand"));
-        this.rentModel = Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
+        this.rentBrand = getIntent().getStringExtra("VehicleBrand") == null ? null: Brand.valueOf(getIntent().getStringExtra("VehicleBrand"));
+        this.rentModel = getIntent().getStringExtra("VehicleModel") == null ? null : Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
         this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
         if (destinationLocation == null) {
@@ -189,50 +188,10 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private void setupUI() {
         usersDB = mDatabase.child("users");
         vehicleDB = mDatabase.child("vehicles");
-//        currUser = FirebaseAuth.getInstance().getCurrentUser();
-//        assert currUser != null;
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currUser != null;
 
-        //TODO: GET DATA FROM DB
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = null;
-        try {
-            testLocation = new MyLocation(35.40273, -120.95154, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        fetchDataFromDB();
-        if (vehicleList.size() == 0) {
-            // NO-1
-            Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-                    "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
-            vehicle1.setReviewResult("4.2");
-            vehicle1.setReviewTotalNumber(100);
-            vehicleList.add(vehicle1);
-            // NO-2
-            Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
-                    "2023 Brand New CAMERY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle2.setReviewResult("4.2");
-            vehicle2.setReviewTotalNumber(56);
-            vehicleList.add(vehicle2);
-            // NO-3
-            Vehicle vehicle3 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.BETWEEN_10K_AND_100K, 5, testLocation, 3,
-                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle3.setReviewResult("2.9");
-            vehicle3.setReviewTotalNumber(90);
-            vehicleList.add(vehicle3);
-            // NO-4
-            Vehicle vehicle4 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                    Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 5, testLocation, 4,
-                    "2023 Brand New SUV", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-            vehicle4.setReviewResult("4.3");
-            vehicle4.setReviewTotalNumber(130);
-            vehicleList.add(vehicle4);
-        }
-
-        syncBackupList();
+        fetchDataFromDB();
     }
 
     private void syncBackupList() {
@@ -252,12 +211,16 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-                    if (currVehicle.getOwnerID() != currUser.getUid()
-                            && currVehicle.getBrand().equals(rentBrand)
-                            && currVehicle.getModel().equals(rentModel)
-                            && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
+//                    if (!currVehicle.getOwnerID().equals(currUser.getUid())
+                    if ( rentBrand != null && rentModel != null) {
+                        if (currVehicle.getBrand().equals(rentBrand)
+                                && currVehicle.getModel().equals(rentModel)
+                                && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
                         ) {
                             vehicleList.add(currVehicle);
+                        }
+                    } else if (rentBrand == null && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)) {
+                        vehicleList.add(currVehicle);
                     }
                 }
                 syncBackupList();

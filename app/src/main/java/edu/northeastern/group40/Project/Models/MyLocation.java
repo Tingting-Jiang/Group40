@@ -15,9 +15,9 @@ import java.util.Locale;
 
 public class MyLocation implements Serializable {
 
-    public final String address;
-    public final double latitude;
-    public final double longitude;
+    public String address = null;
+    public double latitude = 0;
+    public double longitude = 0 ;
 
     public MyLocation(double latitude, double longitude, Context context) throws IOException {
         this.latitude = latitude;
@@ -36,6 +36,8 @@ public class MyLocation implements Serializable {
         longitude = latLng.longitude;
     }
 
+    public MyLocation() {}
+
     public double distanceToInMiles(MyLocation other){
         Location start = new Location("start");
         start.setLatitude(latitude);
@@ -44,7 +46,7 @@ public class MyLocation implements Serializable {
         Location end = new Location("end");
         end.setLatitude(other.latitude);
         end.setLongitude(other.longitude);
-        return start.distanceTo(end)/0.000621371;
+        return start.distanceTo(end) * 0.000621371;
     }
 
 

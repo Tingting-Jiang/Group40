@@ -38,13 +38,15 @@ public class Vehicle implements Serializable {
         this.rentPrice = rentPrice;
         this.vehicleTitle = vehicleTitle;
         this.carImage = carImage;
-        this.reviewResult = null;
+        this.reviewResult = "0";
         this.reviewTotalNumber = 0;
         this.availableDate = new AvailableDate(startDate, endDate);
         this.ownerID = ownerID;
         this.vehicleID = vehicleID;
     }
 
+    public Vehicle() {
+    }
 
     public String getOwnerID() {
         return ownerID;
@@ -82,7 +84,11 @@ public class Vehicle implements Serializable {
         return capacity;
     }
 
-    public String getImage() {
+    public String getVehicleTitle() {
+        return vehicleTitle;
+    }
+
+    public String getCarImage() {
         return carImage;
     }
 
@@ -90,9 +96,6 @@ public class Vehicle implements Serializable {
         return place;
     }
 
-    public String getTitle() {
-        return vehicleTitle;
-    }
 
     public int getReviewTotalNumber() {
         return reviewTotalNumber;
@@ -116,6 +119,10 @@ public class Vehicle implements Serializable {
 
     public void setReviewTotalNumber(int reviewTotalNumber) {
         this.reviewTotalNumber = reviewTotalNumber;
+    }
+
+    public void setCarImage(String carImage) {
+        this.carImage = carImage;
     }
 
     @NonNull

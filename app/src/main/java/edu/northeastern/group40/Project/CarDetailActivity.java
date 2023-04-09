@@ -70,12 +70,12 @@ public class CarDetailActivity extends AppCompatActivity {
     private void setupUI() {
         float totalPriceNeed = rentLength * chosenVehicle.getRentPrice();
         Picasso.get()
-                .load(chosenVehicle.getImage())
+                .load(chosenVehicle.getCarImage())
                 .fit()
                 .into(carPhoto);
 
         // TODO: CHANGE the image to car image
-        carTitle.setText(chosenVehicle.getTitle());
+        carTitle.setText(chosenVehicle.getVehicleTitle());
         ratingBar.setRating(Float.parseFloat(chosenVehicle.getReviewResult()));
         carReviewNumber.setText("by "+ chosenVehicle.getReviewTotalNumber()+ " users ");
         carPrice.setText("$ " + chosenVehicle.getRentPrice());
