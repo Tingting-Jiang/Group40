@@ -1,9 +1,7 @@
 package edu.northeastern.group40.Project;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -123,8 +120,6 @@ public class PaymentActivity extends AppCompatActivity {
         order = new Order(orderId, orderVehicle, availableDate, orderPriceTotal, currUserId);
         assert orderId != null;
         ordersDB.child(orderId).setValue(order);
-        Intent intent = new Intent(PaymentActivity.this, NotificationListener.class);
-        intent.putExtra("order", order);
     }
 
     private void processCurBalance(){
