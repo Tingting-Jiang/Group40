@@ -79,6 +79,8 @@ dependencies {
 //google-map-api
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
+// Firebase Messaging
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
 
 
 }

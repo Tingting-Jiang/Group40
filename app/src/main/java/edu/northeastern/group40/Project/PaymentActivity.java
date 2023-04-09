@@ -1,6 +1,9 @@
 package edu.northeastern.group40.Project;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Order;
+import edu.northeastern.group40.Project.Models.User;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 
@@ -43,6 +48,8 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnExit;
     private DatabaseReference usersDB;
     private DatabaseReference ordersDB;
+    private User owner;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class PaymentActivity extends AppCompatActivity {
                 orderToDb();
                 processCurBalance();
                 increaseBalance();
+                addOrderAsUser();
+                addOrderToOwner();
             } else{
                 processFailed();
             }
@@ -114,6 +123,8 @@ public class PaymentActivity extends AppCompatActivity {
         order = new Order(orderId, orderVehicle, availableDate, orderPriceTotal, currUserId);
         assert orderId != null;
         ordersDB.child(orderId).setValue(order);
+        Intent intent = new Intent(PaymentActivity.this, NotificationListener.class);
+        intent.putExtra("order", order);
     }
 
     private void processCurBalance(){
@@ -171,6 +182,8 @@ public class PaymentActivity extends AppCompatActivity {
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                owner = dataSnapshot.child(ownerId).getValue(User.class);
+                user = dataSnapshot.child(currUserId).getValue(User.class);
                 ownerBalance = dataSnapshot.child(ownerId).child("balance").getValue(Integer.class);
             }
             @Override
@@ -180,8 +193,22 @@ public class PaymentActivity extends AppCompatActivity {
         ownerBalance += orderPriceTotal;
         usersDB.child(ownerId).child("balance").setValue(ownerBalance);
     }
+
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (PaymentActivity.this, targetActivityClass);
         startActivity(intent);
+    }
+
+    private void addOrderAsUser(){
+        user.addOrderAsCarUser(order);
+    }
+
+    private void addOrderToOwner(){
+        owner.addOrderAsCarOwner(order);
+    }
+
+    private void addOrderToAllOrder(){
+        user.addToAllOrder(order);
+        owner.addToAllOrder(order);
     }
 }

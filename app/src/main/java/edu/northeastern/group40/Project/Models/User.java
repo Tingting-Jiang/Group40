@@ -25,6 +25,8 @@ public class User {
 
     List<Order> ordersAsCarUser;
 
+    List<Order> allOrder;
+
     String userID;
 
     public User(String username, String password, String email, String phone, boolean isCarRenter) {
@@ -130,5 +132,23 @@ public class User {
         this.vehicles = vehicles;
     }
 
+    public void addOrderAsCarOwner(Order order){
+        ordersAsCarOwner.add(order);
+    }
 
+    public void addOrderAsCarUser(Order order){
+        ordersAsCarOwner.add(order);
+    }
+
+    public void addToAllOrder(Order order){
+        allOrder.add(order);
+    }
+
+    public List<Order> getOrderAsCarOwner(){
+        return ordersAsCarOwner;
+    }
+
+    public List<Order> getAllOrder(){
+        return allOrder;
+    }
 }
