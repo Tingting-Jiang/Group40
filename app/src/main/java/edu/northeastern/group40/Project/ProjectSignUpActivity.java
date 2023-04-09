@@ -1,5 +1,6 @@
 package edu.northeastern.group40.Project;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     Map<Brand, List<Brand.Model>> brandModelMap = new HashMap<>();
     List<MyLocation> locationList = new ArrayList<>();
     private static final String TAG = "FakeData";
-    private static final String NAME = "Test";
+    private static final String NAME = "test";
     private static final String PASSWORD = "-1234";
     private static final String EMAIL = "@123.com";
     private static final String PHONE = "09876543210";
@@ -79,6 +80,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     RandomEnumGenerator mileage = new RandomEnumGenerator(Mileage.class);
     RandomEnumGenerator brand = new RandomEnumGenerator(Brand.class);
     private String testStartDate = "04/14/2023";
+    private String testEndDate = "06/14/2023";
     // --- remove above---------
 
 
@@ -199,7 +201,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
 
     private String getURL(Color testColor) {
-        switch ((Color) testColor) {
+        switch (testColor) {
             case WHITE:
                 return WHITE_CAR;
             case BLACK:
@@ -217,10 +219,11 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private void addFakeData() {
         initBrandModels();
         initLocations();
-//        for (int idx = 0; idx < locationList.size(); idx++) {
-//            generateUser(idx);
-//        }
-        generateUser(203);
+        for (int idx = 0; idx < locationList.size(); idx++) {
+            generateUser(idx);
+        }
+//        generateUser(1008);
+
 
     }
 
@@ -365,6 +368,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     private void saveVehicles(User user, int idx) {
         vehicleDB = FirebaseDatabase.getInstance().getReference("vehicles");
         String vehicleKey = vehicleDB.push().getKey();
@@ -377,28 +381,28 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         Mileage testMileage = (Mileage) mileage.randomEnum();
         Color testColor = (Color) color.randomEnum();
         String imageURL = getURL(testColor);
-        Log.d(TAG, "url: " + imageURL);
         // TODO: CHANGE BACK
-//        MyLocation testLocation = locationList.get(idx);
-        MyLocation testLocation = locationList.get(0);
+        MyLocation testLocation = locationList.get(idx);
+//        MyLocation testLocation = locationList.get(5);
         int testCap = new Random().nextInt(7);
         int max = 110, min = 70;
         int testPrice = (int)Math.floor(Math.random() * (max - min + 1) + min);
 
         int testReviewNum = (int)Math.floor(Math.random() * (max - min + 1) + min);
 
-        double max1 = 5.0f, min1 = 2.0f;
-        double randomReview = min + new Random().nextDouble() * (max1 - min1);
-        String title = "2023 " + testColor.toString() + " " + testBrand + " " + testModel + " ";
+        int max1 = 5, min1 = 1;
+        double randomReview = min1 + Math.random() * (max1 - min1);
+
+        String title = "2023 " + testColor + " " + testBrand + " " + testModel + " ";
         // TODO: CHANGE BACK
 //        String newStartDate = calculateEndDate(testStartDate, idx);
-        String newStartDate = calculateEndDate(testStartDate, 0);
-        String newEndDate = calculateEndDate(newStartDate, 30);
+//        String newStartDate = calculateEndDate(testStartDate, 0);
+//        String newEndDate = calculateEndDate(newStartDate, 30);
 
         Vehicle vehicle = new Vehicle(testBrand, testModel, testColor, testVehicleBodyStyle,
                 testFuel, testMileage, testCap, testLocation, testPrice,
-                title,  imageURL, newStartDate, newEndDate, user.getUserID(), vehicleKey);
-        vehicle.setReviewResult(String.valueOf(randomReview));
+                title,  imageURL, testStartDate, testEndDate, user.getUserID(), vehicleKey);
+        vehicle.setReviewResult(String.format("%.1f",randomReview));
         vehicle.setReviewTotalNumber(testReviewNum);
 
         assert vehicleKey != null;

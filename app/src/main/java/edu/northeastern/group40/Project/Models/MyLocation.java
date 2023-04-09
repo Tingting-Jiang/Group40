@@ -46,7 +46,7 @@ public class MyLocation implements Serializable {
         Location end = new Location("end");
         end.setLatitude(other.latitude);
         end.setLongitude(other.longitude);
-        return start.distanceTo(end)/0.000621371;
+        return start.distanceTo(end) * 0.000621371;
     }
 
 
