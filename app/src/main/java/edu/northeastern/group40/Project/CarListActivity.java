@@ -3,7 +3,6 @@ package edu.northeastern.group40.Project;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -115,7 +114,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.rentModel = Brand.Model.valueOf(getIntent().getStringExtra("VehicleModel"));
         this.targetAvailableDate = (AvailableDate) getIntent().getSerializableExtra("AvailableDate");
         this.destinationLocation = (MyLocation) getIntent().getSerializableExtra("destinationLocation");
-        Log.i(TAG, "Got: " + rentModel + "-" + rentBrand + "-" + targetAvailableDate.toString() + "-" + destinationLocation.toString());
         if (destinationLocation == null) {
             try {
                 destinationLocation = new MyLocation(37.40273, -121.95154, this);

@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -68,7 +70,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private static final String EMAIL = "@123.com";
     private static final String PHONE = "09876543210";
     private static final String BLUE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000360-Sat%20Apr%2008%2011%3A11%3A54%20PDT%202023?alt=media&token=b41ebfd4-d8e1-4838-8dbe-d65f1746136f";
-    private static final String BLACK_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000353-Thu%20Apr%2006%2011%3A28%3A48%20PDT%202023?alt=media&token=7d612dd9-c2d1-4fc6-afcb-ca3cbd90b248";
+    private static final String BLACK_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000364-Sat%20Apr%2008%2011%3A08%3A22%20PDT%202023?alt=media&token=51f262f7-4e4e-4006-ac11-31c9963be660";
     private static final String RED_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000362-Sat%20Apr%2008%2011%3A12%3A25%20PDT%202023?alt=media&token=664dd4f4-c7db-4af5-bbc4-424987c87d16";
     private static final String WHITE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000359-Sat%20Apr%2008%2011%3A12%3A50%20PDT%202023?alt=media&token=6ef12cc3-7c93-4f08-bbbc-314ce0d39005";
     RandomEnumGenerator color = new RandomEnumGenerator(Color.class);
@@ -76,6 +78,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     RandomEnumGenerator bodyStyle = new RandomEnumGenerator(VehicleBodyStyle.class);
     RandomEnumGenerator mileage = new RandomEnumGenerator(Mileage.class);
     RandomEnumGenerator brand = new RandomEnumGenerator(Brand.class);
+    private String testStartDate = "04/14/2023";
     // --- remove above---------
 
 
@@ -214,8 +217,10 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     private void addFakeData() {
         initBrandModels();
         initLocations();
-        int idx = 0;
-        generateUser(idx);
+//        for (int idx = 0; idx < locationList.size(); idx++) {
+//            generateUser(idx);
+//        }
+        generateUser(203);
 
     }
 
@@ -237,18 +242,75 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
     public void initLocations() {
         try {
-            // CA bay area
+            // CA bay area -- 31
             locationList.add(new MyLocation(37.50273, -121.95154, this));  //0
             locationList.add(new MyLocation(37.7749, -122.4194, this));
-            locationList.add(new MyLocation(37.8044, 122.2711, this));
-            locationList.add(new MyLocation(37.3382, 121.8863, this));
-            locationList.add(new MyLocation(37.4419, 122.1430, this));
-//            locationList.add(new MyLocation(37.8716, 122.2727, this));
-//            locationList.add(new MyLocation(37.5620, 122.3255, this));
-//            locationList.add(new MyLocation(37.3541, 121.9552, this));
-//            locationList.add(new MyLocation(37.5485, 121.9886, this));
-//            locationList.add(new MyLocation(37.4852, 122.2364, this)); // 9
-//            locationList.add(new MyLocation(37.3688, 122.0363, this)); // 10
+            locationList.add(new MyLocation(37.8044, -122.2711, this));
+            locationList.add(new MyLocation(37.3382, -121.8863, this));
+            locationList.add(new MyLocation(37.4419, -122.1430, this));
+            locationList.add(new MyLocation(37.8716, -122.2727, this));
+            locationList.add(new MyLocation(37.5620, -122.3255, this));
+            locationList.add(new MyLocation(37.3541, -121.9552, this));
+            locationList.add(new MyLocation(37.5485, -121.9886, this));
+            locationList.add(new MyLocation(37.4852, -122.2364, this)); // 9
+            locationList.add(new MyLocation(37.3688, -122.0363, this)); // 10
+
+            locationList.add(new MyLocation(37.8199, -122.4783, this));
+            locationList.add(new MyLocation(37.8083, -122.4150, this));
+            locationList.add(new MyLocation(37.4275, -122.1697, this));
+            locationList.add(new MyLocation(37.7858, -122.4011, this));
+            locationList.add(new MyLocation(37.4030, -121.9702, this));
+            locationList.add(new MyLocation(37.7986, -122.2637, this));
+            locationList.add(new MyLocation(37.7699, -122.4661, this));
+            locationList.add(new MyLocation(37.8716, -122.2727, this));
+            locationList.add(new MyLocation(37.3317, -121.8907, this));
+            locationList.add(new MyLocation(37.3314, -121.8906, this));
+
+            locationList.add(new MyLocation(37.4148, -122.0763, this));
+            locationList.add(new MyLocation(37.4148, -122.0763, this));
+            locationList.add(new MyLocation(37.8029, -122.4488, this));
+            locationList.add(new MyLocation(37.3183, -121.9511, this));
+            locationList.add(new MyLocation(37.8017, -122.3972, this));
+            locationList.add(new MyLocation(38.2921, -122.4582, this));
+            locationList.add(new MyLocation(37.7715, -122.4687, this));
+            locationList.add(new MyLocation(37.8626, -122.3090, this));
+            locationList.add(new MyLocation(37.7320, -122.5021, this));
+            locationList.add(new MyLocation(36.9642, -122.0176, this));
+
+            // Boston -20
+            locationList.add(new MyLocation(42.3467, -71.0972, this));//0
+            locationList.add(new MyLocation(42.3554, -71.0648, this));
+            locationList.add(new MyLocation(42.3554, -71.0648, this));
+            locationList.add(new MyLocation(42.3601, -71.0942, this));
+            locationList.add(new MyLocation(42.3496, -71.0785, this));
+            locationList.add(new MyLocation(42.3516, -71.0499, this));
+            locationList.add(new MyLocation(42.3593, -71.0494, this));
+            locationList.add(new MyLocation(42.3384, -71.0983, this));
+            locationList.add(new MyLocation(42.3724, -71.0568, this));
+            locationList.add(new MyLocation(42.3662, -71.0621, this));
+            locationList.add(new MyLocation(42.3145, -71.0345, this));//0
+            locationList.add(new MyLocation(42.3770, -71.1167, this));
+            locationList.add(new MyLocation(42.3770, -71.1167, this));
+            locationList.add(new MyLocation(42.3663, -71.0545, this));
+            locationList.add(new MyLocation(42.3394, -71.0942, this));
+            locationList.add(new MyLocation(42.3505, -71.1054, this));
+            locationList.add(new MyLocation(42.3634, -71.0537, this));
+            locationList.add(new MyLocation(42.3388, -71.0904, this));
+            locationList.add(new MyLocation(42.3603, -71.0581, this));
+            locationList.add(new MyLocation(42.3423, -71.0859, this));
+
+            // New York -10
+            locationList.add(new MyLocation(40.6892, -74.0445, this));//0
+            locationList.add(new MyLocation(40.7484, -73.9857, this));
+            locationList.add(new MyLocation(40.7851, -73.9683, this));
+            locationList.add(new MyLocation(40.7589, -73.9851, this));
+            locationList.add(new MyLocation(40.7127, -74.0134, this));
+            locationList.add(new MyLocation(40.7794, -73.9632, this));
+            locationList.add(new MyLocation(40.7061, -73.9969, this));
+            locationList.add(new MyLocation(40.7479, -74.0048, this));
+            locationList.add(new MyLocation(40.7587, -73.9787, this));
+            locationList.add(new MyLocation(40.7527, -73.9772, this));
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -316,7 +378,9 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         Color testColor = (Color) color.randomEnum();
         String imageURL = getURL(testColor);
         Log.d(TAG, "url: " + imageURL);
-        MyLocation testLocation = locationList.get(idx);
+        // TODO: CHANGE BACK
+//        MyLocation testLocation = locationList.get(idx);
+        MyLocation testLocation = locationList.get(0);
         int testCap = new Random().nextInt(7);
         int max = 110, min = 70;
         int testPrice = (int)Math.floor(Math.random() * (max - min + 1) + min);
@@ -326,10 +390,14 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         double max1 = 5.0f, min1 = 2.0f;
         double randomReview = min + new Random().nextDouble() * (max1 - min1);
         String title = "2023 " + testColor.toString() + " " + testBrand + " " + testModel + " ";
+        // TODO: CHANGE BACK
+//        String newStartDate = calculateEndDate(testStartDate, idx);
+        String newStartDate = calculateEndDate(testStartDate, 0);
+        String newEndDate = calculateEndDate(newStartDate, 30);
 
         Vehicle vehicle = new Vehicle(testBrand, testModel, testColor, testVehicleBodyStyle,
                 testFuel, testMileage, testCap, testLocation, testPrice,
-                title,  imageURL,"04/14/2023", "04/21/2023", user.getUserID(), vehicleKey);
+                title,  imageURL, newStartDate, newEndDate, user.getUserID(), vehicleKey);
         vehicle.setReviewResult(String.valueOf(randomReview));
         vehicle.setReviewTotalNumber(testReviewNum);
 
@@ -339,6 +407,18 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         List<String> sampleList = new ArrayList<>();
         sampleList.add(vehicleKey);
         user.setVehicles(sampleList);
+    }
+
+    private String calculateEndDate(String startDateStr, int k) {
+        // Parse start date string into a LocalDate object
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+
+        // Calculate end date by adding k days to the start date
+        LocalDate endDate = startDate.plusDays(k);
+
+        // Format end date as a string and return it
+        return endDate.format(formatter);
     }
 
 }
