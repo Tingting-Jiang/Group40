@@ -2,6 +2,7 @@ package edu.northeastern.group40.Project.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,8 +37,11 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
     private final Context mContext;
     private SelectListener listener;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference usersDB;
+    private DatabaseReference orderDB;
     private DatabaseReference vehicleDB;
+    private boolean hasRating;
+    private static final String RATE_ORDER = "Rate this order";
+    private static final String TAG = "MyOrdersAdapter";
 
 
     public MyOrdersAdapter(Context mContext, List<Order> orderList, SelectListener listener) {
@@ -45,6 +49,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
         this.mContext = mContext;
         this.listener = listener;
         this.vehicleDB = mDatabase.child("vehicles");
+        this.orderDB = mDatabase.child("orders");
 
     }
 
@@ -64,6 +69,12 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
         holder.orderSum.setText("Total: $ " + currOrder.getOrderPriceTotal());
         holder.orderTitle.setText(currOrder.getOrderedVehicle().getVehicleTitle());
         holder.orderTitle.setOnClickListener(v -> listener.onCarSelect(position));
+        hasRating = (currOrder.getReview() != 0);
+        if (hasRating)
+            holder.orderRate.setText("Your rating: " + currOrder.getReview());
+        else {
+            holder.orderRate.setText(RATE_ORDER);
+        }
 
     }
 
@@ -73,10 +84,12 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
     }
 
     public class MyOrdersViewHolder extends RecyclerView.ViewHolder {
-        TextView  orderSum, orderTime;
+        TextView orderSum, orderTime;
         CardView cardView;
         Button orderTitle, orderRate, orderDetailBtn;
         Integer newRate;
+        Vehicle updatedVehicle = null;
+
         public MyOrdersViewHolder(@NonNull View itemView) {
             super(itemView);
             this.orderSum = itemView.findViewById(R.id.order_sum);
@@ -85,13 +98,15 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
             this.cardView = itemView.findViewById(R.id.order_card);
             this.orderRate = itemView.findViewById(R.id.order_rate);
             this.orderDetailBtn = itemView.findViewById(R.id.check_detail);
+            if (orderRate.getText().equals(RATE_ORDER)) {
+                this.orderRate.setOnClickListener(v -> openReviewDialog());
+            }
 
-
-            this.orderRate.setOnClickListener(v -> openReviewDialog());
             this.orderDetailBtn.setOnClickListener(v -> openDetailDialog(getLayoutPosition()));
         }
 
         public void saveReviewResult(int newRate, String vehicleId) {
+            Log.i(TAG, "TO CHANGE VEHICLE DB");
             vehicleDB.child(vehicleId).runTransaction(new Transaction.Handler() {
                 @NonNull
                 @Override
@@ -106,7 +121,10 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                     double total = reviewNum * reviewResult;
                     car.setReviewTotalNumber(reviewNum + 1);
                     car.setReviewResult(String.valueOf((total + newRate) / (reviewNum + 1)));
+                    updatedVehicle = car;
                     currentData.setValue(car);
+                    Log.i(TAG, "IN CHANGE VEHICLE DB");
+                    updateOrderDetails(newRate);
                     return Transaction.success(currentData);
                 }
 
@@ -115,6 +133,15 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                                        @Nullable DataSnapshot currentData) {
                 }
             });
+
+        }
+
+        public void updateOrderDetails(int newRate) {
+            Log.i(TAG, "TO CHANGE ORDER DB");
+            Order order = orderList.get(getLayoutPosition());
+            order.setReview(newRate);
+            order.setOrderedVehicle(updatedVehicle);
+            orderDB.child(order.getOrderId()).setValue(order);
 
         }
 
@@ -130,10 +157,10 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                     float touchPositionX = event.getX();
                     float width = ratingBar.getWidth();
                     float starsFloat = (touchPositionX / width) * 5.0f;
-                    int stars = (int)starsFloat + 1;
+                    int stars = (int) starsFloat + 1;
                     ratingBar.setRating(stars);
                     newRate = stars;
-                    saveReviewResult(newRate, orderList.get(getLayoutPosition()).getOrderId());
+                    saveReviewResult(newRate, orderList.get(getLayoutPosition()).getOrderedVehicle().getVehicleID());
                     v.setPressed(false);
                 }
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -151,14 +178,16 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                     .setTitle("Rate your overall experience")
                     .setView(dialogView)
                     .setPositiveButton(R.string.submit_rating, (dialog, which) -> {
-                            this.orderRate.setText("Your rating: " + newRate);
-                            dialog.dismiss();
+                        orderRate.setText("Your rating: " + newRate);
+                        dialog.dismiss();
                     })
                     .setCancelable(false)
                     .create();
             reviewDialog.show();
 
         }
+
+
 
         @SuppressLint("SetTextI18n")
         public void openDetailDialog(int layoutPosition) {
