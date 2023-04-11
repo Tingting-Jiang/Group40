@@ -390,7 +390,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
         int testReviewNum = (int)Math.floor(Math.random() * (max - min + 1) + min);
 
-        int max1 = 5, min1 = 1;
+        int max1 = 5, min1 = 2;
         double randomReview = min1 + Math.random() * (max1 - min1);
 
         String title = "2023 " + testColor + " " + testBrand + " " + testModel + " ";
