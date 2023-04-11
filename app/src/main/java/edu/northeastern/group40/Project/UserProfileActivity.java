@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -168,5 +169,9 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(UserProfileActivity.this, ProjectActivity.class);
+        startActivity(intent);
+    }
 }

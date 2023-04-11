@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.IOException;
 
 import edu.northeastern.group40.Project.Models.AvailableDate;
@@ -13,6 +16,19 @@ import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.R;
 
 public class ProjectActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(this, ProjectSignInActivity.class);
+            startActivity(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

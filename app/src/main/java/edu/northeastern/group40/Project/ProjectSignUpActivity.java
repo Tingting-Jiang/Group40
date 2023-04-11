@@ -122,7 +122,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         User user = new User(username, password, email, phone, isCarOwner, uid);
                         saveUserToDatabase(user);
                         Toast.makeText(this, "Sign up successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
+                        Intent intent = new Intent(ProjectSignUpActivity.this, ProjectActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {
