@@ -16,6 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Sign Up"
+            android:textColor="#039BE5"
             android:textSize="24sp"
             android:gravity="center"
             android:padding="16dp"
@@ -87,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up"
+            android:backgroundTint="@color/sky_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/is_car_owner_checkbox" />
