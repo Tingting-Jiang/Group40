@@ -49,5 +49,12 @@ public class MyLocation implements Serializable {
         return start.distanceTo(end) * 0.000621371;
     }
 
+    public String getStateName() {
+        String[] parts = address.split(", ");
+        int len = parts.length;
+        String stateCode = parts[len - 2];
+        return stateCode.split(" ")[0];
+    }
+
 
 }

@@ -43,8 +43,10 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usersDB;
     private DatabaseReference orderDB;
+    private DatabaseReference vehicleDB;
     private FirebaseUser currUser;
     private Button noOrdersBtn;
+
 
 
 
@@ -70,7 +72,7 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
                 startActivity(new Intent(MyOrdersActivity.this, SearchActivity.class));
             });
         } else {
-            noOrdersBtn.setVisibility(View.INVISIBLE);
+            noOrdersBtn.setVisibility(View.GONE);
         }
     }
 

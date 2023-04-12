@@ -211,16 +211,17 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     // todo: filter cars that meet requirement
-//                    if (!currVehicle.getOwnerID().equals(currUser.getUid())
-                    if ( rentBrand != null && rentModel != null) {
-                        if (currVehicle.getBrand().equals(rentBrand)
-                                && currVehicle.getModel().equals(rentModel)
-                                && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)
-                        ) {
+                    if (!currVehicle.getOwnerID().equals(currUser.getUid())) {
+                        if ( rentBrand != null && rentModel != null) {
+                            if (currVehicle.getBrand().equals(rentBrand)
+                                    && currVehicle.getModel().equals(rentModel)
+                                    && meetRequirement(currVehicle)
+                            ) {
+                                vehicleList.add(currVehicle);
+                            }
+                        } else if (rentBrand == null && meetRequirement(currVehicle)) {
                             vehicleList.add(currVehicle);
                         }
-                    } else if (rentBrand == null && currVehicle.getAvailableDate().isAvailable(targetAvailableDate)) {
-                        vehicleList.add(currVehicle);
                     }
                 }
                 syncBackupList();
@@ -231,6 +232,11 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private boolean meetRequirement(Vehicle vehicle) {
+        return vehicle.getAvailableDate().isAvailable(targetAvailableDate) &&
+                vehicle.getPlace().getStateName().equals(destinationLocation.getStateName());
     }
 
     private void initRecyclerView() {
@@ -268,7 +274,9 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
         @Override
         public int compare(Vehicle v1, Vehicle v2) {
-            return v2.getReviewTotalNumber() - v1.getReviewTotalNumber();
+            Double review1 = Double.parseDouble(v1.getReviewResult());
+            Double review2 = Double.parseDouble(v2.getReviewResult());
+            return Double.compare(review2, review1);
         }
     }
     static class SortByMileage implements Comparator<Vehicle> {
@@ -287,7 +295,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
 
         @Override
         public int compare(Vehicle v1, Vehicle v2) {
-            return (int) v2.getPlace().distanceToInMiles(destination) - (int) v1.getPlace().distanceToInMiles(destination);
+            return (int) v1.getPlace().distanceToInMiles(destination) - (int) v2.getPlace().distanceToInMiles(destination);
         }
     }
 

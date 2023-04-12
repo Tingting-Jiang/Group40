@@ -13,7 +13,7 @@ public class Order implements Serializable {
 
     private String ownerId;
 
-    Review review;
+    int review;
 
 
     public Order(String orderId, Vehicle orderedVehicle, AvailableDate orderDate, int orderPriceTotal, String ownerId) {
@@ -22,6 +22,7 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
         this.orderPriceTotal = orderPriceTotal;
         this.ownerId = ownerId;
+        this.review = 0;
     }
 
     public Order() {}
@@ -64,5 +65,13 @@ public class Order implements Serializable {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public int getReview() {
+        return review;
+    }
+
+    public void setReview(int review) {
+        this.review = review;
     }
 }
