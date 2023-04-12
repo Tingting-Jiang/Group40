@@ -45,11 +45,11 @@
 
             <TextView
                 android:id="@+id/car_title_txt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/_2023_lexus"
+                android:text="2023_lexus brand new with comfortable sittings"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 app:layout_constraintLeft_toLeftOf="parent"

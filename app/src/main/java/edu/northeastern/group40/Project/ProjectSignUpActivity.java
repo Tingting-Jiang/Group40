@@ -81,7 +81,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
 
         // Set click listener for sign in link
         mSignInLink.setOnClickListener(v -> {
-            Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
+            Intent intent = new Intent(ProjectSignUpActivity.this, ProjectActivity.class);
             startActivity(intent);
         });
     }

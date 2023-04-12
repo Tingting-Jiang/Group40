@@ -23,7 +23,7 @@ public class CarDetailActivity extends AppCompatActivity {
     private TextView carTitle, carReviewNumber, carPrice, carDescription, totalPrice;
     private RatingBar ratingBar;
     private ImageView carPhoto;
-    private int rentLength;
+    private int rentLength = 0;
     private Button addToCartButton;
     private AvailableDate targetDate;
     @Override
@@ -33,7 +33,8 @@ public class CarDetailActivity extends AppCompatActivity {
         initUI();
         chosenVehicle = (Vehicle) getIntent().getSerializableExtra("carDetail");
         targetDate = (AvailableDate) getIntent().getSerializableExtra("targetDate");
-        rentLength = targetDate.calculateDuration();
+        if (targetDate != null)
+            rentLength = targetDate.calculateDuration();
         updateButtonVisibility();
         setupUI();
     }
@@ -74,14 +75,12 @@ public class CarDetailActivity extends AppCompatActivity {
                 .fit()
                 .into(carPhoto);
 
-        // TODO: CHANGE the image to car image
         carTitle.setText(chosenVehicle.getVehicleTitle());
         ratingBar.setRating(Float.parseFloat(chosenVehicle.getReviewResult()));
         carReviewNumber.setText("by "+ chosenVehicle.getReviewTotalNumber()+ " users ");
         carPrice.setText("$ " + chosenVehicle.getRentPrice());
         carDescription.setText(chosenVehicle.toString());
         totalPrice.setText("Total: $ " + totalPriceNeed);
-        //TODO: CHANGE CAR this to real car total price
     }
 
     public void onBackToCarList(View view) {

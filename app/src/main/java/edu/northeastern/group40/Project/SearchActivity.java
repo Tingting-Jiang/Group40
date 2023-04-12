@@ -230,8 +230,8 @@ public class SearchActivity extends AppCompatActivity {
                 return;
             }
             Intent intent = new Intent(SearchActivity.this, CarListActivity.class);
-            intent.putExtra("VehicleModel", targetModel.toString());
-            intent.putExtra("VehicleBrand", targetBrand.toString());
+//            intent.putExtra("VehicleModel", targetModel.toString());
+//            intent.putExtra("VehicleBrand", targetBrand.toString());
             intent.putExtra("AvailableDate", targetDate);
             intent.putExtra("destinationLocation", targetLocation);
             startActivity(intent);
