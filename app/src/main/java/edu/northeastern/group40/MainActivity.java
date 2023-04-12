@@ -1,16 +1,14 @@
 package edu.northeastern.group40;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import edu.northeastern.group40.A6.A6Activity;
 import edu.northeastern.group40.A8.LogInActivity;
-import edu.northeastern.group40.Project.AddVehicleActivity;
 import edu.northeastern.group40.Project.ProjectActivity;
-import edu.northeastern.group40.Project.ProjectSignUpActivity;
 
 public class MainActivity extends AppCompatActivity {
 
