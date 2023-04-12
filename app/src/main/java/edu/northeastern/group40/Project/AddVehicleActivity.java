@@ -289,8 +289,6 @@ public class AddVehicleActivity extends AppCompatActivity {
 
         storageRef.child(file.getName()).putFile(imageUploadUri)
                 .addOnSuccessListener(taskSnapshot -> {
-
-                    Toast.makeText(AddVehicleActivity.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                     taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
                         imageUrlInDB = uri.toString();
                         Log.i(TAG, "STORED PATH: " + imageUrlInDB);
@@ -298,6 +296,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                         //callback which adds vehicle to db
                         vehicle.setCarImage(imageUrlInDB);
                         mDatabase.child(vehicle.getVehicleID()).setValue(vehicle);
+                        Toast.makeText(AddVehicleActivity.this, "Vehicle Added Successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     });
                 })
