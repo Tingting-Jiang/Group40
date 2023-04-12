@@ -66,9 +66,9 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     Map<Brand, List<Brand.Model>> brandModelMap = new HashMap<>();
     List<MyLocation> locationList = new ArrayList<>();
     private static final String TAG = "FakeData";
-    private static final String NAME = "test";
+    private static final String NAME = "april";
     private static final String PASSWORD = "-1234";
-    private static final String EMAIL = "@123.com";
+    private static final String EMAIL = "@124.com";
     private static final String PHONE = "09876543210";
     private static final String BLUE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000360-Sat%20Apr%2008%2011%3A11%3A54%20PDT%202023?alt=media&token=b41ebfd4-d8e1-4838-8dbe-d65f1746136f";
     private static final String BLACK_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000364-Sat%20Apr%2008%2011%3A08%3A22%20PDT%202023?alt=media&token=51f262f7-4e4e-4006-ac11-31c9963be660";
@@ -79,8 +79,8 @@ public class ProjectSignUpActivity extends AppCompatActivity {
     RandomEnumGenerator bodyStyle = new RandomEnumGenerator(VehicleBodyStyle.class);
     RandomEnumGenerator mileage = new RandomEnumGenerator(Mileage.class);
     RandomEnumGenerator brand = new RandomEnumGenerator(Brand.class);
-    private String testStartDate = "04/14/2023";
-    private String testEndDate = "06/14/2023";
+    private String testStartDate = "04/20/2023";
+    private String testEndDate = "07/20/2023";
     // --- remove above---------
 
 
@@ -143,7 +143,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         }
 
         if (mPhoneEditText.getText().toString().isEmpty() || mPhoneEditText.getText().toString().length() != 10
-        || !mPhoneEditText.getText().toString().matches("^\\d+")){
+                || !mPhoneEditText.getText().toString().matches("^\\d+")){
             Toast.makeText(this, "Please input valid phone number", Toast.LENGTH_SHORT).show();
             valid = false;
         }
@@ -415,7 +415,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         int max1 = 5, min1 = 2;
         double randomReview = min1 + Math.random() * (max1 - min1);
 
-        String title = "2023 " + testColor + " " + testBrand + " " + testModel + " ";
+        String title = "2023 " + testColor + " " + testBrand + " " + testModel;
         // TODO: CHANGE BACK
 //        String newStartDate = calculateEndDate(testStartDate, idx);
 //        String newStartDate = calculateEndDate(testStartDate, 0);
