@@ -302,6 +302,28 @@ public class ProjectSignUpActivity extends AppCompatActivity {
             locationList.add(new MyLocation(42.3603, -71.0581, this));
             locationList.add(new MyLocation(42.3423, -71.0859, this));
 
+            // Seattle -20
+            locationList.add(new MyLocation(47.6205, -122.3493, this));//0
+            locationList.add(new MyLocation(47.6098, -122.3404, this));
+            locationList.add(new MyLocation(47.6214, -122.3484, this));
+            locationList.add(new MyLocation(47.6079, -122.3384, this));
+            locationList.add(new MyLocation(47.5952, -122.3316, this));
+            locationList.add(new MyLocation(47.6205, -122.3506, this));
+            locationList.add(new MyLocation(47.6062, -122.3425, this));
+            locationList.add(new MyLocation(47.6553, -122.3035, this));
+            locationList.add(new MyLocation(47.6686, -122.3507, this));
+            locationList.add(new MyLocation(47.6074, -122.3420, this));
+            locationList.add(new MyLocation(47.6290, -122.3594, this));//0
+            locationList.add(new MyLocation(47.6450, -122.3349, this));
+            locationList.add(new MyLocation(47.5171, -122.2966, this));
+            locationList.add(new MyLocation(47.6518, -122.3477, this));
+            locationList.add(new MyLocation(47.6575, -122.4105, this));
+            locationList.add(new MyLocation(47.5795, -122.4094, this));
+            locationList.add(new MyLocation(47.6154, -122.2014, this));
+            locationList.add(new MyLocation(47.5515, -122.2497, this));
+            locationList.add(new MyLocation(47.9214, -122.2818, this));
+            locationList.add(new MyLocation(47.6195, -122.3506, this));
+
             // New York -10
             locationList.add(new MyLocation(40.6892, -74.0445, this));//0
             locationList.add(new MyLocation(40.7484, -73.9857, this));

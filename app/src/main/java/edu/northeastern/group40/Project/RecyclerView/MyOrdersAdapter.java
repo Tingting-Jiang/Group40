@@ -108,6 +108,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
         public void saveReviewResult(int newRate, String vehicleId) {
             Log.i(TAG, "TO CHANGE VEHICLE DB");
             vehicleDB.child(vehicleId).runTransaction(new Transaction.Handler() {
+                @SuppressLint("DefaultLocale")
                 @NonNull
                 @Override
                 public Transaction.Result doTransaction(@NonNull MutableData currentData) {
@@ -120,7 +121,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyOrde
                     double reviewResult = Double.parseDouble(car.getReviewResult());
                     double total = reviewNum * reviewResult;
                     car.setReviewTotalNumber(reviewNum + 1);
-                    car.setReviewResult(String.valueOf((total + newRate) / (reviewNum + 1)));
+                    car.setReviewResult(String.format("%.1f", (total + newRate) / (reviewNum + 1)));
                     updatedVehicle = car;
                     currentData.setValue(car);
                     Log.i(TAG, "IN CHANGE VEHICLE DB");
