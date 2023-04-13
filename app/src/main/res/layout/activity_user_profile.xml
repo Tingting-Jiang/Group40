@@ -39,6 +39,7 @@
                         android:layout_height="85dp"
                         android:gravity="center"
                         android:text="[User Name]"
+                        android:textColor="#039BE5"
                         android:textSize="36sp"
                         android:textStyle="bold" />
 
@@ -222,6 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="10dp"
+            android:backgroundTint="@color/sky_blue"
             android:text="Sign out"/>
     </LinearLayout>
 

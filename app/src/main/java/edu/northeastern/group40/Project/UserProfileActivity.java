@@ -187,10 +187,5 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //startActivity(new Intent(UserProfileActivity.this, ProjectActivity.class));
-        finish();
-    }
+
 }

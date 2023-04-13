@@ -67,7 +67,7 @@
     <string name="price_low_to_high">$ - $$$</string>
     <string name="less_mileage">less mileage</string>
     <string name="highly_reviewed">highly reviewed</string>
-    <string name="near">near</string>
+    <string name="near">near me</string>
     <string name="est_total_includes_taxes_and_fees">Est Total (includes taxes and fees):</string>
     <string name="search_the_vehicle">Search the vehicle</string>
     <string name="google_maps_API_key">AIzaSyB0xVMOtkpPW_4UwVdhLx8HFzZmRxChcrs</string>
