@@ -210,10 +210,20 @@
         android:padding="8dp">
 
         <Button
+            android:id="@+id/user_profile_my_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="My Car"/>
+
+        <Button
             android:id="@+id/user_profile_sign_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
             android:text="Sign out"/>
     </LinearLayout>
+
 
 </RelativeLayout>
