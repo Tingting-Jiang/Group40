@@ -2,6 +2,7 @@ package edu.northeastern.group40.Project;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +10,13 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +49,9 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnExit;
     private DatabaseReference usersDB;
     private DatabaseReference ordersDB;
+    @Nullable
     private User owner;
+    @Nullable
     private User user;
 
     @Override
@@ -55,6 +61,7 @@ public class PaymentActivity extends AppCompatActivity {
         orderVehicle = (Vehicle) getIntent().getSerializableExtra("carDetail");
         rentLength = getIntent().getIntExtra("rentLength", 0);
         availableDate = (AvailableDate) getIntent().getSerializableExtra("targetDate");
+        ownerId = orderVehicle.getOwnerID();
         initDatabases();
         initUI();
         btnProcess.setOnClickListener(v -> {
@@ -62,8 +69,6 @@ public class PaymentActivity extends AppCompatActivity {
                 orderToDb();
                 processCurBalance();
                 increaseBalance();
-                addOrderAsUser();
-                addOrderToOwner();
             } else{
                 processFailed();
             }
@@ -125,30 +130,38 @@ public class PaymentActivity extends AppCompatActivity {
     private void processCurBalance(){
         currentBalance -= orderPriceTotal;
         usersDB.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                processSuccess();
+                usersDB.child(currUserId).child("balance").setValue(currentBalance);
+
+                owner = dataSnapshot.child(ownerId).getValue(User.class);
+                user = dataSnapshot.child(currUserId).getValue(User.class);
+
+                assert owner != null;
+                owner.addOrderAsCarOwner(order);
+                assert user != null;
+                user.addOrderAsCarUser(order);
+                user.addToAllOrder(order);
+                owner.addToAllOrder(order);
+
+                tvCurrentBalance.setText(String.valueOf(currentBalance) + "$");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
+                builder.setMessage("Your order is completed.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                openNewActivity(ProjectActivity.class);
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PaymentActivity.this, "Fail to get balance data.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void processSuccess(){
-        usersDB.child(currUserId).child("balance").setValue(currentBalance);
-        tvCurrentBalance.setText(String.valueOf(currentBalance) + "$");
-        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
-        builder.setMessage("Your order is completed.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        openNewActivity(ProjectActivity.class);
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void processFailed(){
@@ -164,46 +177,23 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void increaseBalance(){
-        ordersDB.addValueEventListener(new ValueEventListener() {
+        usersDB.child(ownerId).child("balance").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ownerId = dataSnapshot.child(orderId).child("orderedVehicle").child("ownerID").getValue(String.class);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        usersDB.addValueEventListener(new ValueEventListener() {
-            @SuppressWarnings("ConstantConditions")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                owner = dataSnapshot.child(ownerId).getValue(User.class);
-                user = dataSnapshot.child(currUserId).getValue(User.class);
-                ownerBalance = dataSnapshot.child(ownerId).child("balance").getValue(Integer.class);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    ownerBalance = task.getResult().getValue(Integer.class);
+                    ownerBalance += orderPriceTotal;
+                    usersDB.child(ownerId).child("balance").setValue(ownerBalance);
+                }
             }
         });
-        ownerBalance += orderPriceTotal;
-        usersDB.child(ownerId).child("balance").setValue(ownerBalance);
     }
 
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (PaymentActivity.this, targetActivityClass);
         startActivity(intent);
-    }
-
-    private void addOrderAsUser(){
-        user.addOrderAsCarUser(order);
-    }
-
-    private void addOrderToOwner(){
-        owner.addOrderAsCarOwner(order);
-    }
-
-    private void addOrderToAllOrder(){
-        user.addToAllOrder(order);
-        owner.addToAllOrder(order);
     }
 }
