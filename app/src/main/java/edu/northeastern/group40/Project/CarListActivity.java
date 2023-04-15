@@ -60,7 +60,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
     private String currentSearchText = "";
-    private Button changeSettingsBtn;
+    private Button noCarBtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -84,6 +84,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.blue = ContextCompat.getColor(getApplicationContext(),R.color.sky_blue);
         this.black = ContextCompat.getColor(getApplicationContext(),R.color.black);
         this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
+        this.noCarBtn = findViewById(R.id.no_cars_txt);
+        initButton();
 
 
         searchView = findViewById(R.id.searchVehicle);
@@ -105,6 +107,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 vehicleList.clear();
                 vehicleList.addAll(filterList);
                 carListAdapter.notifyDataSetChanged();
+                initButton();
                 return false;
             }
         });
@@ -121,6 +124,18 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 e.printStackTrace();
             }
         }
+
+    }
+
+    private void initButton() {
+        if (vehicleList.size() == 0) {
+            noCarBtn.setVisibility(View.VISIBLE);
+            noCarBtn.setOnClickListener(v -> {
+               onBackPressed();
+            });
+        } else {
+            noCarBtn.setVisibility(View.GONE);
+            }
 
     }
 
@@ -155,6 +170,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 break;
         }
         carListAdapter.notifyDataSetChanged();
+        initButton();
     }
 
     private void unselectOtherSort(String originSort) {
@@ -226,6 +242,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 }
                 syncBackupList();
                 carListAdapter.notifyDataSetChanged();
+                initButton();
             }
 
             @Override
@@ -235,7 +252,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     private boolean meetRequirement(Vehicle vehicle) {
-        return vehicle.getAvailableDate().isAvailable(targetAvailableDate) &&
+        return vehicle.isAvailable() &&
+                vehicle.getAvailableDate().isAvailable(targetAvailableDate) &&
                 vehicle.getPlace().getStateName().equals(destinationLocation.getStateName());
     }
 

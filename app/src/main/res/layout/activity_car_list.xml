@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Project.CarListActivity">
+    tools:context=".Project.CarListActivity"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -139,10 +139,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/ocean_blue"
         android:textAllCaps="false"
-        android:visibility="gone"
         android:text="@string/no_cars_available_now_try_to_change_some_settings">
 
     </Button>
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

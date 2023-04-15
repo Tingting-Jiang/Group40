@@ -1,11 +1,6 @@
 package edu.northeastern.group40.Project;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +9,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.User;
@@ -51,6 +52,7 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnExit;
     private DatabaseReference usersDB;
     private DatabaseReference ordersDB;
+    private DatabaseReference vehicleDB;
     @Nullable
     private User owner;
     @Nullable
@@ -119,6 +121,7 @@ public class PaymentActivity extends AppCompatActivity {
     private void initDatabases() {
         usersDB = mDatabase.child("users");
         ordersDB = mDatabase.child("orders");
+        vehicleDB = mDatabase.child("vehicles");
         currUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currUser != null;
         currUserId = currUser.getUid();
@@ -222,5 +225,10 @@ public class PaymentActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Vehicle currVehicle = order.getOrderedVehicle();
+        currVehicle.setAvailable(false);
+
+        vehicleDB.child(order.getOrderedVehicle().getVehicleID()).setValue(currVehicle);
     }
 }
