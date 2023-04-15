@@ -34,7 +34,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     TextView mIsCarOwnerTextView;
 
-    Button mSignOutTextView;
+    Button mSignOutButton;
+
+    Button mMyCarsButton;
 
     private FirebaseAuth mAuth;
 
@@ -48,7 +50,8 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserPhoneTextView = findViewById(R.id.user_profile_phone);
         mBalanceTextView = findViewById(R.id.user_profile_balance);
         mIsCarOwnerTextView = findViewById(R.id.user_profile_is_car_owner);
-        mSignOutTextView = findViewById(R.id.user_profile_sign_out);
+        mSignOutButton = findViewById(R.id.user_profile_sign_out);
+        mMyCarsButton = findViewById(R.id.user_profile_my_car);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -70,9 +73,24 @@ public class UserProfileActivity extends AppCompatActivity {
 
         changeCarOwnerStatus(mIsCarOwnerTextView, databaseReference);
 
-        mSignOutTextView.setOnClickListener(v -> {
+        mSignOutButton.setOnClickListener(v -> {
             mAuth.signOut();
             finish();
+        });
+
+        mMyCarsButton.setOnClickListener(v -> {
+            if (mIsCarOwnerTextView.getText().toString().equals("No")) {
+                AlertDialog alertDialog = new AlertDialog.Builder(UserProfileActivity.this)
+                        .setTitle("You are not a car owner")
+                        .setMessage("To view your cars, change your car ownership status to 'Yes'")
+                        .setPositiveButton("OK", null)
+                        .create();
+                alertDialog.show();
+
+            } else {
+                Intent intent = new Intent(UserProfileActivity.this, MyCarsActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

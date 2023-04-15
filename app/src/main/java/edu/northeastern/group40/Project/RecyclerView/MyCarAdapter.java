@@ -17,24 +17,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
 import edu.northeastern.group40.R;
 
 
-public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListViewHolder> {
+public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.CarListViewHolder> {
     private List<Vehicle> vehicleList;
-    private final Context mContext;
     private SelectListener listener;
-    private String TAG = "CarListAdapter";
-    private MyLocation destinationLocation;
 
-    public CarListAdapter(Context mContext, List<Vehicle> vehicleList, SelectListener listener, MyLocation destinationLocation) {
+    public MyCarAdapter(List<Vehicle> vehicleList, SelectListener listener) {
         this.vehicleList = vehicleList;
-        this.mContext = mContext;
         this.listener = listener;
-        this.destinationLocation = destinationLocation;
     }
 
     @NonNull
@@ -50,7 +44,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         Vehicle currVehicle = vehicleList.get(position);
         holder.carTitle.setText(currVehicle.getVehicleTitle());
         holder.totalMiles.setText(currVehicle.getMileage().toString());
-        holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles");
         holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber() + " users");
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
         Picasso.get()
@@ -82,6 +75,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
             this.distance = itemView.findViewById(R.id.distance);
             this.rent_price = itemView.findViewById(R.id.rent_price_num);
 
+            this.distance.setVisibility(View.INVISIBLE);
         }
     }
 }

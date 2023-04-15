@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.libraries.places.api.Places;
@@ -26,8 +27,11 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -38,6 +42,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -66,12 +71,15 @@ public class AddVehicleActivity extends AppCompatActivity {
     private boolean imageUploaded;
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference vehicleInUserDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference("vehicles");
+        vehicleInUserDB = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("vehicles");
         inputPlace = null;
         imageUploaded = false;
         setContentView(R.layout.activity_project_add_vehicle);
@@ -100,6 +108,8 @@ public class AddVehicleActivity extends AppCompatActivity {
                     new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, brand.getModels());
             modelMenu.setAdapter(modelAdapter);
         });
+
+
 
         initDropDownMenu(fuelMenu, Fuel.class);
         initDropDownMenu(mileageMenu, Mileage.class);
@@ -296,6 +306,10 @@ public class AddVehicleActivity extends AppCompatActivity {
                         //callback which adds vehicle to db
                         vehicle.setCarImage(imageUrlInDB);
                         mDatabase.child(vehicle.getVehicleID()).setValue(vehicle);
+                        String key = vehicleInUserDB.push().getKey();
+                        vehicleInUserDB.child(key).setValue(vehicle.getVehicleID()).addOnSuccessListener(task->{
+                            Log.w("HERE","add to user also");
+                        });
                         Toast.makeText(AddVehicleActivity.this, "Vehicle Added Successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     });
