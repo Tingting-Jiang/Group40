@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.User;
@@ -69,6 +71,8 @@ public class PaymentActivity extends AppCompatActivity {
                 orderToDb();
                 processCurBalance();
                 increaseBalance();
+                writeOrderToDb();
+
             } else{
                 processFailed();
             }
@@ -134,17 +138,6 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersDB.child(currUserId).child("balance").setValue(currentBalance);
-
-                owner = dataSnapshot.child(ownerId).getValue(User.class);
-                user = dataSnapshot.child(currUserId).getValue(User.class);
-
-                assert owner != null;
-                owner.addOrderAsCarOwner(order);
-                assert user != null;
-                user.addOrderAsCarUser(order);
-                user.addToAllOrder(order);
-                owner.addToAllOrder(order);
-
                 tvCurrentBalance.setText(String.valueOf(currentBalance) + "$");
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
@@ -195,5 +188,39 @@ public class PaymentActivity extends AppCompatActivity {
     private void openNewActivity(Class targetActivityClass) {
         Intent intent = new Intent (PaymentActivity.this, targetActivityClass);
         startActivity(intent);
+    }
+
+    private void writeOrderToDb(){
+        usersDB.child(ownerId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    List ownersOrdersAsCarOwner = new ArrayList<Order>();
+                    for(DataSnapshot snap: task.getResult().child("ordersAsCarOwner").getChildren()){
+                        ownersOrdersAsCarOwner.add(snap.getValue(Order.class));
+                    }
+                    ownersOrdersAsCarOwner.add(order);
+                    usersDB.child(ownerId).child("ordersAsCarOwner").setValue(ownersOrdersAsCarOwner);
+                }
+            }
+        });
+        usersDB.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else{
+                    List usersOrdersAsCarUser = new ArrayList<Order>();
+                    for(DataSnapshot snap: task.getResult().child("ordersAsCarUser").getChildren()){
+                        usersOrdersAsCarUser.add(snap.getValue(Order.class));
+                    }
+                    usersOrdersAsCarUser.add(order);
+                    usersDB.child(currUserId).child("ordersAsCarUser").setValue(usersOrdersAsCarUser);
+                }
+            }
+        });
     }
 }
