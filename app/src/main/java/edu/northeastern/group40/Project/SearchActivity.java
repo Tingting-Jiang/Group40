@@ -217,10 +217,6 @@ public class SearchActivity extends AppCompatActivity {
         submit.setOnClickListener(v -> {
             targetBrand = getResult(brandMenu, Brand.class);
             targetModel = getResult(modelMenu, Brand.Model.class);
-//            if(targetBrand == null || targetModel == null){
-//                Toast.makeText(SearchActivity.this, "Please choose right brand and model", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
             if(targetDate == null) {
                 Toast.makeText(SearchActivity.this, "Please choose availability", Toast.LENGTH_SHORT).show();
                 return;
@@ -230,8 +226,12 @@ public class SearchActivity extends AppCompatActivity {
                 return;
             }
             Intent intent = new Intent(SearchActivity.this, CarListActivity.class);
-//            intent.putExtra("VehicleModel", targetModel.toString());
-//            intent.putExtra("VehicleBrand", targetBrand.toString());
+            if(targetModel!=null){
+                intent.putExtra("VehicleModel", targetModel.toString());
+            }
+            if(targetBrand!=null){
+                intent.putExtra("VehicleBrand", targetBrand.toString());
+            }
             intent.putExtra("AvailableDate", targetDate);
             intent.putExtra("destinationLocation", targetLocation);
             startActivity(intent);
