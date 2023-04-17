@@ -68,6 +68,8 @@
             android:padding="16dp"
             android:text="Don't have an account? Sign Up"
             android:textSize="16sp"
+            android:textStyle="bold"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"

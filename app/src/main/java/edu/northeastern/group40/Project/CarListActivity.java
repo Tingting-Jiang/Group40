@@ -3,6 +3,7 @@ package edu.northeastern.group40.Project;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -60,10 +61,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
     private Button noCarBtn;
-    private static final String BLUE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000360-Sat%20Apr%2008%2011%3A11%3A54%20PDT%202023?alt=media&token=b41ebfd4-d8e1-4838-8dbe-d65f1746136f";
-    private static final String BLACK_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000364-Sat%20Apr%2008%2011%3A08%3A22%20PDT%202023?alt=media&token=51f262f7-4e4e-4006-ac11-31c9963be660";
-    private static final String RED_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000362-Sat%20Apr%2008%2011%3A12%3A25%20PDT%202023?alt=media&token=664dd4f4-c7db-4af5-bbc4-424987c87d16";
-    private static final String WHITE_CAR = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000359-Sat%20Apr%2008%2011%3A12%3A50%20PDT%202023?alt=media&token=6ef12cc3-7c93-4f08-bbbc-314ce0d39005";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -229,37 +226,19 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
-//                    if (!currVehicle.getOwnerID().equals(currUser.getUid())) {
-//                        if ( rentBrand != null && rentModel != null) {
-//                            if (currVehicle.getBrand().equals(rentBrand)
-//                                    && currVehicle.getModel().equals(rentModel)
-//                                    && meetRequirement(currVehicle)
-//                            ) {
-//                                vehicleList.add(currVehicle);
-//                            }
-//                        } else if (rentBrand == null && meetRequirement(currVehicle)) {
-//                            Log.i(TAG, "image: " + currVehicle.getCarImage());
-//                            vehicleList.add(currVehicle);
-//                        }
-//                    }
-                    if (currVehicle.getCarImage() == null || currVehicle.getCarImage().equals("")) {
-                        switch (currVehicle.getColor()) {
-                            case RED:
-                                currVehicle.setCarImage(RED_CAR);
-                                break;
-                            case BLACK:
-                                currVehicle.setCarImage(BLACK_CAR);
-                                break;
-                            case BLUE:
-                                currVehicle.setCarImage(BLUE_CAR);
-                                break;
-                            default:
-                                currVehicle.setCarImage(WHITE_CAR);
-                                break;
+                    if (!currVehicle.getOwnerID().equals(currUser.getUid())) {
+                        if ( rentBrand != null && rentModel != null) {
+                            if (currVehicle.getBrand().equals(rentBrand)
+                                    && currVehicle.getModel().equals(rentModel)
+                                    && meetRequirement(currVehicle)
+                            ) {
+                                vehicleList.add(currVehicle);
+                            }
+                        } else if (rentBrand == null && meetRequirement(currVehicle)) {
+                            Log.i(TAG, "image: " + currVehicle.getCarImage());
+                            vehicleList.add(currVehicle);
                         }
-                        vehicleDB.child(currVehicle.getVehicleID()).setValue(currVehicle);
                     }
-                    vehicleList.add(currVehicle);
                 }
                 syncBackupList();
                 carListAdapter.notifyDataSetChanged();
@@ -313,7 +292,12 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         public int compare(Vehicle v1, Vehicle v2) {
             Double review1 = Double.parseDouble(v1.getReviewResult());
             Double review2 = Double.parseDouble(v2.getReviewResult());
-            return Double.compare(review2, review1);
+            int result = Double.compare(review2, review1);
+            if (result != 0) {
+                return result;
+            } else {
+                return Integer.compare(v2.getReviewTotalNumber(), v1.getReviewTotalNumber());
+            }
         }
     }
     static class SortByMileage implements Comparator<Vehicle> {
