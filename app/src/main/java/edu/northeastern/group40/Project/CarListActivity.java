@@ -227,15 +227,20 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
                     if (!currVehicle.getOwnerID().equals(currUser.getUid())) {
-                        if ( rentBrand != null && rentModel != null) {
-                            if (currVehicle.getBrand().equals(rentBrand)
+                        // have target brand and target model
+                        if ( rentBrand != null && rentModel != null && currVehicle.getBrand().equals(rentBrand)
                                     && currVehicle.getModel().equals(rentModel)
-                                    && meetRequirement(currVehicle)
-                            ) {
+                                    && meetRequirement(currVehicle)) {
                                 vehicleList.add(currVehicle);
-                            }
-                        } else if (rentBrand == null && meetRequirement(currVehicle)) {
+                        }
+                        // have no target brand nor target model
+                        else if (rentBrand == null && meetRequirement(currVehicle)) {
                             Log.i(TAG, "image: " + currVehicle.getCarImage());
+                            vehicleList.add(currVehicle);
+                        }
+                        // have only target brand, no target model
+                        else if (rentBrand != null && rentModel == null && currVehicle.getBrand().equals(rentBrand)
+                        && meetRequirement(currVehicle)) {
                             vehicleList.add(currVehicle);
                         }
                     }
