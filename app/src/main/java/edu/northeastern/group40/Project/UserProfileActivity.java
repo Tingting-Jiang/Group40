@@ -134,12 +134,22 @@ public class UserProfileActivity extends AppCompatActivity {
                     .setView(input)
                     .setPositiveButton("OK", (dialog, which) -> {
                         String value = input.getText().toString();
-                        databaseReference.child(childName).setValue(value);
-                        displayText(textView, databaseReference, childName);
                         if (childName.equals("email")) {
+                            if(!value.contains("@") || !value.contains(".")) {
+                                Toast.makeText(UserProfileActivity.this, "Invalid email. Change failed", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             user.updateEmail(value);
                         }
+                        if (childName.equals("phone")) {
+                            if (value.length() != 10) {
+                                Toast.makeText(UserProfileActivity.this, "Invalid phone number. Change failed", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                        databaseReference.child(childName).setValue(value);
+                        displayText(textView, databaseReference, childName);
                         input.setOnFocusChangeListener(null);
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
