@@ -224,25 +224,14 @@ public class AddVehicleActivity extends AppCompatActivity {
             if (selectedColor != null && selectedVehicleBodyStyle != null && selectedBrand != null
                     && selectedModel != null && selectedFuel != null && selectedMileage != null
                     && capacity != null && inputPlace != null) {
-                getImageURL();
 
-                if (imageUrlInDB.equals("")) {
-                    new Timer().schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            //delay 1s on purpose to get db
-                        }
-                    }, 1000);
-                }
 
                 String vehicleKey = mDatabase.push().getKey();
                 Vehicle vehicle = new Vehicle(selectedBrand, selectedModel, selectedColor, selectedVehicleBodyStyle,
                         selectedFuel, selectedMileage, capacity, new MyLocation(inputPlace),
-                        price, title, imageUrlInDB, startDate, endDate, user.getUid(), vehicleKey);
+                        price, title, null, startDate, endDate, user.getUid(), vehicleKey);
                 Log.d(TAG, vehicle.toString());
-                assert vehicleKey != null;
-                mDatabase.child(vehicleKey).setValue(vehicle);
-                imageUrlInDB = "";
+                getImageURL(vehicle);
 
 //                Log.w(TAG, new MyLocation(inputPlace).address);
                 // missing user
@@ -293,23 +282,29 @@ public class AddVehicleActivity extends AppCompatActivity {
 
     }
 
-    public void getImageURL() {
+    public void getImageURL(Vehicle vehicle) {
         File file = new File(imageUploadUri + "-"+ new Date());
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("images");
 
         storageRef.child(file.getName()).putFile(imageUploadUri)
                 .addOnSuccessListener(taskSnapshot -> {
-
-                    Toast.makeText(AddVehicleActivity.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                     taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
                         imageUrlInDB = uri.toString();
                         Log.i(TAG, "STORED PATH: " + imageUrlInDB);
+
+                        //callback which adds vehicle to db
+                        vehicle.setCarImage(imageUrlInDB);
+                        mDatabase.child(vehicle.getVehicleID()).setValue(vehicle);
+                        Toast.makeText(AddVehicleActivity.this, "Vehicle Added Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
                     });
                 })
                 .addOnFailureListener(e -> Log.i(TAG, "FAILED UPLOAD"));
 
     }
+
+
 
 
 

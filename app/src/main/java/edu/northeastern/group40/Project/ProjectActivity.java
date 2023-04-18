@@ -25,7 +25,9 @@ public class ProjectActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
-            Intent intent = new Intent(this, ProjectSignInActivity.class);
+            Intent intent = new Intent(ProjectActivity.this, ProjectSignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            finish();
             startActivity(intent);
         }
     }
