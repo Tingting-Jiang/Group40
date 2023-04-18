@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-
 import edu.northeastern.group40.Project.Models.AvailableDate;
 import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.R;
@@ -29,6 +29,8 @@ public class ProjectActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             finish();
             startActivity(intent);
+        }else{
+            FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("ordersAsCarOwner").addValueEventListener(new NotificationListener(user.getUid(),this));
         }
     }
 

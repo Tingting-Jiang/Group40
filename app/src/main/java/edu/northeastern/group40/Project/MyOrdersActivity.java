@@ -19,20 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.northeastern.group40.Project.Models.AvailableDate;
-import edu.northeastern.group40.Project.Models.Brand;
-import edu.northeastern.group40.Project.Models.Color;
-import edu.northeastern.group40.Project.Models.Fuel;
-import edu.northeastern.group40.Project.Models.Mileage;
-import edu.northeastern.group40.Project.Models.MyLocation;
 import edu.northeastern.group40.Project.Models.Order;
 import edu.northeastern.group40.Project.Models.SelectListener;
 import edu.northeastern.group40.Project.Models.Vehicle;
-import edu.northeastern.group40.Project.Models.VehicleBodyStyle;
 import edu.northeastern.group40.Project.RecyclerView.MyOrdersAdapter;
 import edu.northeastern.group40.R;
 
@@ -59,7 +51,6 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
         initButton();
 
         createRecyclerView();
-//        addFakeOrder();
         initDatabases();
         initOrderList();
     }
@@ -107,6 +98,7 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
                         orderList.add(currOrder);
                 }
                 myOrdersAdapter.notifyDataSetChanged();
+                initButton();
             }
 
             @Override
@@ -116,40 +108,6 @@ public class MyOrdersActivity extends AppCompatActivity implements SelectListene
 
 
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void addFakeOrder() {
-        String dbString = "https://firebasestorage.googleapis.com/v0/b/mobile-project-5dfc0.appspot.com/o/images%2Fimage%253A1000000006-Tue%20Mar%2028%2019%3A37%3A13%20PDT%202023?alt=media&token=dcf3b137-9a01-4b32-acba-0079849b57a4";
-        MyLocation testLocation = null;
-        try {
-            testLocation = new MyLocation(35.40273, -120.95154, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Vehicle vehicle1 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.CROSSOVER,
-                Fuel.GASOLINE, Mileage.BETWEEN_5K_AND_10K, 4, testLocation, 1,
-                "2023 Brand New Accord", dbString,"04/14/2023", "04/21/2023", "123", "3455");
-        vehicle1.setReviewResult("4.2");
-        vehicle1.setReviewTotalNumber(100);
-
-        // NO-2
-        Vehicle vehicle2 = new Vehicle(Brand.HONDA, Brand.Model.ACCORD, Color.WHITE, VehicleBodyStyle.SUV,
-                Fuel.GASOLINE, Mileage.LESS_THAN_10K, 5, testLocation, 2,
-                "2023 Brand New CAMRY with Super big screen and super comfortable seats", dbString, "04/14/2023", "04/21/2023", "123", "3455");
-        vehicle2.setReviewResult("4.2");
-        vehicle2.setReviewTotalNumber(56);
-        // (String orderId, Vehicle orderedVehicle, AvailableDate orderDate, int orderPriceTotal, String ownerId)
-
-        Order order1 = new Order("123", vehicle1, new AvailableDate("04/14/2023", "04/21/2023"), 150, "12345");
-        Order order2 = new Order("123", vehicle2, new AvailableDate("04/14/2023", "04/21/2023"), 250, "12345");
-        orderList.add(order1);
-        orderList.add(order2);
-//        orderList.add(order1);
-//        orderList.add(order2);
-        myOrdersAdapter.notifyDataSetChanged();
-    }
-
 
     @Override
     public void onCarSelect(Integer position) {

@@ -3,6 +3,7 @@ package edu.northeastern.group40.Project;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -59,8 +60,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     private RecyclerView carRecView;
     private String selectedFilter = "";
     private Integer yellow, blue, black, white;
-    private String currentSearchText = "";
-    private Button changeSettingsBtn;
+    private Button noCarBtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -84,6 +84,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         this.blue = ContextCompat.getColor(getApplicationContext(),R.color.sky_blue);
         this.black = ContextCompat.getColor(getApplicationContext(),R.color.black);
         this.white = ContextCompat.getColor(getApplicationContext(),R.color.white);
+        this.noCarBtn = findViewById(R.id.no_cars_txt);
+        initButton();
 
 
         searchView = findViewById(R.id.searchVehicle);
@@ -105,6 +107,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 vehicleList.clear();
                 vehicleList.addAll(filterList);
                 carListAdapter.notifyDataSetChanged();
+                initButton();
                 return false;
             }
         });
@@ -121,6 +124,18 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 e.printStackTrace();
             }
         }
+
+    }
+
+    private void initButton() {
+        if (vehicleList.size() == 0) {
+            noCarBtn.setVisibility(View.VISIBLE);
+            noCarBtn.setOnClickListener(v -> {
+               onBackPressed();
+            });
+        } else {
+            noCarBtn.setVisibility(View.GONE);
+            }
 
     }
 
@@ -155,6 +170,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 break;
         }
         carListAdapter.notifyDataSetChanged();
+        initButton();
     }
 
     private void unselectOtherSort(String originSort) {
@@ -210,22 +226,28 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Vehicle currVehicle = dataSnapshot.getValue(Vehicle.class);
                     assert currVehicle != null;
-                    // todo: filter cars that meet requirement
                     if (!currVehicle.getOwnerID().equals(currUser.getUid())) {
-                        if ( rentBrand != null && rentModel != null) {
-                            if (currVehicle.getBrand().equals(rentBrand)
+                        // have target brand and target model
+                        if ( rentBrand != null && rentModel != null && currVehicle.getBrand().equals(rentBrand)
                                     && currVehicle.getModel().equals(rentModel)
-                                    && meetRequirement(currVehicle)
-                            ) {
+                                    && meetRequirement(currVehicle)) {
                                 vehicleList.add(currVehicle);
-                            }
-                        } else if (rentBrand == null && meetRequirement(currVehicle)) {
+                        }
+                        // have no target brand nor target model
+                        else if (rentBrand == null && meetRequirement(currVehicle)) {
+                            Log.i(TAG, "image: " + currVehicle.getCarImage());
+                            vehicleList.add(currVehicle);
+                        }
+                        // have only target brand, no target model
+                        else if (rentBrand != null && rentModel == null && currVehicle.getBrand().equals(rentBrand)
+                        && meetRequirement(currVehicle)) {
                             vehicleList.add(currVehicle);
                         }
                     }
                 }
                 syncBackupList();
                 carListAdapter.notifyDataSetChanged();
+                initButton();
             }
 
             @Override
@@ -235,7 +257,8 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     }
 
     private boolean meetRequirement(Vehicle vehicle) {
-        return vehicle.getAvailableDate().isAvailable(targetAvailableDate) &&
+        return vehicle.isAvailable() &&
+                vehicle.getAvailableDate().isAvailable(targetAvailableDate) &&
                 vehicle.getPlace().getStateName().equals(destinationLocation.getStateName());
     }
 
@@ -259,8 +282,6 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         intent.putExtra("carDetail", car);
         intent.putExtra("targetDate", targetAvailableDate);
         startActivity(intent);
-       // TODO: PUT OBJECT  INTO INTENT
-        // https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents
     }
 
     static class SortByRentPrice implements Comparator<Vehicle> {
@@ -276,7 +297,12 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
         public int compare(Vehicle v1, Vehicle v2) {
             Double review1 = Double.parseDouble(v1.getReviewResult());
             Double review2 = Double.parseDouble(v2.getReviewResult());
-            return Double.compare(review2, review1);
+            int result = Double.compare(review2, review1);
+            if (result != 0) {
+                return result;
+            } else {
+                return Integer.compare(v2.getReviewTotalNumber(), v1.getReviewTotalNumber());
+            }
         }
     }
     static class SortByMileage implements Comparator<Vehicle> {
@@ -302,6 +328,7 @@ public class CarListActivity extends AppCompatActivity implements SelectListener
     public void onSortPrice(View view) {
         updateSort(PRICE, priceSort);
     }
+
     public void onSortMileage(View view) {
         updateSort(MILEAGE, mileageSort);
     }

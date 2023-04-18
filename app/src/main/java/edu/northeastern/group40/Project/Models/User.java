@@ -21,11 +21,9 @@ public class User {
 
     List<String> vehicles;
 
-    List<Order> ordersAsCarOwner;
+    List<Order> ordersAsCarOwner = new ArrayList<Order>();
 
-    List<Order> ordersAsCarUser;
-
-    List<Order> allOrder;
+    List<Order> ordersAsCarUser = new ArrayList<Order>();
 
     String userID;
 
@@ -134,21 +132,18 @@ public class User {
 
     public void addOrderAsCarOwner(Order order){
         ordersAsCarOwner.add(order);
+
     }
 
     public void addOrderAsCarUser(Order order){
-        ordersAsCarOwner.add(order);
-    }
-
-    public void addToAllOrder(Order order){
-        allOrder.add(order);
+        ordersAsCarUser.add(order);
     }
 
     public List<Order> getOrderAsCarOwner(){
         return ordersAsCarOwner;
     }
 
-    public List<Order> getAllOrder(){
-        return allOrder;
+    public List<Order> getOrderAsCarUser(){
+        return ordersAsCarUser;
     }
 }

@@ -20,6 +20,7 @@ public class Vehicle implements Serializable {
     private String carImage;
     private String ownerID;
     private String vehicleID;
+    private boolean available;
 
     // date format: "MM/DD/YYYY"
     private AvailableDate availableDate;
@@ -43,6 +44,7 @@ public class Vehicle implements Serializable {
         this.availableDate = new AvailableDate(startDate, endDate);
         this.ownerID = ownerID;
         this.vehicleID = vehicleID;
+        this.available = true;
     }
 
     public Vehicle() {
@@ -119,6 +121,14 @@ public class Vehicle implements Serializable {
 
     public void setReviewTotalNumber(int reviewTotalNumber) {
         this.reviewTotalNumber = reviewTotalNumber;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public void setCarImage(String carImage) {
