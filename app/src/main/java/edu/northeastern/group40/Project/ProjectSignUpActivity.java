@@ -122,9 +122,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
                         User user = new User(username, password, email, phone, isCarOwner, uid);
                         saveUserToDatabase(user);
                         Toast.makeText(this, "Sign up successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ProjectSignUpActivity.this, ProjectActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Exception error = task.getException();
@@ -142,7 +140,7 @@ public class ProjectSignUpActivity extends AppCompatActivity {
         DatabaseReference reference = mDatabase.child("users").child(user.getUserID());
         reference.setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Intent intent = new Intent(ProjectSignUpActivity.this, ProjectSignInActivity.class);
+                Intent intent = new Intent(ProjectSignUpActivity.this, ProjectActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {

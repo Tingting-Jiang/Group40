@@ -137,8 +137,18 @@ public class UserProfileActivity extends AppCompatActivity {
                         databaseReference.child(childName).setValue(value);
                         displayText(textView, databaseReference, childName);
                         if (childName.equals("email")) {
+                            if(!value.contains("@") || !value.contains(".")) {
+                                Toast.makeText(UserProfileActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             user.updateEmail(value);
+                        }
+                        if (childName.equals("phone")) {
+                            if (value.length() != 10) {
+                                Toast.makeText(UserProfileActivity.this, "Invalid phone number", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                         }
                         input.setOnFocusChangeListener(null);
                     })
