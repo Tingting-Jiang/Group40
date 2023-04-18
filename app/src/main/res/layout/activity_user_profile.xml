@@ -215,6 +215,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/sky_blue"
             android:text="My Car"/>
 
         <Button
