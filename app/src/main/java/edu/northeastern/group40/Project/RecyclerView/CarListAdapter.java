@@ -50,7 +50,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarListV
         Vehicle currVehicle = vehicleList.get(position);
         holder.carTitle.setText(currVehicle.getVehicleTitle());
         holder.totalMiles.setText(currVehicle.getMileage().toString());
-        holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles");
+        holder.distance.setText(String.format("%.2f", destinationLocation.distanceToInMiles(currVehicle.getPlace())) + " miles away from you");
         holder.review_num.setText(currVehicle.getReviewResult() + " by " + currVehicle.getReviewTotalNumber() + " users");
         holder.rent_price.setText(currVehicle.getRentPrice() + " per day");
         Picasso.get()

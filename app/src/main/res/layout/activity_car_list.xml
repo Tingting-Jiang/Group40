@@ -46,7 +46,6 @@
             android:id="@+id/filter_linear1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
             android:orientation="horizontal">
 
             <Button
@@ -79,6 +78,7 @@
 
             <Button
                 android:id="@+id/reviewSort"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
@@ -88,8 +88,7 @@
                 android:text="@string/highly_reviewed"
                 android:textColor="#FFF"
                 android:textSize="10sp"
-                tools:ignore="SmallSp"
-                style="?android:attr/buttonBarButtonStyle" />
+                tools:ignore="SmallSp" />
 
             <Button
                 android:id="@+id/mileageSort"
